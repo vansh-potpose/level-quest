@@ -1,5 +1,6 @@
 @import "tailwindcss";
 
+
 :root {
   /* Background Layers */
   --background: #010409; /* App base background */
@@ -16,6 +17,7 @@
   --active-element: #FF8000; /* Active elements */
   
 }
+
 @theme {
   /* Background Layers */
   --bg-color: #010409; /* App base background */

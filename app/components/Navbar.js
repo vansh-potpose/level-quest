@@ -1,16 +1,67 @@
+import Image from "next/image";
 
-const Navbar = ({screen,setScreen})=>{
-    return(
-        <div className="">
-            <ul className="flex gap-4 color-background ">
-                <li className={`border-2 rounded-md p-1 ${screen=="Profile"?"border-active-element text-active-element ":"border-white text-white "}`} onClick={()=>{setScreen("Profile")}}>Profile</li>
-                <li className={`border-2 rounded-md p-1 ${screen=="Store"?"border-orange-400 text-orange-400":"border-white text-white"}`} onClick={()=>{setScreen("Store")}}>Store</li>
-                <li className={`border-2 rounded-md p-1 ${screen=="Quests"?"border-orange-400 text-orange-400":"border-white text-white"}`} onClick={()=>{setScreen("Quests")}}>Quests</li>
-                <li className={`border-2 rounded-md p-1 ${screen=="Home"?"border-orange-400 text-orange-400":"border-white text-white"}`} onClick={()=>{setScreen("Home")}}>Home</li>
-                <li className={`border-2 rounded-md p-1 ${screen=="Habits"?"border-orange-400 text-orange-400":"border-white text-white"}`} onClick={()=>{setScreen("Habits")}}>Habits</li>
-                <li className={`border-2 rounded-md p-1 ${screen=="Settings"?"border-orange-400 text-orange-400":"border-white text-white"}`} onClick={()=>{setScreen("Settings")}}>Settings</li>
-            </ul>
+const navItems = ["Profile", "Store", "Quests", "Home", "Habits", "Settings"];
+
+const Navbar = ({ screen, setScreen,coins }) => {
+  return (
+    <nav className="fixed w-full flex justify-between items-center bg-[#010409] h-16 px-5 border-b-[1px] border-[#3d444d]">
+      {/* Left - Logo */}
+      <div className="flex items-center gap-2">
+        <Image
+          src="/icon2.jpg"
+          alt="Logo"
+          width={40}
+          height={40}
+          className="rounded-full"
+        />
+        <p className="text-white font-semibold text-lg">Your App Name</p>
+      </div>
+
+      {/* Middle - Navigation Links */}
+      <ul className="flex gap-3 items-center">
+        {navItems.map((item) => (
+          <li
+            key={item}
+            role="button"
+            tabIndex={0}
+            onClick={() => setScreen(item)}
+            className={`px-3 py-1 border-2 rounded-md text-sm font-medium cursor-pointer transition-colors duration-200
+              ${
+                screen === item
+                  ? "border-[#FF8000] text-[#FF8000]"
+                  : "border-transparent text-white hover:border-gray-600 hover:text-[#FF8000]"
+              }`}
+          >
+            {item}
+          </li>
+        ))}
+      </ul>
+
+      {/* Right - User Info */}
+      <div className="flex gap-2">
+        <div>
+            <Image
+                src="/icon2.jpg"
+                alt="Profile"
+                width={40}
+                height={40}
+                className="rounded-full object-cover"
+            />
+            <p>1000</p>
         </div>
-    );
+      <div className="flex items-center gap-2">
+        <Image
+          src="/jinwoo-solo-leveling.webp"
+          alt="Profile"
+          width={40}
+          height={40}
+          className="rounded-full object-cover"
+          />
+        <p className="text-white text-sm font-medium">User Name</p>
+      </div>
+          </div>
+    </nav>
+  );
 };
+
 export default Navbar;

@@ -6,15 +6,23 @@ import { useState } from "react";
 export default function Home() {
 
   const [screen, setScreen] = useState("home");
+  const [coins,setCoins] = useState(0);
+  const [user, setUser] = useState({
+    name: "User Name",
+    profilePic: "/jinwoo-solo-leveling.webp",
+  });
 
   return (
    <div>
+    <div className="fixed top-0 left-0 w-full z-50">
     <Navbar 
     screen={screen}
     setScreen={setScreen}
     />
-    <div className="w-3xl h-5 bg-amber-500"
-    ></div>
+    </div>
+    
+
+   
 
    </div>
   );
