@@ -24,7 +24,7 @@ const Dashboard = ({ user }) => {
             <p className="text-white text-sm font-medium">Health: {user.health}</p>
             <p className="text-white text-sm font-medium">Coins: {user.coins}</p>
             <ProgressBar value={30} color={"#0090FF"} h="5" />
-          </div> 
+          </div>  
 
         </div>
       </div>
