@@ -24,7 +24,7 @@ export default function Home() {
       { name: "stamina 5", level: 1, progress: 0 },
       { name: "luck 6", level: 1, progress: 0 }
     ],
-    about:"ommit2Hab1t is a power ul habit-tracking app designed to help you stay on top o your goals. It combines task tracking, data analysis, and Al-enerated reports to provide deep insights into your habits and performance. The app is inspired by the 'Solo -Leveling' system, where users gain points and level up by completing tasks.",
+    about:"Commit2Hab1t is a power ul habit-tracking app designed to help you stay on top o your goals. It combines task tracking, data analysis, and Al-enerated reports to provide deep insights into your habits and performance. The app is inspired by the 'Solo -Leveling' system, where users gain points and level up by completing tasks.",
     stregth: "decipline",
     weakness: "procrastination",
     masterObjective: "doing nothing",
@@ -42,7 +42,7 @@ export default function Home() {
     user={user}
     />
     </div>
-    <div className="flex flex-col items-center justify-center h-screen mt-16">
+    <div className="flex flex-col items-center justify-center h-screen mt-40">
       {screen === "home" && <Dashboard user={user} />}
       {screen === "profile" && <h1 className="text-4xl font-bold mb-4">Profile Page</h1>}
       {screen === "store" && <h1 className="text-4xl font-bold mb-4">Store Page</h1>}
