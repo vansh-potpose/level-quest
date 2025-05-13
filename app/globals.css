@@ -1,16 +1,39 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Background Layers */
+  --background: #010409; /* App base background */
+  --foreground: #f0f6fc; /* Main text color on background */
+  --muted-background-color: #0d1117; /* Card, container */
+  --element-background-color: #151b23; /* Inputs, buttons */
+  --overlay-background-color: #212830; /* Modals, popups */
+  --border-color: #3d444d; /* Borders */
+
+  /* Text */
+  --muted-color: #d8dee3; /* Subtle text */
+  --disabled-color: #9198a1; /* Disabled/muted text */
+
+  --active-element: #FF8000; /* Active elements */
+  
+}
+@theme {
+  /* Background Layers */
+  --bg-color: #010409; /* App base background */
+  --fg-color: #f0f6fc; /* Main text color on background */
+  --muted-bg-color: #0d1117; /* Card, container */
+  --element-bg-color: #151b23; /* Inputs, buttons */
+  --overlay-bg-color: #212830; /* Modals, popups */
+  --border-color: #3d444d; /* Borders */
+
+  /* Text */
+  --muted-color: #d8dee3; /* Subtle text */
+  --disabled-color: #9198a1; /* Disabled/muted text */
+  --active-element: #FF8000; /* Active elements */
+  
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+
+
 
 @media (prefers-color-scheme: dark) {
   :root {
