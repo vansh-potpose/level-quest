@@ -12,7 +12,7 @@ export default function Home() {
     name: "User Name",
     profilePic: "/jinwoo-solo-leveling.webp",
     level: 1,
-    exp: 0,
+    exp: 50,
     health: 100,
     coins: 3000,
     job: "Hunter",
