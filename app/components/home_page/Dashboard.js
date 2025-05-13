@@ -26,7 +26,7 @@ const Dashboard = ({ user }) => {
             <ProgressBar value={30} color={"#0090FF"} h="5" />
           </div>   
 
-        </div>
+        </div> 
       </div>
 
     </div>
