@@ -1,5 +1,9 @@
 import Image from "next/image";
 
+import { BsCoin } from "react-icons/bs";
+
+
+
 const navItems = ["Profile", "Store", "Quests", "Home", "Habits", "Settings"];
 
 const Navbar = ({ screen, setScreen,coins }) => {
@@ -7,13 +11,7 @@ const Navbar = ({ screen, setScreen,coins }) => {
     <nav className="fixed w-full flex justify-between items-center bg-[#010409] h-16 px-5 border-b-[1px] border-[#3d444d]">
       {/* Left - Logo */}
       <div className="flex items-center gap-2">
-        <Image
-          src="/icon2.jpg"
-          alt="Logo"
-          width={40}
-          height={40}
-          className="rounded-full"
-        />
+        
         <p className="text-white font-semibold text-lg">Your App Name</p>
       </div>
 
@@ -39,15 +37,10 @@ const Navbar = ({ screen, setScreen,coins }) => {
 
       {/* Right - User Info */}
       <div className="flex gap-2">
-        <div>
-            <Image
-                src="/icon2.jpg"
-                alt="Profile"
-                width={40}
-                height={40}
-                className="rounded-full object-cover"
-            />
+        <div className="flex items-center gap-2  px-5 py-1 rounded-md">
+            <BsCoin size={24} />
             <p>1000</p>
+            
         </div>
       <div className="flex items-center gap-2">
         <Image
