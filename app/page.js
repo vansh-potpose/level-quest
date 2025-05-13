@@ -6,7 +6,7 @@ import { useState } from "react";
 export default function Home() {
 
   const [screen, setScreen] = useState("home");
-  const [coins,setCoins] = useState(0);
+  const [coins,setCoins] = useState(3000);
   const [user, setUser] = useState({
     name: "User Name",
     profilePic: "/jinwoo-solo-leveling.webp",
@@ -18,6 +18,8 @@ export default function Home() {
     <Navbar 
     screen={screen}
     setScreen={setScreen}
+    coins={coins}
+    user={user}
     />
     </div>
     
