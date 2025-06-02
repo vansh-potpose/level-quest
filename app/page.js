@@ -17,25 +17,31 @@ export default function Home() {
   const claimItems = (attribute_name, amount) => {
     console.log(`cosole comment 1 Claiming item with attribute: ${attribute_name}, amount: ${amount}`);
     switch (attribute_name) {
-    case "health": updateHealth(amount); break;
-    case "coins": updateCoins(amount); break;
-    case "experience": updateExp(amount); break;
-    default: updateSkill(attribute_name, amount);
+      case "health": updateHealth(amount); break;
+      case "coins": updateCoins(amount); break;
+      case "experience": updateExp(amount); break;
+      default: updateSkill(attribute_name, amount);
+    }
+
+  };
+
+  const claimObjects = (message) => {
+    console.log(`Claiming object: ${message}`);
+    alert(message);
   }
-
-  }; 
-
 
 
   const [screen, setScreen] = useState("Store");
-  const [coins, setCoins] = useState(3000);
+  const baseHealth = 100; // Base health for level 1
+  const baseXP = 100; // Base experience for level 1
+  const [coins, setCoins] = useState(30000);
   const [user, setUser] = useState({
     name: "User Name",
     profilePic: "/jinwoo-solo-leveling.webp",
     level: 1,
     exp: 50,
     health: 100,
-    coins: 3000,
+    coins: 30000,
     job: "Hunter",
     stats: [
       { skill: "strength", level: 1, value: 50 },
@@ -79,24 +85,15 @@ export default function Home() {
 
   });
 
-  // const updateExp = (amount) => {
-  //   setUser(prev => {
-  //     const newExp = prev.exp + amount;
-  //     console.log(`Experience updated: ${amount} added. New total: ${newExp}`);
-  //     return {
-  //       ...prev,
-  //       exp: newExp
-  //     };
-  //   });
-  // };
+
 
   const getMaxExpForLevel = (level) => {
-    const baseXP = 100;
+
     return Math.floor(baseXP * level ** 1.5); // adjust as you want
   };
 
   const getMaxHealthForLevel = (level) => {
-    const baseHealth = 100;
+
     return Math.floor(baseHealth * 1.05 ** level); // adjust as you want
   };
 
@@ -111,45 +108,68 @@ export default function Home() {
 
   // Update health
   const updateHealth = (amount) => {
-    setUser(prev => ({
-      ...prev,
-      health: Math.max(0, prev.health + amount)
-    }));
+    setUser(prev => {
+      const maxHealth = getMaxHealthForLevel(prev.level);
+      const newHealth = Math.max(0, Math.min(prev.health + amount, maxHealth));
+      return {
+        ...prev,
+        health: newHealth
+      };
+    });
   };
 
   // Update skill points (by skill name)
+  // Function to get max points for a skill at a given level
+  const getMaxSkillPoints = (level) => {
+    // Example: max points increases by 50 per level, starting at 100
+    return Math.floor(baseXP * level ** 1.5);
+  };
+
   const updateSkill = (skillName, amount) => {
     setUser(prev => ({
       ...prev,
-      stats: prev.stats.map(stat =>
-        stat.skill === skillName
-          ? { ...stat, value: stat.value + amount }
-          : stat
-      )
+      stats: prev.stats.map(stat => {
+        if (stat.skill === skillName) {
+          let newValue = stat.value + amount;
+          let newLevel = stat.level;
+          let maxPoints = getMaxSkillPoints(stat.level);
+
+          // Level up skill while value exceeds max points
+          while (newValue >= maxPoints) {
+            newValue -= maxPoints;
+            newLevel += 1;
+            maxPoints = getMaxSkillPoints(newLevel);
+          }
+          newValue = stat.value + amount;; // Ensure value doesn't go negative
+
+          return { ...stat, value: newValue, level: newLevel };
+        }
+        return stat;
+      })
     }));
   };
 
   const updateExp = (amount) => {
-  setUser(prev => {
-    let newExp = prev.exp + amount;
-    let newLevel = prev.level;
-    const maxExp = getMaxExpForLevel(newLevel);
+    setUser(prev => {
+      let newExp = prev.exp + amount;
+      let newLevel = prev.level;
+      const maxExp = getMaxExpForLevel(newLevel);
 
-    // Level up while experience exceeds max required exp
-    while (newExp >= maxExp) {
-      newExp -= maxExp;
-      newLevel += 1;
-    }
+      // Level up while experience exceeds max required exp
+      while (newExp >= maxExp) {
+        newExp -= maxExp;
+        newLevel += 1;
+      }
 
-    console.log(`Experience updated: +${amount}. New total: ${newExp}, Level: ${newLevel}`);
+      console.log(`Experience updated: +${amount}. New total: ${newExp}, Level: ${newLevel}`);
 
-    return {
-      ...prev,
-      exp: newExp,
-      level: newLevel,
-    };
-  });
-};
+      return {
+        ...prev,
+        exp: newExp,
+        level: newLevel,
+      };
+    });
+  };
 
 
   const [quests, setQuests] = useState([
@@ -366,7 +386,7 @@ export default function Home() {
 
 
 
-  
+
 
 
 
@@ -383,8 +403,8 @@ export default function Home() {
       type: "Object",
       amount: 1,
       claimed: false,
-      onClaim: () => { },
-    }, null),
+      attribute_name: "agility",
+    }, claimObjects),
     new Item({
       id: 2,
       name: "Playing Mobile Game",
@@ -394,8 +414,8 @@ export default function Home() {
       type: "Object",
       amount: 1,
       claimed: false,
-      onClaim: () => { },
-    }, null),
+      attribute_name: "intelligence",
+    }, claimObjects),
     new Item({
       id: 3,
       name: "Gali Cricket",
@@ -405,8 +425,8 @@ export default function Home() {
       type: "Object",
       amount: 1,
       claimed: false,
-      onClaim: () => { },
-    }, null),
+      attribute_name: "strength",
+    }, claimObjects),
     new Item({
       id: 4,
       name: "Casio MTP 1183",
@@ -416,8 +436,8 @@ export default function Home() {
       type: "Object",
       amount: 1,
       claimed: false,
-      onClaim: () => { },
-    }, null),
+      attribute_name: "luck",
+    }, claimObjects),
     new Item({
       id: 5,
       name: "Chatting With Her",
@@ -427,8 +447,8 @@ export default function Home() {
       type: "Object",
       amount: 1,
       claimed: false,
-      onClaim: () => { },
-    }, null),
+      attribute_name: "health",
+    }, claimObjects),
     new Item({
       id: 6,
       name: "Butter Scotch Ice Cream",
@@ -438,8 +458,8 @@ export default function Home() {
       type: "Object",
       amount: 1,
       claimed: false,
-      onClaim: () => { },
-    }, null),
+      attribute_name: "health",
+    }, claimObjects),
     new Item({
       id: 7,
       name: "Meeting Her",
@@ -449,8 +469,8 @@ export default function Home() {
       type: "Object",
       amount: 1,
       claimed: false,
-      onClaim: () => { },
-    }, null),
+      attribute_name: "stamina",
+    }, claimObjects),
     new Item({
       id: 8,
       name: "Magical Sword",
@@ -458,10 +478,10 @@ export default function Home() {
       description: "A sword that glows with magical energy.",
       image: "/images.jpeg",
       type: "Magical Item",
-      amount: 1,
+      amount: 60,
       claimed: false,
-      onClaim: () => { },
-    }, null),
+      attribute_name: "strength",
+    }, claimItems),
     new Item({
       id: 9,
       name: "Enchanted Shield",
@@ -471,8 +491,8 @@ export default function Home() {
       type: "Magical Item",
       amount: 1,
       claimed: false,
-      onClaim: () => { },
-    }, null),
+      attribute_name: "health",
+    }, claimItems),
     new Item({
       id: 10,
       name: "Mystic Amulet",
@@ -482,8 +502,8 @@ export default function Home() {
       type: "Magical Item",
       amount: 1,
       claimed: false,
-      onClaim: () => { },
-    }, null),
+      attribute_name: "experience",
+    }, claimItems),
   ]);
 
 
@@ -498,7 +518,12 @@ export default function Home() {
         />
       </div>
       <div className="flex flex-col items-center justify-center  mt-24">
-        {screen === "Home" && <Dashboard user={user} />}
+        {screen === "Home" && <Dashboard
+          user={user}
+          getMaxHealthForLevel={getMaxHealthForLevel}
+          getMaxExpForLevel={getMaxExpForLevel}
+          getMaxSkillPoints={getMaxSkillPoints}
+        />}
         {screen === "Store" && <StorePage StoreItems={StoreItems} buyItem={buyItem} />}
         {screen === "Quests" && <h1 className=" mb-4"><QuestPage quests={quests} setQuests={setQuests} /></h1>}
         {screen === "Habits" && <h1 className="text-4xl font-bold mb-4">Habits Page</h1>}

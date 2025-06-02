@@ -25,7 +25,7 @@ export class Item {
         
         break;
 
-      case "object":
+      case "Object":
         this.onClaim(`Object "${this.name}" claimed!`);
         this.claimed = true;
         break;

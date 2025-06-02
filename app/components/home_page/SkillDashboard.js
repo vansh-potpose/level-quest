@@ -3,7 +3,7 @@ import SkillProgressBar from './SkillProgressBar';
 
  
 
-const SkillDashboard = ({skills}) => {
+const SkillDashboard = ({skills,getMaxSkillPoints}) => {
   return (
     <div className="w-fit bg-black text-white px-6 py-12 font-orbitron">
          <h2 className="text-[#f0f6fc] border-b  border-[#3d444d] text-md mb-4 font-medium tracking-wider uppercase">
@@ -26,6 +26,7 @@ const SkillDashboard = ({skills}) => {
                 skill={s.skill}
                 level={s.level}
                 value={s.value}
+                getMaxSkillPoints={getMaxSkillPoints}
               />
             ))}
           </div>

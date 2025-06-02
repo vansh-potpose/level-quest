@@ -2,12 +2,10 @@ import Image from "next/image";
 import { MdEdit } from "react-icons/md";
 import ProgressBar from "../ProgressBar";
 
-const ProfileInfo = ({ user }) => {
-  const baseXP = 100;
-  const baseHealth = 100;
-
-  const xpNeeded = Math.floor(baseXP * user.level ** 1.5);
-  const maxHealth = Math.floor(baseHealth * 1.05 ** user.level);
+const ProfileInfo = ({ user ,getMaxHealthForLevel,getMaxExpForLevel }) => {
+ 
+  const xpNeeded = getMaxExpForLevel(user.level) ;
+  const maxHealth = getMaxHealthForLevel(user.level);
 
   return (
     <div className="flex flex-col items-center justify-center">
