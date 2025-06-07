@@ -5,6 +5,7 @@ import { FaCheck } from "react-icons/fa";
 import { toast } from 'react-toastify';
 import ProgressBar from "../ProgressBar";
 import { showGameToast } from "../ShowGameToast";
+import { confirmToast } from "../confirmToast"; // Adjust the import path as necessary
 
 const QuestModal = ({ quest, onClose, updateSubQuestStatus }) => {
   const [subQuests, setSubQuests] = useState(quest.sub_quests || []);
@@ -12,6 +13,24 @@ const QuestModal = ({ quest, onClose, updateSubQuestStatus }) => {
   useEffect(() => {
     setSubQuests(quest.sub_quests || []);
   }, [quest.sub_quests]);
+
+
+
+
+  async function handleDelete() {
+  const confirmed = await confirmToast({
+    message: "Do you really want to delete this item?",
+    confirmText: "Delete",
+    cancelText: "Cancel",
+  });
+
+  if (confirmed) {
+    // Delete logic here
+    console.log("Deleted");
+  } else {
+    console.log("Cancelled");
+  }
+}
 
   const completedCount = subQuests.filter((sq) => sq.completed).length || 0;
   const totalCount = subQuests.length || 1;
@@ -180,12 +199,7 @@ const QuestModal = ({ quest, onClose, updateSubQuestStatus }) => {
                     
                     {sq.completed && (
                       <button className="bg-green-500 hover:bg-green-400 transition text-white text-sm font-semibold px-3 py-1 rounded-md"
-                        onClick={() => showGameToast({
-                          icon: "🎁",
-                          title: "Reward Claimed",
-                          description: "+100 XP, Health Potion added!",
-                          color: "yellow",
-                        })}>
+                        onClick={() => handleDelete()}>
                         Claim
                       </button>
                     )}
