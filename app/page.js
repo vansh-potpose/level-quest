@@ -193,9 +193,23 @@ export default function Home() {
         ...prev,
         inventory: [...prev.inventory, newItem],
       }));
-      alert(`You bought: ${item.name}`);
+      showGameToast({
+        icon: "🛒",
+        title: "Item Purchased!",
+        description: `You bought: ${item.name}`,
+        border_color: "border-green-500",
+        text_color: "text-green-400",
+        progressClass_color: "!bg-green-500",
+      });
     } else {
-      alert("Not enough coins to buy this item.");
+      showGameToast({
+        icon: "❌",
+        title: "Purchase Failed",
+        description: "Not enough coins to buy this item.",
+        border_color: "border-red-500",
+        text_color: "text-red-500",
+        progressClass_color: "!bg-red-700",
+      });
     }
   }
 
