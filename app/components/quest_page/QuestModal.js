@@ -45,7 +45,7 @@ const QuestModal = ({ quest, onClose, updateSubQuestStatus }) => {
   };
 
 
-  
+
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-white/40 border"
@@ -68,20 +68,7 @@ const QuestModal = ({ quest, onClose, updateSubQuestStatus }) => {
             alt={quest.name}
             className="w-full h-auto rounded object-fill"
           />
-          <div
-            className={`absolute z-50 right-2 p-2 bottom-2 border-2 font-bold ${quest.status === "Completed"
-                ? "border-[#31FB74] bg-[#31FB74]/70"
-                : quest.priority === "High"
-                  ? "border-[#FF1A00] bg-[#FF1A00]/70"
-                  : quest.priority === "Medium"
-                    ? "border-[#F9E827] bg-[#F9E827]/70"
-                    : "border-[#3d444d] bg-[#3d444d]/70"
-              } rounded-lg`}
-          >
-            {quest.status === "Completed"
-              ? "Completed"
-              : "Priority : " + quest.priority}
-          </div>
+          
         </div>
 
         <div className="p-4">
@@ -103,10 +90,28 @@ const QuestModal = ({ quest, onClose, updateSubQuestStatus }) => {
 
           <p className="text-[#9198a1] text-sm mb-4">{quest.description}</p>
 
+                
           <div className="text-sm text-[#f0f6fc] mb-2">
+            <div className="flex items-center gap-2 justify-between">
             <p>
               <b>Time left :</b> {getTimeLeft()}
             </p>
+
+            <div
+            className={` border w-fit py-1 px-2 ${quest.status === "Completed"
+                ? "border-[#31FB74] "
+                : quest.priority === "High"
+                  ? "border-[#FF1A00] "
+                  : quest.priority === "Medium"
+                    ? "border-[#F9E827] "
+                    : "border-[#3d444d] "
+              } rounded-lg`}
+          >
+            {quest.status === "Completed"
+              ? "Completed"
+              : "Priority : " + quest.priority}
+          </div>
+          </div>
 
             <div className="mt-2 flex gap-5 items-start">
               <div className="min-w-fit font-semibold">Rewards :</div>
