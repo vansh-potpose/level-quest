@@ -3,38 +3,19 @@ import Image from "next/image";
 import Navbar from "./components/Navbar";
 import Dashboard from "./components/home_page/Dashboard";
 import QuestPage from "./components/quest_page/QuestPage";
-
+import { showGameToast } from "./components/ShowGameToast";
 import Reward from "./components/Reward";
 import Item from "./components/Item";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import StorePage from "./components/store_page/StorePage";
 
-
 export default function Home() {
+  // --- Constants ---
+  const BASE_HEALTH = 100;
+  const BASE_XP = 100;
 
-  // Update experience
-
-  const claimItems = (attribute_name, amount) => {
-    console.log(`cosole comment 1 Claiming item with attribute: ${attribute_name}, amount: ${amount}`);
-    switch (attribute_name) {
-      case "health": updateHealth(amount); break;
-      case "coins": updateCoins(amount); break;
-      case "experience": updateExp(amount); break;
-      default: updateSkill(attribute_name, amount);
-    }
-
-  };
-
-  const claimObjects = (message) => {
-    console.log(`Claiming object: ${message}`);
-    alert(message);
-  }
-
-
+  // --- State ---
   const [screen, setScreen] = useState("Store");
-  const baseHealth = 100; // Base health for level 1
-  const baseXP = 100; // Base experience for level 1
-  const [coins, setCoins] = useState(30000);
   const [user, setUser] = useState({
     name: "User Name",
     profilePic: "/jinwoo-solo-leveling.webp",
@@ -51,12 +32,11 @@ export default function Home() {
       { skill: "stamina", level: 1, value: 80 },
       { skill: "luck", level: 1, value: 30 }
     ],
-    about: "Commit2Hab1t is a power ul habit-tracking app designed to help you stay on top o your goals. It combines task tracking, data analysis, and Al-enerated reports to provide deep insights into your habits and performance. The app is inspired by the 'Solo -Leveling' system, where users gain points and level up by completing tasks.",
-    stregth: "decipline",
+    about: "Commit2Hab1t is a powerful habit-tracking app designed to help you stay on top of your goals. It combines task tracking, data analysis, and AI-generated reports to provide deep insights into your habits and performance. The app is inspired by the 'Solo-Leveling' system, where users gain points and level up by completing tasks.",
+    stregth: "discipline",
     weakness: "procrastination",
     masterObjective: "doing nothing",
     minorObjective: "doing nothing",
-
     inventory: [
       new Item({
         id: 19,
@@ -69,7 +49,6 @@ export default function Home() {
         claimed: false,
         attribute_name: "health",
       }, claimItems),
-
       new Item({
         id: 20,
         name: "Mana Potion",
@@ -82,50 +61,29 @@ export default function Home() {
         attribute_name: "experience",
       }, claimItems),
     ]
-
   });
+  const [coins, setCoins] = useState(user.coins || 0);
 
+  // --- Utility Functions ---
+  const getMaxExpForLevel = (level) => Math.floor(BASE_XP * level ** 1.5);
+  const getMaxHealthForLevel = (level) => Math.floor(BASE_HEALTH * 1.05 ** level);
+  const getMaxSkillPoints = (level) => Math.floor(BASE_XP * level ** 1.5);
 
-
-  const getMaxExpForLevel = (level) => {
-
-    return Math.floor(baseXP * level ** 1.5); // adjust as you want
-  };
-
-  const getMaxHealthForLevel = (level) => {
-
-    return Math.floor(baseHealth * 1.05 ** level); // adjust as you want
-  };
-
-  // Update coins
-  const updateCoins = (amount) => {
-    setUser(prev => ({
-      ...prev,
-      coins: prev.coins + amount
-    }));
+  // --- Update Functions ---
+  function updateCoins(amount) {
+    setUser(prev => ({ ...prev, coins: prev.coins + amount }));
     setCoins(prev => prev + amount);
-  };
+  }
 
-  // Update health
-  const updateHealth = (amount) => {
+  function updateHealth(amount) {
     setUser(prev => {
       const maxHealth = getMaxHealthForLevel(prev.level);
       const newHealth = Math.max(0, Math.min(prev.health + amount, maxHealth));
-      return {
-        ...prev,
-        health: newHealth
-      };
+      return { ...prev, health: newHealth };
     });
-  };
+  }
 
-  // Update skill points (by skill name)
-  // Function to get max points for a skill at a given level
-  const getMaxSkillPoints = (level) => {
-    // Example: max points increases by 50 per level, starting at 100
-    return Math.floor(baseXP * level ** 1.5);
-  };
-
-  const updateSkill = (skillName, amount) => {
+  function updateSkill(skillName, amount) {
     setUser(prev => ({
       ...prev,
       stats: prev.stats.map(stat => {
@@ -134,51 +92,135 @@ export default function Home() {
           let newLevel = stat.level;
           let maxPoints = getMaxSkillPoints(stat.level);
 
-          // Level up skill while value exceeds max points
           while (newValue >= maxPoints) {
             newValue -= maxPoints;
             newLevel += 1;
             maxPoints = getMaxSkillPoints(newLevel);
           }
-          newValue = stat.value + amount;; // Ensure value doesn't go negative
-
+          newValue=stat.value + amount;
           return { ...stat, value: newValue, level: newLevel };
         }
         return stat;
       })
     }));
-  };
+  }
 
-  const updateExp = (amount) => {
+  function updateExp(amount) {
     setUser(prev => {
       let newExp = prev.exp + amount;
       let newLevel = prev.level;
-      const maxExp = getMaxExpForLevel(newLevel);
+      let maxExp = getMaxExpForLevel(newLevel);
 
-      // Level up while experience exceeds max required exp
       while (newExp >= maxExp) {
         newExp -= maxExp;
         newLevel += 1;
+        maxExp = getMaxExpForLevel(newLevel);
       }
+      
 
-      console.log(`Experience updated: +${amount}. New total: ${newExp}, Level: ${newLevel}`);
-
-      return {
-        ...prev,
-        exp: newExp,
-        level: newLevel,
-      };
+      return { ...prev, exp: newExp, level: newLevel };
     });
+  }
+
+  // --- Claim Functions ---
+  function claimItems(attribute_name, amount) {
+    switch (attribute_name) {
+      case "health": updateHealth(amount); break;
+      case "coins": updateCoins(amount); break;
+      case "experience": updateExp(amount); break;
+      default: updateSkill(attribute_name, amount);
+    }
+  }
+
+
+
+  function claimObjects(message) {
+    alert(message);
+  }
+
+
+  function addToInventory(item) {
+    setUser(prev => ({
+      ...prev,
+      inventory: [...prev.inventory, item],
+    }));
+  }
+
+
+  const claimReward = (reward) => {
+    switch (reward.type) {
+      case "coins":
+        updateCoins(reward.data.amount);
+        break;
+      case "experience":
+        updateExp(reward.data.amount);
+        break;
+      case "skill":
+        updateSkill(reward.data.skill, reward.data.amount);
+        break;
+      case "item":
+        addToInventory(reward.data.item);
+        break;
+      default:
+        console.warn(`Unhandled reward type: ${reward.type}`);
+    }
   };
 
 
+  const claimRewards = (quest) => {
+    quest.rewards.forEach(reward => {
+      claimReward(reward);
+    });
+    setQuests(prev => prev.map(q => q.id === quest.id ? { ...q, status: "Completed" } : q));
+    showGameToast({
+      icon: "🏆" ,
+      title: "Quest Completed!",
+      description: `You completed the quest: ${quest.name}`,
+      border_color: "border-yellow-500",
+      text_color: "text-yellow-400",
+      progressClass_color: "!bg-yellow-500",
+    });
+  };
+  
+  
+  // --- Store Logic ---
+  function buyItem(item) {
+    if (user.coins >= item.price) {
+      updateCoins(-item.price);
+      const newId = Date.now() + Math.floor(Math.random() * 1000000);
+      const newItem = new Item({ ...item, id: newId }, item.onClaim, item.skill_name || "none");
+      setUser(prev => ({
+        ...prev,
+        inventory: [...prev.inventory, newItem],
+      }));
+      alert(`You bought: ${item.name}`);
+    } else {
+      alert("Not enough coins to buy this item.");
+    }
+  }
+
+  // --- Store Items ---
+  const [StoreItems] = useState([
+    new Item({ id: 1, name: "Shadow Fight Game", price: 300, description: "Epic battles and martial arts.", image: "/image_b.jpg", type: "Object", amount: 1, claimed: false, attribute_name: "agility" }, claimObjects),
+    new Item({ id: 2, name: "Playing Mobile Game", price: 300, description: "Immersive gaming experience.", image: "/images.jpeg", type: "Object", amount: 1, claimed: false, attribute_name: "intelligence" }, claimObjects),
+    new Item({ id: 3, name: "Gali Cricket", price: 300, description: "Play with friends in streets.", image: "/images.jpeg", type: "Object", amount: 1, claimed: false, attribute_name: "strength" }, claimObjects),
+    new Item({ id: 4, name: "Casio MTP 1183", price: 1000, description: "Stylish wristwatch with leather strap.", image: "/images.jpeg", type: "Object", amount: 1, claimed: false, attribute_name: "luck" }, claimObjects),
+    new Item({ id: 5, name: "Chatting With Her", price: 500, description: "Romantic texting session.", image: "/images.jpeg", type: "Object", amount: 1, claimed: false, attribute_name: "health" }, claimObjects),
+    new Item({ id: 6, name: "Butter Scotch Ice Cream", price: 300, description: "Delicious frozen dessert.", image: "/images.jpeg", type: "Object", amount: 1, claimed: false, attribute_name: "health" }, claimObjects),
+    new Item({ id: 7, name: "Meeting Her", price: 1500, description: "Calling her and asking her to meet, you both can talk, walk, dance, etc.", image: "/images.jpeg", type: "Object", amount: 1, claimed: false, attribute_name: "stamina" }, claimObjects),
+    new Item({ id: 8, name: "Magical Sword", price: 5000, description: "A sword that glows with magical energy.", image: "/images.jpeg", type: "Magical Item", amount: 60, claimed: false, attribute_name: "strength" }, claimItems),
+    new Item({ id: 9, name: "Enchanted Shield", price: 4000, description: "A shield that protects against dark magic.", image: "/images.jpeg", type: "Magical Item", amount: 1, claimed: false, attribute_name: "health" }, claimItems),
+    new Item({ id: 10, name: "Mystic Amulet", price: 6000, description: "An amulet that grants the wearer special powers.", image: "/images.jpeg", type: "Magical Item", amount: 1, claimed: false, attribute_name: "experience" }, claimItems),
+  ]);
+
+  // --- Quests ---
   const [quests, setQuests] = useState([
     {
       id: 1,
       image: "/images.jpeg",
       name: "Quest 1",
       endDate: new Date().toISOString(),
-      description: "just complete the quest page today itself, as it is important and need to compelete today",
+      description: "Just complete the quest page today itself, as it is important and needs to be completed today",
       priority: "Low",
       status: "Active",
       rewards: [
@@ -190,13 +232,19 @@ export default function Home() {
           id: 1,
           name: "Sub-quest 1",
           completed: false,
-          reward: new Reward("coins", { amount: 100 }),
+          rewards: [
+            new Reward("coins", { amount: Math.floor(1000 * 0.05) }),
+            new Reward("experience", { amount: Math.floor(500 * 0.05) }),
+          ],
         },
         {
           id: 2,
           name: "Sub-quest 2",
           completed: true,
-          reward: new Reward("experience", { amount: 50 }),
+          rewards: [
+            new Reward("coins", { amount: Math.floor(1000 * 0.05) }),
+            new Reward("experience", { amount: Math.floor(500 * 0.05) }),
+          ],
         },
       ],
     },
@@ -205,21 +253,33 @@ export default function Home() {
       image: "/images.jpeg",
       name: "Quest 2",
       endDate: new Date().toISOString(),
-      description: "just complete the quest page today itself, as it is important and need to compelete today",
+      description: "Just complete the quest page today itself, as it is important and needs to be completed today",
       priority: "Medium",
       status: "Active",
       rewards: [
         new Reward("coins", { amount: 500 }),
         new Reward("experience", { amount: 300 }),
         new Reward("skill", { skill: "strength", amount: 5 }),
-        new Reward("item", { item: "Health Potion" }),
+        new Reward("item", { item: new Item({ id: 101, name: "Health Potion", price: 100, description: "Restores 50 health points.", image: "/images.jpeg", type: "Magical Item", amount: 50, claimed: false, attribute_name: "health" }, claimItems) }),
       ],
       sub_quests: [
         {
           id: 1,
           name: "Sub-quest 1",
           completed: false,
-          reward: new Reward("skill", { skill: "intelligence", amount: 10 }),
+          rewards: [
+            new Reward("coins", { amount: Math.floor(500 * 0.05) }),
+            new Reward("experience", { amount: Math.floor(300 * 0.05) }),
+          ],
+        },
+        {
+          id: 2,
+          name: "Sub-quest 2",
+          completed: false,
+          rewards: [
+            new Reward("coins", { amount: Math.floor(500 * 0.05) }),
+            new Reward("experience", { amount: Math.floor(300 * 0.05) }),
+          ],
         },
       ],
     },
@@ -228,24 +288,35 @@ export default function Home() {
       image: "/images.jpeg",
       name: "Quest 3",
       endDate: new Date().toISOString(),
-      description: "just complete the quest page today itself, as it is important and need to compelete today",
+      description: "Just complete the quest page today itself, as it is important and needs to be completed today",
       priority: "High",
       status: "Completed",
       rewards: [
         new Reward("coins", { amount: 2000 }),
         new Reward("experience", { amount: 1000 }),
-        new Reward("item", { item: "Sword" }),
+        new Reward("item", { item: new Item({ id: 102, name: "Sword", price: 2000, description: "A sharp blade for battle.", image: "/images.jpeg", type: "Weapon", amount: 1, claimed: false, attribute_name: "strength" }, claimItems) }),
       ],
       sub_quests: [
         {
           id: 1,
           name: "Sub-quest 1",
           completed: true,
-          reward: new Reward("item", { item: "Running Shoes" }),
+          rewards: [
+            new Reward("coins", { amount: Math.floor(2000 * 0.05) }),
+            new Reward("experience", { amount: Math.floor(1000 * 0.05) }),
+          ],
+        },
+        {
+          id: 2,
+          name: "Sub-quest 2",
+          completed: false,
+          rewards: [
+            new Reward("coins", { amount: Math.floor(2000 * 0.05) }),
+            new Reward("experience", { amount: Math.floor(1000 * 0.05) }),
+          ],
         },
       ],
     },
-    // Example Quest 4
     {
       id: 4,
       image: "/quest4.png",
@@ -263,17 +334,22 @@ export default function Home() {
           id: 1,
           name: "Read 25 pages",
           completed: true,
-          reward: new Reward("experience", { amount: 100 }),
+          rewards: [
+            new Reward("coins", { amount: 0 }),
+            new Reward("experience", { amount: Math.floor(200 * 0.05) }),
+          ],
         },
         {
           id: 2,
           name: "Read 25 more pages",
           completed: false,
-          reward: new Reward("experience", { amount: 100 }),
+          rewards: [
+            new Reward("coins", { amount: 0 }),
+            new Reward("experience", { amount: Math.floor(200 * 0.05) }),
+          ],
         },
       ],
     },
-    // Example Quest 5
     {
       id: 5,
       image: "/quest5.png",
@@ -284,24 +360,29 @@ export default function Home() {
       status: "Active",
       rewards: [
         new Reward("coins", { amount: 800 }),
-        new Reward("item", { item: "Coffee Mug" }),
+        new Reward("item", { item: new Item({ id: 104, name: "Coffee Mug", price: 200, description: "A mug to start your day.", image: "/images.jpeg", type: "Object", amount: 1, claimed: false, attribute_name: "none" }, claimItems) }),
       ],
       sub_quests: [
         {
           id: 1,
           name: "Day 1 Routine",
           completed: false,
-          reward: new Reward("coins", { amount: 400 }),
+          rewards: [
+            new Reward("coins", { amount: Math.floor(800 * 0.05) }),
+            new Reward("experience", { amount: 0 }),
+          ],
         },
         {
           id: 2,
           name: "Day 2 Routine",
           completed: false,
-          reward: new Reward("coins", { amount: 400 }),
+          rewards: [
+            new Reward("coins", { amount: Math.floor(800 * 0.05) }),
+            new Reward("experience", { amount: 0 }),
+          ],
         },
       ],
     },
-    // Example Quest 6
     {
       id: 6,
       image: "/quest6.png",
@@ -319,23 +400,31 @@ export default function Home() {
           id: 1,
           name: "Day 1 Workout",
           completed: true,
-          reward: new Reward("experience", { amount: 200 }),
+          rewards: [
+            new Reward("coins", { amount: 0 }),
+            new Reward("experience", { amount: Math.floor(600 * 0.05) }),
+          ],
         },
         {
           id: 2,
           name: "Day 2 Workout",
           completed: false,
-          reward: new Reward("experience", { amount: 200 }),
+          rewards: [
+            new Reward("coins", { amount: 0 }),
+            new Reward("experience", { amount: Math.floor(600 * 0.05) }),
+          ],
         },
         {
           id: 3,
           name: "Day 3 Workout",
           completed: false,
-          reward: new Reward("experience", { amount: 200 }),
+          rewards: [
+            new Reward("coins", { amount: 0 }),
+            new Reward("experience", { amount: Math.floor(600 * 0.05) }),
+          ],
         },
       ],
     },
-    // Example Quest 7
     {
       id: 7,
       image: "/quest7.png",
@@ -353,163 +442,86 @@ export default function Home() {
           id: 1,
           name: "30 minutes coding",
           completed: false,
-          reward: new Reward("experience", { amount: 75 }),
+          rewards: [
+            new Reward("coins", { amount: Math.floor(300 * 0.05) }),
+            new Reward("experience", { amount: Math.floor(150 * 0.05) }),
+          ],
         },
         {
           id: 2,
           name: "Another 30 minutes coding",
           completed: false,
-          reward: new Reward("experience", { amount: 75 }),
+          rewards: [
+            new Reward("coins", { amount: Math.floor(300 * 0.05) }),
+            new Reward("experience", { amount: Math.floor(150 * 0.05) }),
+          ],
         },
       ],
     },
-  ])
-
-
-
-
-  const buyItem = (item) => {
-    if (user.coins >= item.price) {
-      updateCoins(-item.price);
-      // Ensure unique id for the new item using timestamp and random
-      const newId = Date.now() + Math.floor(Math.random() * 1000000);
-      const newItem = new Item({ ...item, id: newId }, item.onClaim, item.skill_name || "none");
-      setUser(prev => ({
-        ...prev,
-        inventory: [...prev.inventory, newItem],
-      }));
-      alert(`You bought: ${item.name}`);
-    } else {
-      alert("Not enough coins to buy this item.");
-    }
-  };
-
-
-
-
-
-
-
-
-
-
-  const [StoreItems, setStoreItems] = useState([
-    new Item({
-      id: 1,
-      name: "Shadow Fight Game",
-      price: 300,
-      description: "Epic battles and martial arts.",
-      image: "/image_b.jpg",
-      type: "Object",
-      amount: 1,
-      claimed: false,
-      attribute_name: "agility",
-    }, claimObjects),
-    new Item({
-      id: 2,
-      name: "Playing Mobile Game",
-      price: 300,
-      description: "Immersive gaming experience.",
-      image: "/images.jpeg",
-      type: "Object",
-      amount: 1,
-      claimed: false,
-      attribute_name: "intelligence",
-    }, claimObjects),
-    new Item({
-      id: 3,
-      name: "Gali Cricket",
-      price: 300,
-      description: "Play with friends in streets.",
-      image: "/images.jpeg",
-      type: "Object",
-      amount: 1,
-      claimed: false,
-      attribute_name: "strength",
-    }, claimObjects),
-    new Item({
-      id: 4,
-      name: "Casio MTP 1183",
-      price: 1000,
-      description: "Stylish wristwatch with leather strap.",
-      image: "/images.jpeg",
-      type: "Object",
-      amount: 1,
-      claimed: false,
-      attribute_name: "luck",
-    }, claimObjects),
-    new Item({
-      id: 5,
-      name: "Chatting With Her",
-      price: 500,
-      description: "Romantic texting session.",
-      image: "/images.jpeg",
-      type: "Object",
-      amount: 1,
-      claimed: false,
-      attribute_name: "health",
-    }, claimObjects),
-    new Item({
-      id: 6,
-      name: "Butter Scotch Ice Cream",
-      price: 300,
-      description: "Delicious frozen dessert.",
-      image: "/images.jpeg",
-      type: "Object",
-      amount: 1,
-      claimed: false,
-      attribute_name: "health",
-    }, claimObjects),
-    new Item({
-      id: 7,
-      name: "Meeting Her",
-      price: 1500,
-      description: "Calling her and asking her to meet, you both can talk, walk, dance, etc.",
-      image: "/images.jpeg",
-      type: "Object",
-      amount: 1,
-      claimed: false,
-      attribute_name: "stamina",
-    }, claimObjects),
-    new Item({
-      id: 8,
-      name: "Magical Sword",
-      price: 5000,
-      description: "A sword that glows with magical energy.",
-      image: "/images.jpeg",
-      type: "Magical Item",
-      amount: 60,
-      claimed: false,
-      attribute_name: "strength",
-    }, claimItems),
-    new Item({
-      id: 9,
-      name: "Enchanted Shield",
-      price: 4000,
-      description: "A shield that protects against dark magic.",
-      image: "/images.jpeg",
-      type: "Magical Item",
-      amount: 1,
-      claimed: false,
-      attribute_name: "health",
-    }, claimItems),
-    new Item({
-      id: 10,
-      name: "Mystic Amulet",
-      price: 6000,
-      description: "An amulet that grants the wearer special powers.",
-      image: "/images.jpeg",
-      type: "Magical Item",
-      amount: 1,
-      claimed: false,
-      attribute_name: "experience",
-    }, claimItems),
   ]);
 
+  // --- Level Up Toasts ---
+  const prevSkillLevels = useRef(user.stats.map(stat => stat.level));
+  const prevUserLevel = useRef(user.level);
+  const prevUserHealth = useRef(user.health);
+  useEffect(() => {
+    user.stats.forEach((stat, idx) => {
+      const prevLevel = prevSkillLevels.current[idx];
+      if (stat.level > prevLevel) {
+        showGameToast({
+          icon: "⚔️",
+          title: `${stat.skill} Level Up!`,
+          description: `You've reached Level ${stat.level}!`,
+          border_color: "border-green-500",
+          text_color: "text-green-400",
+          progressClass_color: "!bg-green-500",
+        });
+      }
+    });
+    prevSkillLevels.current = user.stats.map(stat => stat.level);
+  }, [user.stats]);
 
+  useEffect(() => {
+    if (user.level > prevUserLevel.current) {
+      showGameToast({
+        icon: "🎉",
+        title: "Level Up!",
+        description: `You've reached Level ${user.level}!`,
+        border_color: "border-blue-500",
+        text_color: "text-blue-400",
+        progressClass_color: "!bg-blue-500",
+      });
+    }
+    prevUserLevel.current = user.level;
+  }, [user.level]);
+
+  useEffect(() => {
+    if (user.health > prevUserHealth.current) {
+      showGameToast({
+        icon: "❤️",
+        title: "Health Restored!",
+        description: `Your health increased to ${user.health}.`,
+        border_color: "border-red-500",
+        text_color: "text-red-500",
+        progressClass_color: "!bg-red-700",
+      });
+    } else if (user.health < prevUserHealth.current) {
+      showGameToast({
+        icon: "💔",
+        title: "Health Decreased!",
+        description: `Your health dropped to ${user.health}.`,
+        border_color: "border-red-700",
+        text_color: "text-red-600",
+        progressClass_color: "!bg-red-700",
+      });
+    }
+    prevUserHealth.current = user.health;
+  }, [user.health]);
+
+  // --- Render ---
   return (
     <div>
-      <div className="fixed top-0 left-0 w-full z-50">
+      <div className="fixed top-0 left-0 w-full z-50 ">
         <Navbar
           screen={screen}
           setScreen={setScreen}
@@ -517,22 +529,28 @@ export default function Home() {
           user={user}
         />
       </div>
-      <div className="flex flex-col items-center justify-center  mt-24">
-        {screen === "Home" && <Dashboard
-          user={user}
-          getMaxHealthForLevel={getMaxHealthForLevel}
-          getMaxExpForLevel={getMaxExpForLevel}
-          getMaxSkillPoints={getMaxSkillPoints}
-        />}
-        {screen === "Store" && <StorePage StoreItems={StoreItems} buyItem={buyItem} />}
-        {screen === "Quests" && <h1 className=" mb-4"><QuestPage quests={quests} setQuests={setQuests} /></h1>}
-        {screen === "Habits" && <h1 className="text-4xl font-bold mb-4">Habits Page</h1>}
-        {screen === "Settings" && <h1 className="text-4xl font-bold mb-4">Settings Page</h1>}
+      <div className="flex flex-col items-center justify-center mt-24">
+        {screen === "Home" && (
+          <Dashboard
+            user={user}
+            getMaxHealthForLevel={getMaxHealthForLevel}
+            getMaxExpForLevel={getMaxExpForLevel}
+            getMaxSkillPoints={getMaxSkillPoints}
+          />
+        )}
+        {screen === "Store" && (
+          <StorePage StoreItems={StoreItems} buyItem={buyItem} />
+        )}
+        {screen === "Quests" && (
+          <QuestPage quests={quests} setQuests={setQuests} />
+        )}
+        {screen === "Habits" && (
+          <h1 className="text-4xl font-bold mb-4">Habits Page</h1>
+        )}
+        {screen === "Settings" && (
+          <h1 className="text-4xl font-bold mb-4">Settings Page</h1>
+        )}
       </div>
-
-
-
-
     </div>
   );
 }

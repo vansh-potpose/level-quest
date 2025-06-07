@@ -6,10 +6,10 @@ import { IoCube } from "react-icons/io5";
 import { FaCheck } from "react-icons/fa";
 
 export default function QuestCard({ quest, onQuestClick }) {
-  const hardborder = "border-[#FF1A00]";
-  const mediumborder = "border-[#F9E827]";
+  const hardborder = "border-[#FF1A00]/70";
+  const mediumborder = "border-[#F9E827]/70";
   const easyborder = "border-[#3d444d]";
-  const completedborder = "border-[#31FB74]";
+  const completedborder = "border-[#31FB74]/70";
 
   const totalSubquests = quest.sub_quests ? quest.sub_quests.length : 0;
   const completedSubquests = quest.sub_quests

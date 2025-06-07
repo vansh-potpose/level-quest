@@ -2,7 +2,9 @@ import React, { useState, useEffect } from "react";
 import { BsCoin } from "react-icons/bs";
 import { IoCube } from "react-icons/io5";
 import { FaCheck } from "react-icons/fa";
+import { toast } from 'react-toastify';
 import ProgressBar from "../ProgressBar";
+import { showGameToast } from "../ShowGameToast";
 
 const QuestModal = ({ quest, onClose, updateSubQuestStatus }) => {
   const [subQuests, setSubQuests] = useState(quest.sub_quests || []);
@@ -65,15 +67,14 @@ const QuestModal = ({ quest, onClose, updateSubQuestStatus }) => {
             className="w-full h-auto rounded object-fill"
           />
           <div
-            className={`absolute z-50 right-2 p-2 bottom-2 border-2 font-bold ${
-              quest.status === "Completed"
+            className={`absolute z-50 right-2 p-2 bottom-2 border-2 font-bold ${quest.status === "Completed"
                 ? "border-[#31FB74] bg-[#31FB74]/70"
                 : quest.priority === "High"
-                ? "border-[#FF1A00] bg-[#FF1A00]/70"
-                : quest.priority === "Medium"
-                ? "border-[#F9E827] bg-[#F9E827]/70"
-                : "border-[#3d444d] bg-[#3d444d]/70"
-            } rounded-lg`}
+                  ? "border-[#FF1A00] bg-[#FF1A00]/70"
+                  : quest.priority === "Medium"
+                    ? "border-[#F9E827] bg-[#F9E827]/70"
+                    : "border-[#3d444d] bg-[#3d444d]/70"
+              } rounded-lg`}
           >
             {quest.status === "Completed"
               ? "Completed"
@@ -89,10 +90,10 @@ const QuestModal = ({ quest, onClose, updateSubQuestStatus }) => {
               <b>
                 {quest.endDate
                   ? new Date(quest.endDate).toLocaleDateString(undefined, {
-                      year: "numeric",
-                      month: "short",
-                      day: "numeric",
-                    })
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                  })
                   : ""}
               </b>
             </span>
@@ -152,31 +153,32 @@ const QuestModal = ({ quest, onClose, updateSubQuestStatus }) => {
                   <div className="flex items-center gap-2 cursor-pointer">
                     <div
                       onClick={() => handleCheckboxToggle(sq.id, sq.completed)}
-                      className={`w-5 h-5 rounded-sm border-2 flex items-center justify-center cursor-pointer transition ${
-                        sq.completed
+                      className={`w-5 h-5 rounded-sm border-2 flex items-center justify-center cursor-pointer transition ${sq.completed
                           ? "border-green-500 text-green-500 bg-green-700/20"
                           : "border-gray-600 text-gray-600 bg-gray-700/20"
-                      }`}
+                        }`}
                     >
                       {sq.completed && <FaCheck size={12} />}
                     </div>
                     <span
-                      className={`text-md ${
-                        sq.completed
+                      className={`text-md ${sq.completed
                           ? "text-green-300 line-through"
                           : "text-gray-300"
-                      }`}
+                        }`}
                     >
                       {sq.name}
                     </span>
                   </div>
                   <div className="flex items-center gap-4">
-                    <span className="flex items-center gap-1 text-sm font-medium">
-                      <BsCoin size={16} className="text-yellow-400" />
-                      300
-                    </span>
+                    
                     {sq.completed && (
-                      <button className="bg-green-500 hover:bg-green-400 transition text-white text-sm font-semibold px-3 py-1 rounded-md">
+                      <button className="bg-green-500 hover:bg-green-400 transition text-white text-sm font-semibold px-3 py-1 rounded-md"
+                        onClick={() => showGameToast({
+                          icon: "🎁",
+                          title: "Reward Claimed",
+                          description: "+100 XP, Health Potion added!",
+                          color: "yellow",
+                        })}>
                         Claim
                       </button>
                     )}
