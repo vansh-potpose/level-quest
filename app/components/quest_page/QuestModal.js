@@ -70,7 +70,7 @@ const QuestModal = ({ quest, onClose, updateSubQuestStatus }) => {
     }
 
     const confirmed = await confirmToast({
-      message: "Mark this subquest as completed?",
+      message: "Mark this subquest as completed? (This change cannot be reverted.)",
       confirmText: "Yes",
       cancelText: "No",
     });
@@ -238,7 +238,7 @@ const QuestModal = ({ quest, onClose, updateSubQuestStatus }) => {
                   </div>
                   <div className="flex items-center gap-4">
 
-                    {sq.completed && (
+                    {(sq.completed) && (
                       <button className="bg-green-500 hover:bg-green-400 transition text-white text-sm font-semibold px-3 py-1 rounded-md"
                         onClick={() => handleDelete()}>
                         Claim
