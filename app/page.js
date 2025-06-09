@@ -141,14 +141,6 @@ export default function Home() {
     });
     setQuests(prev => prev.map(q => q.id === quest.id ? { ...q, status: "Completed" } : q));
     showGameToast({
-      icon: "🏆" ,
-      title: "Quest Completed!",
-      description: `You completed the quest: ${quest.name}`,
-      border_color: "border-yellow-500",
-      text_color: "text-yellow-400",
-      progressClass_color: "!bg-yellow-500",
-    });
-    showGameToast({
       icon: "🎁",
       title: "Rewards Claimed!",
       description: `You received: ${rewars_names}`,
