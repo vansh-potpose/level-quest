@@ -29,6 +29,7 @@ const QuestModal = ({ quest, onClose, updateSubQuestStatus,claimRewards }) => {
     // You can update the quest status here, e.g., call an API or update state
     // For example, if quest is in parent state, you might call a prop function
     // Or you can show a toast
+    claimRewards(quest); // Call the function to claim rewards
     showGameToast({
       icon: "🏆",
       title: "Quest Completed!",

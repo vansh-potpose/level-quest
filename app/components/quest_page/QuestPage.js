@@ -3,7 +3,7 @@ import { useState, useMemo } from "react";
 import QuestCard from "./QuestCard";
 import QuestModal from "./QuestModal";
 
-export default function QuestPage({ quests, setQuests }) {
+export default function QuestPage({ quests, setQuests,claimRewards }) {
   const [selectedQuest, setSelectedQuest] = useState(null);
   const [sortOption, setSortOption] = useState("name");
   const [searchTerm, setSearchTerm] = useState("");
