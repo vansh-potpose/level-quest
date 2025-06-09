@@ -112,6 +112,7 @@ export default function QuestPage({ quests, setQuests }) {
           quest={selectedQuest}
           onClose={handleCloseModal}
           updateSubQuestStatus={updateSubQuestStatus}
+          claimRewards={claimRewards}
         />
       )}
     </div>

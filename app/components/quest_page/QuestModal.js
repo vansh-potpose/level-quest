@@ -7,7 +7,7 @@ import ProgressBar from "../ProgressBar";
 import { showGameToast } from "../ShowGameToast";
 import { confirmToast } from "../confirmToast";
 
-const QuestModal = ({ quest, onClose, updateSubQuestStatus }) => {
+const QuestModal = ({ quest, onClose, updateSubQuestStatus,claimRewards }) => {
   const [subQuests, setSubQuests] = useState(quest.sub_quests || []);
 
   useEffect(() => {

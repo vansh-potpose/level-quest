@@ -277,7 +277,7 @@ export default function Home() {
           <StorePage StoreItems={StoreItems} buyItem={buyItem} />
         )}
         {screen === "Quests" && (
-          <QuestPage quests={quests} setQuests={setQuests} />
+          <QuestPage quests={quests} setQuests={setQuests} claimRewards={claimRewards} />
         )}
         {screen === "Habits" && (
           <h1 className="text-4xl font-bold mb-4">Habits Page</h1>
