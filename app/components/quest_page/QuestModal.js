@@ -43,19 +43,16 @@ const QuestModal = ({ quest, onClose, updateSubQuestStatus,claimRewards }) => {
   }
 
 
-  async function handleDelete() {
-    const confirmed = await confirmToast({
-      message: "Do you really want to delete this item?",
-      confirmText: "Delete",
-      cancelText: "Cancel",
-    });
-
-    if (confirmed) {
-      console.log("Deleted");
-      // call delete API etc.
-    } else {
-      console.log("Cancelled");
+  async function claimSubQuestRewads(quest) {
+    if (quest.rewards.length === 0) {
+      toast.info("No rewards available for this subquest.");
+      return;
     }
+
+ 
+        claimRewards(quest);
+  
+ 
   }
 
 
@@ -241,7 +238,7 @@ const QuestModal = ({ quest, onClose, updateSubQuestStatus,claimRewards }) => {
 
                     {(sq.completed) && (
                       <button className="bg-green-500 hover:bg-green-400 transition text-white text-sm font-semibold px-3 py-1 rounded-md"
-                        onClick={() => handleDelete()}>
+                        onClick={() => claimSubQuestRewads(subQuests)}>
                         Claim
                       </button>
                     )}
