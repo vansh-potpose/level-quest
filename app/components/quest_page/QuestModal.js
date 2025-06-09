@@ -15,34 +15,76 @@ const QuestModal = ({ quest, onClose, updateSubQuestStatus }) => {
   }, [quest.sub_quests]);
 
 
-  async function handleDelete() {
-  const confirmed = await confirmToast({
-    message: "Do you really want to delete this item?",
-    confirmText: "Delete",
-    cancelText: "Cancel",
-  });
+  useEffect(() => {
+    if (subQuests.length > 0 && subQuests.every(sq => sq.completed)) {
+      // Mark parent quest as completed
+      if (quest.status !== "Completed") {
+        updateQuestStatusToCompleted();
+        quest.status = "Completed"; // Update local quest status
+      }
+    }
+  }, [subQuests]);
 
-  if (confirmed) {
-    console.log("Deleted");
-    // call delete API etc.
-  } else {
-    console.log("Cancelled");
+  function updateQuestStatusToCompleted() {
+    // You can update the quest status here, e.g., call an API or update state
+    // For example, if quest is in parent state, you might call a prop function
+    // Or you can show a toast
+    showGameToast({
+      icon: "🏆",
+      title: "Quest Completed!",
+      description: `You completed the quest: ${quest.name}`,
+      border_color: "border-yellow-500",
+      text_color: "text-yellow-400",
+      progressClass_color: "!bg-yellow-500",
+    });
+    // Optionally update quest.status if it's local state
+    // Or call a prop like updateQuestStatus(quest.id, "Completed")
   }
-}
-  
+
+
+  async function handleDelete() {
+    const confirmed = await confirmToast({
+      message: "Do you really want to delete this item?",
+      confirmText: "Delete",
+      cancelText: "Cancel",
+    });
+
+    if (confirmed) {
+      console.log("Deleted");
+      // call delete API etc.
+    } else {
+      console.log("Cancelled");
+    }
+  }
+
 
   const completedCount = subQuests.filter((sq) => sq.completed).length || 0;
   const totalCount = subQuests.length || 1;
   const completionRatio = (completedCount / totalCount) * 100;
 
-  const handleCheckboxToggle = (subQuestId, currentStatus) => {
-    setSubQuests((subQuests) =>
-      subQuests.map((sq) =>
-        sq.id === subQuestId ? { ...sq, completed: !currentStatus } : sq
-      )
-    );
-    updateSubQuestStatus(quest.id, subQuestId, !currentStatus);
+  const handleCheckboxToggle = async (subQuestId, currentStatus) => {
+    if (currentStatus) {
+      // Prevent unchecking if already checked
+      toast.info("You can't uncheck a completed subquest.");
+      return;
+    }
+
+    const confirmed = await confirmToast({
+      message: "Mark this subquest as completed?",
+      confirmText: "Yes",
+      cancelText: "No",
+    });
+
+    if (confirmed) {
+      setSubQuests((subQuests) =>
+        subQuests.map((sq) =>
+          sq.id === subQuestId ? { ...sq, completed: true } : sq
+        )
+      );
+      updateSubQuestStatus(quest.id, subQuestId, true);
+    }
   };
+
 
   const getTimeLeft = () => {
     if (!quest.endDate) return "N/A";
@@ -86,7 +128,7 @@ const QuestModal = ({ quest, onClose, updateSubQuestStatus }) => {
             alt={quest.name}
             className="w-full h-auto rounded object-fill"
           />
-          
+
         </div>
 
         <div className="p-4">
@@ -108,28 +150,28 @@ const QuestModal = ({ quest, onClose, updateSubQuestStatus }) => {
 
           <p className="text-[#9198a1] text-sm mb-4">{quest.description}</p>
 
-                
+
           <div className="text-sm text-[#f0f6fc] mb-2">
             <div className="flex items-center gap-2 justify-between">
-            <p>
-              <b>Time left :</b> {getTimeLeft()}
-            </p>
+              <p>
+                <b>Time left :</b> {getTimeLeft()}
+              </p>
 
-            <div
-            className={` border w-fit py-1 px-2 ${quest.status === "Completed"
-                ? "border-[#31FB74] "
-                : quest.priority === "High"
-                  ? "border-[#FF1A00] "
-                  : quest.priority === "Medium"
-                    ? "border-[#F9E827] "
-                    : "border-[#3d444d] "
-              } rounded-lg`}
-          >
-            {quest.status === "Completed"
-              ? "Completed"
-              : "Priority : " + quest.priority}
-          </div>
-          </div>
+              <div
+                className={` border w-fit py-1 px-2 ${quest.status === "Completed"
+                  ? "border-[#31FB74] "
+                  : quest.priority === "High"
+                    ? "border-[#FF1A00] "
+                    : quest.priority === "Medium"
+                      ? "border-[#F9E827] "
+                      : "border-[#3d444d] "
+                  } rounded-lg`}
+              >
+                {quest.status === "Completed"
+                  ? "Completed"
+                  : "Priority : " + quest.priority}
+              </div>
+            </div>
 
             <div className="mt-2 flex gap-5 items-start">
               <div className="min-w-fit font-semibold">Rewards :</div>
@@ -179,23 +221,23 @@ const QuestModal = ({ quest, onClose, updateSubQuestStatus }) => {
                     <div
                       onClick={() => handleCheckboxToggle(sq.id, sq.completed)}
                       className={`w-5 h-5 rounded-sm border-2 flex items-center justify-center cursor-pointer transition ${sq.completed
-                          ? "border-green-500 text-green-500 bg-green-700/20"
-                          : "border-gray-600 text-gray-600 bg-gray-700/20"
+                        ? "border-green-500 text-green-500 bg-green-700/20"
+                        : "border-gray-600 text-gray-600 bg-gray-700/20"
                         }`}
                     >
                       {sq.completed && <FaCheck size={12} />}
                     </div>
                     <span
                       className={`text-md ${sq.completed
-                          ? "text-green-300 line-through"
-                          : "text-gray-300"
+                        ? "text-green-300 line-through"
+                        : "text-gray-300"
                         }`}
                     >
                       {sq.name}
                     </span>
                   </div>
                   <div className="flex items-center gap-4">
-                    
+
                     {sq.completed && (
                       <button className="bg-green-500 hover:bg-green-400 transition text-white text-sm font-semibold px-3 py-1 rounded-md"
                         onClick={() => handleDelete()}>
