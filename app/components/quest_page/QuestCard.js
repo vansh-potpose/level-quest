@@ -37,20 +37,12 @@ export default function QuestCard({ quest, onQuestClick }) {
   return (
     <div
       onClick={() => onQuestClick(quest)}
-      className={`group relative bg-[#0d1117] border-2 ${
-        quest.status === "Completed"
-          ? completedborder
-          : quest.priority === "High"
-          ? hardborder
-          : quest.priority === "Medium"
-          ? mediumborder
-          : easyborder
-      } rounded-lg shadow-md w-96`}
+      className={`group relative bg-[#0d1117] border border-[#3d444d] rounded-lg shadow-md w-96`}
     >
       <div className="h-40 overflow-hidden rounded-t-lg">
         <img src={quest.image} alt={quest.name} className="w-full object-fill rounded-t-md " />
       </div>
-      <ProgressBar value={progress} color="bg-[#31FB74]" h="h-[5px] rounded-none" />
+      <ProgressBar value={progress} color="bg-[#22c55e]" h="h-[5px] rounded-none" />
       <div className="p-4">
         <h2 className="text-lg font-bold text-[#f0f6fc]">{quest.name}</h2>
         <p className="text-sm font-normal text-[#9198a1]">{quest.description}</p>
@@ -60,12 +52,15 @@ export default function QuestCard({ quest, onQuestClick }) {
         </div>
       </div>
       {quest.status === "Completed" && (
-        <div className="absolute top-0  justify-center  w-full bg-black/60 h-full flex items-center gap-2  text-[#31FB74] rounded-md p-2">
+        <div className="absolute top-0  justify-center  w-full bg-black/60 h-full flex items-center gap-2  text-[#22c55e] rounded-md p-2">
           <FaCheck size={50} />
         </div>
       )}
       <p className="group-hover:opacity-100 opacity-0 duration-700 absolute top-2 right-2 font-medium text-sm  bg-black/60 w-fit p-2 rounded-md transition-opacity">
         {getRemainingTime()}
+      </p>
+      <p className="group-hover:opacity-100 opacity-0 duration-700 absolute top-2 left-2 font-medium text-sm bg-black/60 w-fit p-2 rounded-md transition-opacity">
+        Priority
       </p>
     </div>
   );

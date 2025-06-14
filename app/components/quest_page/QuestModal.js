@@ -106,69 +106,88 @@ const QuestModal = ({
   };
 
   // UI
+  // Priority badge helper
+  const getPriorityBadge = () => {
+    if (quest.status === "Completed")
+      return (
+        <span className="bg-[#00c160] text-white px-3 py-1 rounded-full text-xs font-bold shadow">
+          Completed
+        </span>
+      );
+        if (quest.priority === "High")
+      return (
+        <span className="bg-[#e74c3c] text-white px-3 py-1 rounded-full text-xs font-bold shadow">
+          High Priority
+        </span>
+      );
+        if (quest.priority === "Medium")
+      return (
+        <span className="bg-[#f7ca18] text-gray-900 px-3 py-1 rounded-full text-xs font-bold shadow">
+          Medium Priority
+        </span>
+      );
+    return (
+      <span className="bg-gray-700/80 text-gray-200 px-3 py-1 rounded-full text-xs font-bold shadow">
+        Low Priority
+      </span>
+    );
+  };
+
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-white/40 border"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60"
       onClick={onClose}
     >
       <div
-        className="dark:bg-gray-900 bg-[#0d1117] pb-5 rounded-xl w-[90%] max-w-2xl shadow-lg relative"
+        className="relative bg-[#181c24] rounded-2xl w-[95%] max-w-2xl shadow-2xl border border-gray-800 overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
+        {/* Close Button */}
         <button
           onClick={onClose}
-          className="z-50 absolute top-3 right-4 text-2xl font-bold text-[#f0f6fc] bg-[#0d1117]/70 rounded-md flex w-6 h-6 items-center justify-center"
+          className="absolute top-4 right-4 text-2xl font-bold text-white bg-black/30 hover:bg-red-600/80 transition rounded-full w-9 h-9 flex items-center justify-center"
+          aria-label="Close"
         >
           ×
         </button>
 
-        <div className="relative w-full mb-4 h-64 overflow-hidden rounded-t-xl">
+        {/* Quest Image with overlay */}
+        <div className="relative w-full h-56 overflow-hidden">
           <img
             src={quest.image || "/images.jpeg"}
             alt={quest.name}
-            className="w-full h-auto rounded object-fill"
+            className="w-full h-full object-cover"
           />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#181c24] via-transparent to-transparent" />
         </div>
 
-        <div className="p-4">
-          <div className="flex justify-between items-center mb-2">
-            <h2 className="text-xl font-bold text-[#f0f6fc]">{quest.name}</h2>
-            <span className="text-sm text-[#f0f6fc]">
-              End Date:{" "}
-              <b>
-                {quest.endDate
-                  ? new Date(quest.endDate).toLocaleDateString(undefined, {
-                      year: "numeric",
-                      month: "short",
-                      day: "numeric",
-                    })
-                  : ""}
-              </b>
-            </span>
+        {/* Content */}
+        <div className="p-6">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3 gap-2">
+            <h2 className="text-2xl font-extrabold text-white tracking-tight">{quest.name}</h2>
+            <div className="flex items-center gap-2">
+              {getPriorityBadge()}
+              <span className="text-xs text-gray-400">
+                <b>
+                  {quest.endDate
+                    ? new Date(quest.endDate).toLocaleDateString(undefined, {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                      })
+                    : ""}
+                </b>
+              </span>
+            </div>
           </div>
-
-          <p className="text-[#9198a1] text-sm mb-4">{quest.description}</p>
-
+          <p className="text-gray-300 text-base mb-4">{quest.description}</p>
+          {/* Original subquest/reward logic */}
           <div className="text-sm text-[#f0f6fc] mb-2">
             <div className="flex items-center gap-2 justify-between">
               <p>
                 <b>Time left:</b> {getTimeLeft()}
               </p>
-              <div
-                className={`border w-fit py-1 px-2 ${
-                  quest.status === "Completed"
-                    ? "border-[#31FB74]"
-                    : quest.priority === "High"
-                    ? "border-[#FF1A00]"
-                    : quest.priority === "Medium"
-                    ? "border-[#F9E827]"
-                    : "border-[#3d444d]"
-                } rounded-lg`}
-              >
-                {quest.status === "Completed"
-                  ? "Completed"
-                  : "Priority: " + quest.priority}
-              </div>
+              
             </div>
             <div className="mt-2 flex gap-5 items-start">
               <div className="min-w-fit font-semibold">Rewards:</div>
@@ -177,7 +196,7 @@ const QuestModal = ({
           </div>
 
           <div className="my-4">
-            <ProgressBar value={completionRatio} color="bg-[#31FB74]" h="h-2" />
+            <ProgressBar value={completionRatio} color="bg-[#22c55e]" h="h-2" />
           </div>
 
           <div>
@@ -215,7 +234,7 @@ const QuestModal = ({
                     <Rewards rewards={sq.rewards} />
                     {sq.completed && (
                       <button
-                        className="bg-green-500 hover:bg-green-400 transition text-white text-sm font-semibold px-3 py-1 rounded-md"
+                        className="bg-[#22c55e] hover:bg-green-700 transition text-white text-sm font-semibold px-3 py-1 rounded-md"
                         onClick={() => handleClaimSubQuestRewards(sq)}
                         disabled={sq.claim}
                       >
