@@ -21,6 +21,7 @@ export default function Home() {
   const [user, setUser] = useState(exampleUser(claimItems));
   const [coins, setCoins] = useState(user.coins || 0);
   const [dailyChallenges, setDailyChallenges] = useState(dailyChallenge);
+  const [tasks, setTasks] = useState(user.Tasks);
 
   // --- Utility Functions ---
   const getMaxExpForLevel = (level) => Math.floor(BASE_XP * level ** 1.5);
@@ -63,7 +64,6 @@ export default function Home() {
     }));
   }
 
-  const [tasks, setTasks] = useState(user.Tasks);
   function updateExp(amount) {
     setUser(prev => {
       let newExp = prev.exp + amount;
