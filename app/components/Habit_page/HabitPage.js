@@ -4,7 +4,7 @@ import Calendar from './Calendar';
 import HabitChallengeList from './HabitChallengeList';
 import HabitChallengeHistory from './HabitChallengeHistory';
 
-export default function HabitPage({ dailyChallenges, setDailyChallenges }) {
+export default function HabitPage({ dailyChallenges, setDailyChallenges,tasks, setTasks }) {
     // Toggle completed state for a challenge by id
     const handleCheckboxChange = (id) => {
         const updatedChallenges = dailyChallenges.challenges.map((challenge) =>
@@ -18,7 +18,7 @@ export default function HabitPage({ dailyChallenges, setDailyChallenges }) {
     // Import Calendar and dependencies
 
     // Example initial state for calendar tasks
-    const [calendarTasks, setCalendarTasks] = useState({});
+    
 
     // Get today's date in YYYY-MM-DD format
     const today = new Date();
@@ -63,7 +63,7 @@ export default function HabitPage({ dailyChallenges, setDailyChallenges }) {
                     />
                 </div>
                 <div className="rounded-lg  flex items-center justify-center">
-                    <Calendar tasks={calendarTasks} setTasks={setCalendarTasks} />
+                    <Calendar tasks={tasks} setTasks={setTasks} />
                 </div>
             </div>
         </div>

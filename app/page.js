@@ -286,6 +286,9 @@ export default function Home() {
           <HabitPage
             dailyChallenges={dailyChallenges}
             setDailyChallenges={setDailyChallenges}
+            tasks={tasks}
+            setTasks={setTasks} 
+            
           />
         )}
         {screen === "Settings" && (
