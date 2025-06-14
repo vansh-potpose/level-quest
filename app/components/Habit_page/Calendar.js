@@ -174,8 +174,9 @@ const Calendar = ({ tasks, setTasks }) => {
                     color: "var(--foreground)"
                 }}
             >
-                <div className="TaskList__header text-lg font-semibold mb-8 tracking-wide flex items-center gap-2">
-                    Tasks for <span className="ml-1" style={{ color: "var(--active-element)" }}>{selectedDate || 'No date selected'}</span>
+                <div className="TaskList__header text-xl font-bold mb-8 tracking-wide flex items-center gap-2">
+                    <svg width="22" height="22" fill="none" stroke="var(--active-element)" strokeWidth="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                    Tasks for <span className="ml-1 text-md font-medium" style={{ color: "var(--active-element)" }}>{selectedDate.replace(/-/g,'/') || 'No date selected'}</span>
                 </div>
                 <div>
                     {tasksForDate.length === 0 && (
