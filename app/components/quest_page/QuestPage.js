@@ -1,21 +1,23 @@
 "use client";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import QuestCard from "./QuestCard";
 import QuestModal from "./QuestModal";
 
-export default function QuestPage({ quests, setQuests,claimRewards }) {
+export default function QuestPage({ quests, setQuests, claimRewards }) {
+  // State
   const [selectedQuest, setSelectedQuest] = useState(null);
   const [sortOption, setSortOption] = useState("name");
   const [searchTerm, setSearchTerm] = useState("");
-  const [filterStatus, setFilterStatus] = useState("Active"); // Filter quests by status
+  const [showCompleted, setShowCompleted] = useState(false);
 
-  const handleOpenModal = (quest) => setSelectedQuest(quest);
-  const handleCloseModal = () => setSelectedQuest(null);
+  // Handlers
+  const openModal = useCallback((quest) => setSelectedQuest(quest), []);
+  const closeModal = useCallback(() => setSelectedQuest(null), []);
 
-  // Update completion status of a sub-quest
-  const updateSubQuestStatus = (questId, subQuestId, completed) => {
-    setQuests((prevQuests) =>
-      prevQuests.map((quest) =>
+  // Update sub-quest completion
+  const updateSubQuestStatus = useCallback((questId, subQuestId, completed) => {
+    setQuests((prev) =>
+      prev.map((quest) =>
         quest.id === questId
           ? {
               ...quest,
@@ -26,39 +28,77 @@ export default function QuestPage({ quests, setQuests,claimRewards }) {
           : quest
       )
     );
-  };
+  }, [setQuests]);
 
-  // Filter and sort quests based on search, sort option, and status filter
-  const filteredAndSortedQuests = useMemo(() => {
-    // Filter by search term (case-insensitive)
-    let filtered = quests.filter((quest) =>
-      quest.name.toLowerCase().includes(searchTerm.trim().toLowerCase())
+  // Update sub-quest claimed
+  const updateSubQuestClaimed = useCallback((questId, subQuestId, claimed) => {
+    setQuests((prev) =>
+      prev.map((quest) =>
+        quest.id === questId
+          ? {
+              ...quest,
+              sub_quests: quest.sub_quests.map((sub) =>
+                sub.id === subQuestId ? { ...sub, claim: claimed } : sub
+              ),
+            }
+          : quest
+      )
     );
+  }, [setQuests]);
 
-    // Filter by quest status (Completed or Active)
-    filtered = filtered.filter((quest) =>
-      filterStatus === "Completed"
-        ? quest.status === "Completed"
-        : quest.status !== "Completed"
+  // Update quest status
+  const updateQuestCompleted = useCallback((questId, completed) => {
+    setQuests((prev) =>
+      prev.map((quest) =>
+        quest.id === questId
+          ? { ...quest, status: completed ? "Completed" : "Active" }
+          : quest
+      )
     );
+  }, [setQuests]);
 
-    // Sort quests
-    if (sortOption === "name") {
-      filtered.sort((a, b) => a.name.localeCompare(b.name));
-    } else if (sortOption === "date") {
-      filtered.sort((a, b) => new Date(a.endDate) - new Date(b.endDate));
-    } else if (sortOption === "difficulty") {
-      const priorityOrder = { High: 1, Medium: 2, Low: 3 };
-      filtered.sort(
-        (a, b) => priorityOrder[a.priority] - priorityOrder[b.priority]
-      );
-    }
+  // Filtering and sorting
+  const filterQuests = useCallback(
+    (quests) =>
+      quests.filter((quest) => {
+        const matchesSearch = quest.name
+          .toLowerCase()
+          .includes(searchTerm.trim().toLowerCase());
+        const matchesStatus = showCompleted
+          ? quest.status === "Completed"
+          : quest.status !== "Completed";
+        return matchesSearch && matchesStatus;
+      }),
+    [searchTerm, showCompleted]
+  );
 
-    return filtered;
-  }, [quests, sortOption, searchTerm, filterStatus]);
+  const sortQuests = useCallback(
+    (quests) => {
+      const sorted = [...quests];
+      if (sortOption === "name") {
+        sorted.sort((a, b) => a.name.localeCompare(b.name));
+      } else if (sortOption === "date") {
+        sorted.sort((a, b) => new Date(a.endDate) - new Date(b.endDate));
+      } else if (sortOption === "difficulty") {
+        const priorityOrder = { High: 1, Medium: 2, Low: 3 };
+        sorted.sort(
+          (a, b) => priorityOrder[a.priority] - priorityOrder[b.priority]
+        );
+      }
+      return sorted;
+    },
+    [sortOption]
+  );
 
+  const displayedQuests = useMemo(
+    () => sortQuests(filterQuests(quests)),
+    [quests, filterQuests, sortQuests]
+  );
+
+  // Render
   return (
     <div className="flex flex-col items-center h-screen">
+      {/* Controls */}
       <div className="flex items-center gap-3 bg-[#0d1117] p-3 rounded-lg shadow-md">
         <select
           className="px-3 py-1.5 text-xs rounded-md border border-[#3d444d] bg-[#151b23] text-[#f0f6fc] focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
@@ -80,39 +120,37 @@ export default function QuestPage({ quests, setQuests,claimRewards }) {
 
         <button
           className={`px-3 min-w-32 py-1.5 text-xs rounded-md border-2 ${
-            filterStatus === "Completed"
-              ? "border-green-700"
-              : "border-yellow-600"
+            showCompleted ? "border-green-700" : "border-yellow-600"
           } text-[#f0f6fc] focus:outline-none transition`}
-          onClick={() =>
-            setFilterStatus((prev) =>
-              prev === "Completed" ? "Active" : "Completed"
-            )
-          }
+          onClick={() => setShowCompleted((prev) => !prev)}
           aria-label="Toggle quest status filter"
         >
-          {filterStatus === "Completed" ? "Show Active" : "Show Completed"}
+          {showCompleted ? "Show Active" : "Show Completed"}
         </button>
       </div>
 
+      {/* Quest Cards */}
       <div className="w-full max-w-[1200px] mx-auto mt-4">
         <div className="flex flex-wrap gap-4">
-          {filteredAndSortedQuests.map((quest) => (
+          {displayedQuests.map((quest) => (
             <QuestCard
               quest={quest}
               key={quest.id}
-              onQuestClick={handleOpenModal}
+              onQuestClick={openModal}
             />
           ))}
         </div>
       </div>
 
+      {/* Modal */}
       {selectedQuest && (
         <QuestModal
           quest={selectedQuest}
-          onClose={handleCloseModal}
+          onClose={closeModal}
           updateSubQuestStatus={updateSubQuestStatus}
           claimRewards={claimRewards}
+          updateSubQuestClaimed={updateSubQuestClaimed}
+          updateQuestCompleted={updateQuestCompleted}
         />
       )}
     </div>

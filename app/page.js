@@ -8,7 +8,8 @@ import Reward from "./components/Reward";
 import Item from "./components/Item";
 import { useEffect, useState, useRef } from "react";
 import StorePage from "./components/store_page/StorePage";
-import {exampleUser, exampleStoreItems, exampleQuests} from "./data";
+import HabitPage from "./components/Habit_page/HabitPage";
+import {exampleUser, exampleStoreItems, exampleQuests,dailyChallenge} from "./data";
 
 export default function Home() {
   // --- Constants ---
@@ -16,9 +17,10 @@ export default function Home() {
   const BASE_XP = 100;
 
   // --- State ---
-  const [screen, setScreen] = useState("Store");
+  const [screen, setScreen] = useState("Home");
   const [user, setUser] = useState(exampleUser(claimItems));
   const [coins, setCoins] = useState(user.coins || 0);
+  const [dailyChallenges, setDailyChallenges] = useState(dailyChallenge);
 
   // --- Utility Functions ---
   const getMaxExpForLevel = (level) => Math.floor(BASE_XP * level ** 1.5);
@@ -139,7 +141,6 @@ export default function Home() {
     quest.rewards.forEach(reward => {
       claimReward(reward);
     });
-    setQuests(prev => prev.map(q => q.id === quest.id ? { ...q, status: "Completed" } : q));
     showGameToast({
       icon: "🎁",
       title: "Rewards Claimed!",
@@ -247,8 +248,17 @@ export default function Home() {
 
   // --- Render ---
   return (
-    <div>
-      <div className="fixed top-0 left-0 w-full z-50 ">
+    <div className="relative min-h-screen flex flex-col">
+      {/* Background */}
+      <div
+        className="absolute inset-0 -z-10"
+        style={{
+          background: "linear-gradient(135deg, #000 50%, rgba(0,60,130,0.85) 100%)",
+          filter: "blur(40px)",
+          transition: "background 0.8s cubic-bezier(0.4,0,0.2,1)",
+        }}
+      />
+      <div className="fixed top-0 left-0 w-full z-50">
         <Navbar
           screen={screen}
           setScreen={setScreen}
@@ -256,7 +266,7 @@ export default function Home() {
           user={user}
         />
       </div>
-      <div className="flex flex-col items-center justify-center mt-24">
+      <main className="flex-1 flex flex-col items-center justify-start pt-24 w-full overflow-auto">
         {screen === "Home" && (
           <Dashboard
             user={user}
@@ -272,12 +282,15 @@ export default function Home() {
           <QuestPage quests={quests} setQuests={setQuests} claimRewards={claimRewards} />
         )}
         {screen === "Habits" && (
-          <h1 className="text-4xl font-bold mb-4">Habits Page</h1>
+          <HabitPage
+            dailyChallenges={dailyChallenges}
+            setDailyChallenges={setDailyChallenges}
+          />
         )}
         {screen === "Settings" && (
           <h1 className="text-4xl font-bold mb-4">Settings Page</h1>
         )}
-      </div>
+      </main>
     </div>
   );
 }
