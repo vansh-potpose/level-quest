@@ -45,7 +45,7 @@ export const exampleUser = (claimItems) => ({
             amount: 50,
             claimed: false,
             attribute_name: "experience",
-        }, claimItems),
+        }, claimItems), 
     ],
     Tasks: [
         {
