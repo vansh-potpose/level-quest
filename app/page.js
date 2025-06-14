@@ -63,6 +63,7 @@ export default function Home() {
     }));
   }
 
+  const [tasks, setTasks] = useState(user.tasks || []);
   function updateExp(amount) {
     setUser(prev => {
       let newExp = prev.exp + amount;
