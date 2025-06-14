@@ -51,32 +51,27 @@ export const exampleUser = (claimItems) => ({
         {
             id: "task-1",    
             name: "Read 10 pages of a book",
-            isCompleted: false,
-            createdAt: new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString(),
+            isCompleted: false
         },
         {
             id: "task-2",
             name: "Go for a 30-minute walk",
-            isCompleted: false,
-            createdAt: new Date(new Date().getFullYear(), new Date().getMonth(), 2).toISOString(),
+            isCompleted: false
         },
         {
             id: "task-3",
             name: "Write a journal entry",
-            isCompleted: false,
-            createdAt: new Date(new Date().getFullYear(), new Date().getMonth(), 3).toISOString(),
+            isCompleted: false
         },
         {
             id: "task-4",
             name: "Practice coding for 1 hour",
-            isCompleted: false,
-            createdAt: new Date(new Date().getFullYear(), new Date().getMonth(), 4).toISOString(),
+            isCompleted: false
         },
         {
             id: "task-5",
             name: "Meditate for 15 minutes",
-            isCompleted: false,
-            createdAt: new Date(new Date().getFullYear(), new Date().getMonth(), 5).toISOString(),
+            isCompleted: false
         },
     ]
 });
