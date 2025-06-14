@@ -97,7 +97,7 @@ return (
         <div
             className="h-fit p-6 rounded-xl max-w-sm shadow-lg border border-[#3d444d]"
             style={{
-                background: "black",
+                background: "black", 
                 color: "var(--foreground)"
             }}
         >
