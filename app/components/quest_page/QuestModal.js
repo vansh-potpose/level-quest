@@ -110,24 +110,24 @@ const QuestModal = ({
   const getPriorityBadge = () => {
     if (quest.status === "Completed")
       return (
-        <span className="bg-[#00c160] text-white px-3 py-1 rounded-full text-xs font-bold shadow">
+        <span className="bg-[#00c160] text-white px-3 py-1 rounded-md text-xs font-bold shadow">
           Completed
         </span>
       );
         if (quest.priority === "High")
       return (
-        <span className="bg-[#e74c3c] text-white px-3 py-1 rounded-full text-xs font-bold shadow">
+        <span className="bg-[#d52713] text-white px-3 py-1 rounded-md text-xs font-bold shadow">
           High Priority
         </span>
       );
         if (quest.priority === "Medium")
       return (
-        <span className="bg-[#f7ca18] text-gray-900 px-3 py-1 rounded-full text-xs font-bold shadow">
+        <span className="bg-[#c8a310] text-white px-3 py-1 rounded-md text-xs font-bold shadow">
           Medium Priority
         </span>
       );
     return (
-      <span className="bg-gray-700/80 text-gray-200 px-3 py-1 rounded-full text-xs font-bold shadow">
+      <span className="bg-gray-700/80 text-gray-200 px-3 py-1 rounded-md text-xs font-bold shadow">
         Low Priority
       </span>
     );
@@ -139,7 +139,7 @@ const QuestModal = ({
       onClick={onClose}
     >
       <div
-        className="relative bg-[#181c24] rounded-2xl w-[95%] max-w-2xl shadow-2xl border border-gray-800 overflow-hidden"
+        className="relative bg-[#181c24] rounded-lg  w-[95%] max-w-2xl shadow-2xl  overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close Button */}
