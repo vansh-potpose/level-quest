@@ -63,7 +63,7 @@ export default function Home() {
     }));
   }
 
-  const [tasks, setTasks] = useState(user.tasks || []);
+  const [tasks, setTasks] = useState(user.Tasks);
   function updateExp(amount) {
     setUser(prev => {
       let newExp = prev.exp + amount;
@@ -287,8 +287,7 @@ export default function Home() {
             dailyChallenges={dailyChallenges}
             setDailyChallenges={setDailyChallenges}
             tasks={tasks}
-            setTasks={setTasks} 
-            
+            setTasks={setTasks}
           />
         )}
         {screen === "Settings" && (

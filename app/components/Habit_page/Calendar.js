@@ -202,7 +202,7 @@ const Calendar = ({ tasks, setTasks }) => {
                                     aria-label={`Mark ${task.name} as completed`}
                                 />
                                 <span
-                                    className="flex-1 text-lg truncate"
+                                    className="flex-1 text-md truncate"
                                     style={{
                                         textDecoration: task.isCompleted ? "line-through" : "none",
                                         color: task.isCompleted ? "var(--muted-color)" : "inherit",

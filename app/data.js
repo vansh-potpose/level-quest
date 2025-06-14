@@ -1,80 +1,94 @@
 import Item from "./components/Item";
 import Reward from "./components/Reward";
+import dayjs from 'dayjs';
 
 // --- Example User ---
-export const exampleUser = (claimItems) => ({
-    name: "User Name",
-    profilePic: "/jinwoo-solo-leveling.webp",
-    level: 1,
-    exp: 50,
-    health: 100,
-    coins: 30000,
-    job: "Hunter",
-    stats: [
-        { skill: "strength", level: 1, value: 50 },
-        { skill: "agility", level: 1, value: 40 },
-        { skill: "intelligence", level: 1, value: 60 },
-        { skill: "Skill", level: 1, value: 70 },
-        { skill: "stamina", level: 1, value: 80 },
-        { skill: "luck", level: 1, value: 30 }
-    ],
-    about: "Commit2Hab1t is a powerful habit-tracking app designed to help you stay on top of your goals. It combines task tracking, data analysis, and AI-generated reports to provide deep insights into your habits and performance. The app is inspired by the 'Solo-Leveling' system, where users gain points and level up by completing tasks.",
-    stregth: "discipline",
-    weakness: "procrastination",
-    masterObjective: "doing nothing",
-    minorObjective: "doing nothing",
-    inventory: [
-        new Item({
-            id: 19,
-            name: "Health Potion",
-            price: 100,
-            description: "Restores 50 health points.",
-            image: "/images.jpeg",
-            type: "Magical Item",
-            amount: 50,
-            claimed: false,
-            attribute_name: "health",
-        }, claimItems),
-        new Item({
-            id: 20,
-            name: "Mana Potion",
-            price: 150,
-            description: "Restores 30 mana points.",
-            image: "/images.jpeg",
-            type: "Magical Item",
-            amount: 50,
-            claimed: false,
-            attribute_name: "experience",
-        }, claimItems), 
-    ],
-    Tasks: [
-        {
-            id: "task-1",    
-            name: "Read 10 pages of a book",
-            isCompleted: false
-        },
-        {
-            id: "task-2",
-            name: "Go for a 30-minute walk",
-            isCompleted: false
-        },
-        {
-            id: "task-3",
-            name: "Write a journal entry",
-            isCompleted: false
-        },
-        {
-            id: "task-4",
-            name: "Practice coding for 1 hour",
-            isCompleted: false
-        },
-        {
-            id: "task-5",
-            name: "Meditate for 15 minutes",
-            isCompleted: false
-        },
-    ]
-});
+export const exampleUser = (claimItems) => {
+    // Import dayjs at the top of your file if not already imported
+    // import dayjs from 'dayjs';
+
+    const currentMonth = dayjs().month() + 1; // month is 0-indexed
+    const currentYear = dayjs().format('YY');
+
+    return {
+        name: "User Name",
+        profilePic: "/jinwoo-solo-leveling.webp",
+        level: 1,
+        exp: 50,
+        health: 100,
+        coins: 30000,
+        job: "Hunter",
+        stats: [
+            { skill: "strength", level: 1, value: 50 },
+            { skill: "agility", level: 1, value: 40 },
+            { skill: "intelligence", level: 1, value: 60 },
+            { skill: "Skill", level: 1, value: 70 },
+            { skill: "stamina", level: 1, value: 80 },
+            { skill: "luck", level: 1, value: 30 }
+        ],
+        about: "Commit2Hab1t is a powerful habit-tracking app designed to help you stay on top of your goals. It combines task tracking, data analysis, and AI-generated reports to provide deep insights into your habits and performance. The app is inspired by the 'Solo-Leveling' system, where users gain points and level up by completing tasks.",
+        stregth: "discipline",
+        weakness: "procrastination",
+        masterObjective: "doing nothing",
+        minorObjective: "doing nothing",
+        inventory: [
+            new Item({
+                id: 19,
+                name: "Health Potion",
+                price: 100,
+                description: "Restores 50 health points.",
+                image: "/images.jpeg",
+                type: "Magical Item",
+                amount: 50,
+                claimed: false,
+                attribute_name: "health",
+            }, claimItems),
+            new Item({
+                id: 20,
+                name: "Mana Potion",
+                price: 150,
+                description: "Restores 30 mana points.",
+                image: "/images.jpeg",
+                type: "Magical Item",
+                amount: 50,
+                claimed: false,
+                attribute_name: "experience",
+            }, claimItems), 
+        ],
+        Tasks: [
+            {
+                id: 'task-1',
+                name: 'Buy groceries',
+                isCompleted: false,
+                date: `3-${currentMonth}-${currentYear}`
+            },
+            {
+                id: 'task-2',
+                name: 'Doctor appointment',
+                isCompleted: true,
+                date: `7-${currentMonth}-${currentYear}`
+            },
+            {
+                id: 'task-3',
+                name: 'Team meeting',
+                isCompleted: false,
+                date: `12-${currentMonth}-${currentYear}`
+            },
+            {
+                id: 'task-4',
+                name: 'Workout session',
+                isCompleted: false,
+                date: `18-${currentMonth}-${currentYear}`
+            },
+            {
+                id: 'task-5',
+                name: 'Read a book',
+                isCompleted: true,
+                date: `25-${currentMonth}-${currentYear}`
+            }
+        ]
+    };
+};
 
 // --- Example Store Items ---
 export const exampleStoreItems = (claimItems, claimObjects) => [
