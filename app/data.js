@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 
 // --- Example User ---
 export const exampleUser = (claimItems) => {
-    // Import dayjs at the top of your file if not already imported
+    // Import dayjs at the top of  your file if not already imported
     // import dayjs from 'dayjs';
 
     const currentMonth = dayjs().month() + 1; // month is 0-indexed
