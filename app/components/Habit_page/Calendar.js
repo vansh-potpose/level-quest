@@ -95,7 +95,6 @@ return (
     <div className="flex flex-col md:flex-row  w-fit"
         style={{
             background: "var(--muted-background-color)",
-            border: "1px solid var(--border-color)",
             color: "var(--foreground)",
             boxShadow: "0 4px 32px 0 rgba(0,0,0,0.25)",
             borderRadius: "1rem",
@@ -106,8 +105,7 @@ return (
         <div
             className="h-fit p-6 rounded-2xl max-w-sm shadow-lg"
             style={{
-                background: "var(--element-background-color)",
-                border: "1px solid var(--border-color)",
+                background: "black",
                 color: "var(--foreground)"
             }}
         >
@@ -158,7 +156,7 @@ return (
                         color = "#fff";
                     }
                     if (isSelected) {
-                        bg = "linear-gradient(135deg, var(--active-element), #0d9488)";
+                        bg = "var(--active-element)";
                         border = "2px solid var(--active-element)";
                         color = "#fff";
                     }
