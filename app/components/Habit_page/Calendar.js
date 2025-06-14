@@ -146,7 +146,7 @@ return (
                     const isToday = dayObj.date === today;
                     const isSelected = dayObj.date === selectedDate;
                     const dayTasks = tasks[dayObj.date] || [];
- 
+  
                     let bg = "var(--element-background-color)";
                     let border = "1px solid var(--border-color)";
                     let color = "var(--foreground)";
