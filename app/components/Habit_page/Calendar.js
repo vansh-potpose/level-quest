@@ -92,40 +92,32 @@ const Calendar = ({ tasks, setTasks }) => {
 
     
 return (
-    <div className="flex flex-col md:flex-row  w-fit"
-        style={{
-            background: "var(--muted-background-color)",
-            color: "var(--foreground)",
-            boxShadow: "0 4px 32px 0 rgba(0,0,0,0.25)",
-            borderRadius: "1rem",
-            padding: "1.5rem"
-        }}
-    >
+    <div className="flex flex-col md:flex-row w-fit gap-4">
         {/* Calendar */}
         <div
-            className="h-fit p-6 rounded-2xl max-w-sm shadow-lg"
+            className="h-fit p-6 rounded-xl max-w-sm shadow-lg border border-[#3d444d]"
             style={{
                 background: "black",
                 color: "var(--foreground)"
             }}
         >
-            <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center justify-between mb-5">
                 <button
                     onClick={handlePrevMonth}
-                    className="hover:text-[var(--active-element)] transition-transform transform hover:scale-125 duration-200 p-2 rounded-full hover:bg-[var(--muted-bg-color)]"
+                    className="hover:text-[var(--active-element)] transition-transform transform hover:scale-110 duration-200 p-2 rounded-full hover:bg-[var(--muted-bg-color)]"
                     aria-label="Previous Month"
                     style={{ color: "var(--foreground)" }}
                 >
                     &lt;
                 </button>
-                <h2 className="text-2xl font-extrabold tracking-wide drop-shadow-lg"
+                <h2 className="text-xl font-extrabold tracking-wide drop-shadow-lg"
                     style={{ color: "var(--foreground)" }}
                 >
                     {currentDate.format('MMMM YYYY')}
                 </h2>
                 <button
                     onClick={handleNextMonth}
-                    className="hover:text-[var(--active-element)] transition-transform transform hover:scale-125 duration-200 p-2 rounded-full hover:bg-[var(--muted-bg-color)]"
+                    className="hover:text-[var(--active-element)] transition-transform transform hover:scale-110 duration-200 p-2 rounded-full hover:bg-[var(--muted-bg-color)]"
                     aria-label="Next Month"
                     style={{ color: "var(--foreground)" }}
                 >
@@ -173,12 +165,13 @@ return (
                                 if (!dayObj.date) return;
                                 setSelectedDate(dayObj.date);
                             }}
-                            className="h-10 w-10 flex items-center justify-center rounded-xl relative shadow-inner cursor-pointer transition duration-200 ease-in-out"
+                            className="h-9 w-9 flex items-center justify-center rounded-lg relative shadow-inner cursor-pointer transition duration-200 ease-in-out"
                             style={{
                                 background: dayObj.date ? bg : "transparent",
                                 border: dayObj.date ? border : "none",
                                 color: dayObj.date ? color : "inherit",
-                                fontWeight: (isToday || isSelected) ? "bold" : "normal"
+                                fontWeight: (isToday || isSelected) ? "bold" : "normal",
+                                fontSize: "14px"
                             }}
                             title={
                                 dayTasks.length > 0
@@ -203,88 +196,90 @@ return (
             </div>
         </div>
 
-        {/* Divider for large screens */}
-        <div className="hidden md:block w-px mx-4 rounded-full"
-            style={{
-                background: "linear-gradient(to bottom, var(--border-color), var(--muted-background-color), var(--background))"
-            }}
-        ></div>
-
         {/* Task List */}
-        <div className="TaskList p-6 xs:w-96 rounded-2xl shadow-lg flex-1"
+        <div className="TaskList p-8 xs:w-[28rem] rounded-2xl shadow-lg flex-1"
             style={{
                 background: "var(--muted-background-color)",
                 border: "1px solid var(--border-color)",
                 color: "var(--foreground)"
             }}
         >
-            <div className="TaskList__header text-xl font-extrabold mb-6 tracking-wide flex items-center gap-2">
-                <svg className="w-6 h-6" fill="none" stroke="#3cb371" strokeWidth="2" viewBox="0 0 24 24">
+            <div className="TaskList__header text-2xl font-extrabold mb-8 tracking-wide flex items-center gap-2">
+                <svg className="w-7 h-7" fill="none" stroke="#3cb371" strokeWidth="2" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2l4 -4" />
                 </svg>
                 Tasks for <span className="ml-1" style={{ color: "var(--active-element)" }}>{selectedDate || 'No date selected'}</span>
             </div>
             <div>
-                {(tasks[selectedDate] || []).map((task, index) => (
-                    <div
-                        key={`${selectedDate}-${index}`}
-                        className="TaskList__task flex items-center gap-3 mb-3 px-3 py-2 rounded-xl transition shadow-sm"
-                        style={{
-                            background: task.isCompleted
-                                ? "linear-gradient(to right, var(--element-background-color), var(--muted-bg-color))"
-                                : "linear-gradient(to right, var(--element-background-color), var(--overlay-bg-color))",
-                            opacity: task.isCompleted ? 0.7 : 1
-                        }}
-                    >
-                        <input
-                            type="checkbox"
-                            checked={task.isCompleted}
-                            onChange={() => toggleTaskCompletion(index)}
-                            className="form-checkbox h-5 w-5 transition"
-                            style={{
-                                accentColor: "#3cb371"
-                            }}
-                        />
-                        <span
-                            className="flex-1 text-base"
-                            style={{
-                                textDecoration: task.isCompleted ? "line-through" : "none",
-                                color: task.isCompleted ? "var(--muted-color)" : "inherit"
-                            }}
-                        >
-                            {task.name}
-                        </span>
-                        <button
-                            onClick={() => deleteTask(index)}
-                            className="text-xs hover:underline"
-                            title="Delete Task"
-                            style={{ color: "#ef4444" }}
-                        >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                height="24px"
-                                viewBox="0 0 24 24"
-                                width="24px"
-                                fill="#ef4444"
-                            >
-                                <path d="M0 0h24v24H0z" fill="none" />
-                                <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" />
-                            </svg>
-                        </button>
+                {(tasks[selectedDate] || []).length === 0 && (
+                    <div className="text-base text-center py-8" style={{ color: "var(--muted-color)" }}>
+                        No tasks for this day.
                     </div>
-                ))}
-                {!(tasks[selectedDate] || []).length && (
-                    <div className="text-sm" style={{ color: "var(--muted-color)" }}>No tasks for today</div>
                 )}
+                <ul className="space-y-3">
+                    {(tasks[selectedDate] || []).map((task, index) => (
+                        <li
+                            key={`${selectedDate}-${index}`}
+                            className={`TaskList__task flex items-center gap-3 px-4 py-3 rounded-xl shadow-sm group transition
+                                ${task.isCompleted
+                                    ? "bg-gradient-to-r from-green-900/60 to-green-800/40 opacity-70"
+                                    : "bg-gradient-to-r from-[var(--element-background-color)] to-[var(--overlay-bg-color)]"
+                                }
+                            `}
+                        >
+                            <input
+                                type="checkbox"
+                                checked={task.isCompleted}
+                                onChange={() => toggleTaskCompletion(index)}
+                                className="form-checkbox h-5 w-5 accent-[#3cb371] transition"
+                                aria-label={`Mark ${task.name} as completed`}
+                            />
+                            <span
+                                className="flex-1 text-lg truncate"
+                                style={{
+                                    textDecoration: task.isCompleted ? "line-through" : "none",
+                                    color: task.isCompleted ? "var(--muted-color)" : "inherit",
+                                    fontWeight: task.isCompleted ? 400 : 500,
+                                    letterSpacing: "0.01em"
+                                }}
+                                title={task.name}
+                            >
+                                <EditableText
+                                    text={task.name}
+                                    onSave={(newName) => updateTaskName(index, newName)}
+                                    className="bg-transparent border-none outline-none w-full"
+                                    textClassName="w-full"
+                                />
+                            </span>
+                            <button
+                                onClick={() => deleteTask(index)}
+                                className="opacity-60 group-hover:opacity-100 transition p-1 rounded hover:bg-red-100/10"
+                                title="Delete Task"
+                                aria-label="Delete Task"
+                            >
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    height="22px"
+                                    viewBox="0 0 24 24"
+                                    width="22px"
+                                    fill="#ef4444"
+                                >
+                                    <path d="M0 0h24v24H0z" fill="none" />
+                                    <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" />
+                                </svg>
+                            </button>
+                        </li>
+                    ))}
+                </ul>
                 <button
                     onClick={addTask}
-                    className="py-2 px-4 mt-4 rounded-xl w-full"
+                    className="py-3 px-5 mt-8 rounded-xl w-full font-semibold text-base shadow-md hover:bg-[var(--active-element)] hover:text-white transition"
                     style={{
                         background: "var(--element-background-color)",
                         color: "var(--foreground)"
                     }}
                 >
-                    Add Task
+                    + Add Task
                 </button>
             </div>
         </div>

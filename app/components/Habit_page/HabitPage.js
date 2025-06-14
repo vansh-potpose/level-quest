@@ -62,7 +62,7 @@ export default function HabitPage({ dailyChallenges, setDailyChallenges }) {
                         getTodayChallengeCompleted={getTodayChallengeCompleted}
                     />
                 </div>
-                <div className="bg-[#0d1117] rounded-lg  flex items-center justify-center">
+                <div className="rounded-lg  flex items-center justify-center">
                     <Calendar tasks={calendarTasks} setTasks={setCalendarTasks} />
                 </div>
             </div>
