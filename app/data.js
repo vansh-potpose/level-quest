@@ -3,50 +3,82 @@ import Reward from "./components/Reward";
 
 // --- Example User ---
 export const exampleUser = (claimItems) => ({
-  name: "User Name",
-  profilePic: "/jinwoo-solo-leveling.webp",
-  level: 1,
-  exp: 50,
-  health: 100,
-  coins: 30000,
-  job: "Hunter",
-  stats: [
-    { skill: "strength", level: 1, value: 50 },
-    { skill: "agility", level: 1, value: 40 },
-    { skill: "intelligence", level: 1, value: 60 },
-    { skill: "Skill", level: 1, value: 70 },
-    { skill: "stamina", level: 1, value: 80 },
-    { skill: "luck", level: 1, value: 30 }
-  ],
-  about: "Commit2Hab1t is a powerful habit-tracking app designed to help you stay on top of your goals. It combines task tracking, data analysis, and AI-generated reports to provide deep insights into your habits and performance. The app is inspired by the 'Solo-Leveling' system, where users gain points and level up by completing tasks.",
-  stregth: "discipline",
-  weakness: "procrastination",
-  masterObjective: "doing nothing",
-  minorObjective: "doing nothing",
-  inventory: [
-    new Item({
-      id: 19,
-      name: "Health Potion",
-      price: 100,
-      description: "Restores 50 health points.",
-      image: "/images.jpeg",
-      type: "Magical Item",
-      amount: 50,
-      claimed: false,
-      attribute_name: "health",
-    }, claimItems),
-    new Item({
-      id: 20,
-      name: "Mana Potion",
-      price: 150,
-      description: "Restores 30 mana points.",
-      image: "/images.jpeg",
-      type: "Magical Item",
-      amount: 50,
-      claimed: false,
-      attribute_name: "experience",
-    }, claimItems),
-  ]
+    name: "User Name",
+    profilePic: "/jinwoo-solo-leveling.webp",
+    level: 1,
+    exp: 50,
+    health: 100,
+    coins: 30000,
+    job: "Hunter",
+    stats: [
+        { skill: "strength", level: 1, value: 50 },
+        { skill: "agility", level: 1, value: 40 },
+        { skill: "intelligence", level: 1, value: 60 },
+        { skill: "Skill", level: 1, value: 70 },
+        { skill: "stamina", level: 1, value: 80 },
+        { skill: "luck", level: 1, value: 30 }
+    ],
+    about: "Commit2Hab1t is a powerful habit-tracking app designed to help you stay on top of your goals. It combines task tracking, data analysis, and AI-generated reports to provide deep insights into your habits and performance. The app is inspired by the 'Solo-Leveling' system, where users gain points and level up by completing tasks.",
+    stregth: "discipline",
+    weakness: "procrastination",
+    masterObjective: "doing nothing",
+    minorObjective: "doing nothing",
+    inventory: [
+        new Item({
+            id: 19,
+            name: "Health Potion",
+            price: 100,
+            description: "Restores 50 health points.",
+            image: "/images.jpeg",
+            type: "Magical Item",
+            amount: 50,
+            claimed: false,
+            attribute_name: "health",
+        }, claimItems),
+        new Item({
+            id: 20,
+            name: "Mana Potion",
+            price: 150,
+            description: "Restores 30 mana points.",
+            image: "/images.jpeg",
+            type: "Magical Item",
+            amount: 50,
+            claimed: false,
+            attribute_name: "experience",
+        }, claimItems),
+    ],
+    Tasks: [
+        {
+            id: "task-1",
+            name: "Read 10 pages of a book",
+            isCompleted: false,
+            createdAt: new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString(),
+        },
+        {
+            id: "task-2",
+            name: "Go for a 30-minute walk",
+            isCompleted: false,
+            createdAt: new Date(new Date().getFullYear(), new Date().getMonth(), 2).toISOString(),
+        },
+        {
+            id: "task-3",
+            name: "Write a journal entry",
+            isCompleted: false,
+            createdAt: new Date(new Date().getFullYear(), new Date().getMonth(), 3).toISOString(),
+        },
+        {
+            id: "task-4",
+            name: "Practice coding for 1 hour",
+            isCompleted: false,
+            createdAt: new Date(new Date().getFullYear(), new Date().getMonth(), 4).toISOString(),
+        },
+        {
+            id: "task-5",
+            name: "Meditate for 15 minutes",
+            isCompleted: false,
+            createdAt: new Date(new Date().getFullYear(), new Date().getMonth(), 5).toISOString(),
+        },
+    ]
 });
 
 // --- Example Store Items ---

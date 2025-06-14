@@ -197,17 +197,15 @@ return (
         </div>
 
         {/* Task List */}
-        <div className="TaskList p-8 xs:w-[28rem] rounded-2xl shadow-lg flex-1"
+        <div className="TaskList p-8 xs:w-[28rem] w-[20rem]  rounded-2xl shadow-lg flex-1"
             style={{
                 background: "var(--muted-background-color)",
-                border: "1px solid var(--border-color)",
+           
                 color: "var(--foreground)"
             }}
         >
-            <div className="TaskList__header text-2xl font-extrabold mb-8 tracking-wide flex items-center gap-2">
-                <svg className="w-7 h-7" fill="none" stroke="#3cb371" strokeWidth="2" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2l4 -4" />
-                </svg>
+            <div className="TaskList__header text-lg font-semibold mb-8 tracking-wide flex items-center gap-2">
+               
                 Tasks for <span className="ml-1" style={{ color: "var(--active-element)" }}>{selectedDate || 'No date selected'}</span>
             </div>
             <div>
