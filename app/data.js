@@ -49,7 +49,7 @@ export const exampleUser = (claimItems) => ({
     ],
     Tasks: [
         {
-            id: "task-1",   
+            id: "task-1",    
             name: "Read 10 pages of a book",
             isCompleted: false,
             createdAt: new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString(),
