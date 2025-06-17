@@ -105,9 +105,6 @@ export default function CreateItem({ addItem }) {
                             placeholder="Enter price"
                         />
                     </div>
-                    
-                </div>
-                <div className="flex gap-4">
                     <div className="flex-1">
                         <label className="block text-sm font-semibold text-gray-300 mb-1">Type</label>
                         <select
@@ -118,9 +115,11 @@ export default function CreateItem({ addItem }) {
                         >
                             <option value="Object">Object</option>
                             <option value="Magical Item">Magical Item</option>
-                            <option value="Weapon">Weapon</option>
                         </select>
                     </div>
+                </div>
+                <div className="flex gap-4">
+
                     <div className="flex-1">
                         <label className="block text-sm font-semibold text-gray-300 mb-1">Attribute Name</label>
                         <input
@@ -141,7 +140,7 @@ export default function CreateItem({ addItem }) {
                 </button>
             </div>
             <div className="md:w-1/2 w-full  flex items-center justify-center">
-               <ItemImage item={item} />
+                <ItemImage item={item} />
             </div>
         </div>
     );
