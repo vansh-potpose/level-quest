@@ -34,6 +34,32 @@ export default function QuestCard({ quest, onQuestClick }) {
     return `${diffMinutes} min`;
   };
 
+  const getPriorityBadge = () => {
+    if (quest.status === "Completed")
+      return (
+        <span className="border-2 border-[#00c160] text-white px-3 py-1 rounded-md text-xs font-bold shadow">
+          Completed
+        </span>
+      );
+        if (quest.priority === "High")
+      return (
+        <span className="border-2 border-[#d52713] text-white px-3 py-1 rounded-md text-xs font-bold shadow">
+          High 
+        </span>
+      );
+        if (quest.priority === "Medium")
+      return (
+        <span className="border-2 border-[#c8a310] text-white px-3 py-1 rounded-md text-xs font-bold shadow">
+          Medium 
+        </span>
+      );
+    return (
+      <span className="border-2 border-gray-700 text-gray-200 px-3 py-1 rounded-md text-xs font-bold shadow">
+        Low
+      </span>
+    );
+  };
+
   return (
     <div
       onClick={() => onQuestClick(quest)}
@@ -46,6 +72,9 @@ export default function QuestCard({ quest, onQuestClick }) {
       <div className="p-4">
         <h2 className="text-lg font-bold text-[#f0f6fc]">{quest.name}</h2>
         <p className="text-sm font-normal text-[#9198a1]">{quest.description}</p>
+        <p className="font-medium text-sm w-fit  rounded-md my-3  ">
+        
+      </p>
         <div className="mt-2 flex gap-5 items-start">
           <div className="min-w-fit  font-semibold">Rewards :</div>
           <Rewards rewards={quest.rewards} />
@@ -57,11 +86,9 @@ export default function QuestCard({ quest, onQuestClick }) {
         </div>
       )}
       <p className="group-hover:opacity-100 opacity-0 duration-700 absolute top-2 right-2 font-medium text-sm  bg-black/60 w-fit p-2 rounded-md transition-opacity">
-        {getRemainingTime()}
+        {getPriorityBadge()} - {getRemainingTime()}
       </p>
-      <p className="group-hover:opacity-100 opacity-0 duration-700 absolute top-2 left-2 font-medium text-sm bg-black/60 w-fit p-2 rounded-md transition-opacity">
-        Priority
-      </p>
+      
     </div>
   );
 }

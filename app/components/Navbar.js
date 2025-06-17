@@ -4,7 +4,7 @@ import { BsCoin } from "react-icons/bs";
 
 
 
-const navItems = ["Home", "Quests","Habits","Store", "Settings"];
+const navItems = ["Home", "Quests","Habits","Store", "Workshop","Settings"];
 
 const Navbar = ({ screen, setScreen,coins,user }) => {
   return (
