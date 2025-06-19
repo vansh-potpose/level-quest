@@ -95,7 +95,15 @@ export default function Home() {
 
 
   function claimObjects(message) {
-    alert(message);
+    showGameToast({
+      icon: "🎉",
+      title: "Object Claimed!",
+      description: message,
+      border_color: "border-blue-500",
+      text_color: "text-blue-400",
+      progressClass_color: "!bg-blue-500",
+    });
+    
   }
 
 
@@ -295,7 +303,14 @@ export default function Home() {
           <h1 className="text-4xl font-bold mb-4">Settings Page</h1>
         )}
         {screen === "Workshop" && (
-          <WorkshopPage user={user} StoreItems={StoreItems} setStoreItems={setStoreItems} setQuests={setQuests} />
+          <WorkshopPage 
+          user={user} 
+          StoreItems={StoreItems} 
+          setStoreItems={setStoreItems} 
+          setQuests={setQuests} 
+          claimItems={claimItems}
+          claimObjects={claimObjects}
+          />
         )}
       </main>
     </div>

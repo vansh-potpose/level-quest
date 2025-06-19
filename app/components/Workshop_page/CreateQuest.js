@@ -96,7 +96,7 @@ export default function CreateQuest({ tempQuest, setTempQuest, StoreItems, skill
                         name="name"
                         value={tempQuest.name}
                         onChange={handleChange}
-                        className="mt-1 block w-full border border-gray-700 bg-gray-800 text-gray-100 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
+                        className="mt-1 block w-full border border-[#3d444d] bg-[#0d1117] text-gray-100 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
                         placeholder="Enter quest name"
                     />
                 </div>
@@ -106,7 +106,7 @@ export default function CreateQuest({ tempQuest, setTempQuest, StoreItems, skill
                         name="description"
                         value={tempQuest.description}
                         onChange={handleChange}
-                        className="mt-1 block w-full border border-gray-700 bg-gray-800 text-gray-100 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
+                        className="mt-1 block w-full border border-[#3d444d] bg-[#0d1117] text-gray-100 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
                         rows={4}
                         placeholder="Describe the quest"
                     />
@@ -125,7 +125,7 @@ export default function CreateQuest({ tempQuest, setTempQuest, StoreItems, skill
                                     endDate: new Date(e.target.value).toISOString()
                                 }))
                             }
-                            className="mt-1 h-10 block w-full border border-gray-700 bg-gray-800 text-gray-100 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
+                            className="mt-1 h-10 block w-full border border-[#3d444d] bg-[#0d1117] text-gray-100 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
                         />
                     </div>
                     <div className="flex-1">
@@ -134,7 +134,7 @@ export default function CreateQuest({ tempQuest, setTempQuest, StoreItems, skill
                             name="priority"
                             value={tempQuest.priority}
                             onChange={handleChange}
-                            className="mt-1 block h-10 w-full border border-gray-700 bg-gray-800 text-gray-100 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
+                            className="mt-1 block h-10 w-full border border-[#3d444d] bg-[#0d1117] text-gray-100 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
                         >
                             <option value="Low">Low</option>
                             <option value="Medium">Medium</option>
@@ -167,7 +167,7 @@ export default function CreateQuest({ tempQuest, setTempQuest, StoreItems, skill
                             type="text"
                             value={subquestInput}
                             onChange={e => setSubquestInput(e.target.value)}
-                            className="flex-1 border border-gray-700 bg-gray-800 text-gray-100 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
+                            className="flex-1 border border-[#3d444d] bg-[#0d1117] text-gray-100 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
                             placeholder="Add subquest"
                         />
                         <button
@@ -181,7 +181,7 @@ export default function CreateQuest({ tempQuest, setTempQuest, StoreItems, skill
                     </div>
                     <ul className="space-y-1">
                         {(tempQuest.sub_quests || []).map((sq, idx) => (
-                            <li key={sq.id || idx} className="flex items-center justify-between bg-gray-700 rounded px-2 py-1">
+                            <li key={sq.id || idx} className="flex items-center justify-between  bg-[#151b23] rounded px-2 py-1">
                                 <span>{sq.name}</span>
                                 <button
                                     type="button"

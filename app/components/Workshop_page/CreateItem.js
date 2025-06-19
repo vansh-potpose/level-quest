@@ -1,17 +1,26 @@
 'use client'
 import { useRef, useState } from "react";
-import { FiUpload, FiSave } from "react-icons/fi";
+import { FiUpload, FiSave, FiBox } from "react-icons/fi";
 import ItemImage from "./ItemImage";
 
-export default function CreateItem({ addItem }) {
-    const [item, setItem] = useState({ id: 1, name: "Shadow Fight Game", price: 300, description: "Epic battles and martial arts.", image: "/image_b.jpg", type: "Object", amount: 1, claimed: false, attribute_name: "agility" });
+export default function CreateItem({ skills, item, setItem ,addItemToStore }) {
     const fileInputRef = useRef();
 
+    // Only local state for selectedAttribute
+    const [selectedAttribute, setSelectedAttribute] = useState("");
+
+    const ATTRIBUTE_OPTIONS = [
+        { value: "", label: "None" },
+        { value: "health", label: "Health" },
+        { value: "experience", label: "Experience" },
+        { value: "skills", label: "Skills" },
+    ];
+
     const handleChange = (e) => {
-        const { name, value } = e.target;
+        const { name, value, type } = e.target;
         setItem(prev => ({
             ...prev,
-            [name]: value
+            [name]: type === "number" ? Number(value) : value
         }));
     };
 
@@ -22,39 +31,34 @@ export default function CreateItem({ addItem }) {
             reader.onloadend = () => {
                 setItem(prev => ({
                     ...prev,
-                    image: reader.result // base64 string
+                    image: reader.result
                 }));
             };
             reader.readAsDataURL(file);
         }
     };
 
+    const handleAttributeChange = (e) => {
+        const value = e.target.value;
+        setSelectedAttribute(value);
+        // Reset related fields in item
+        setItem(prev => ({
+            ...prev,
+            attribute_name: value === "skills" ? "" : value,
+            amount: 0
+        }));
+    };
+
     const handleSave = () => {
-        // You can add validation here if needed
-        addItem({
-            ...item,
-            id: Date.now(),
-            price: Number(item.price),
-            amount: Number(item.amount),
-            claimed: false
-        });
-        setItem({
-            name: "",
-            price: "",
-            description: "",
-            image: "",
-            type: "Object",
-            amount: 1,
-            claimed: false,
-            attribute_name: "",
-        });
+        console.log("Item to save:", JSON.stringify(item, null, 2));
+        addItemToStore(item);
     };
 
     return (
         <div className="flex flex-col md:flex-row rounded-xl px-8 py-5 gap-8">
             <div className="md:w-1/2 w-full space-y-6">
                 <h2 className="text-2xl font-bold mb-4 text-gray-100 flex items-center gap-2">
-                    <FiUpload className="inline-block text-blue-400" /> Create Item
+                    <FiBox className="inline-block text-blue-400" /> Create Item
                 </h2>
                 {/* Image upload */}
                 <div>
@@ -78,7 +82,7 @@ export default function CreateItem({ addItem }) {
                         name="name"
                         value={item.name}
                         onChange={handleChange}
-                        className="mt-1 block w-full border border-gray-700 bg-gray-800 text-gray-100 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
+                        className="mt-1 block w-full border border-[#3d444d] bg-[#0d1117] text-gray-100 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
                         placeholder="Enter item name"
                     />
                 </div>
@@ -88,7 +92,7 @@ export default function CreateItem({ addItem }) {
                         name="description"
                         value={item.description}
                         onChange={handleChange}
-                        className="mt-1 block w-full border border-gray-700 bg-gray-800 text-gray-100 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
+                        className="mt-1 block w-full border border-[#3d444d] bg-[#0d1117] text-gray-100 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
                         rows={3}
                         placeholder="Describe the item"
                     />
@@ -101,7 +105,7 @@ export default function CreateItem({ addItem }) {
                             name="price"
                             value={item.price}
                             onChange={handleChange}
-                            className="mt-1 h-10 block w-full border border-gray-700 bg-gray-800 text-gray-100 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
+                            className="mt-1 h-10 block w-full border border-[#3d444d] bg-[#0d1117] text-gray-100 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
                             placeholder="Enter price"
                         />
                     </div>
@@ -111,27 +115,81 @@ export default function CreateItem({ addItem }) {
                             name="type"
                             value={item.type}
                             onChange={handleChange}
-                            className="mt-1 block h-10 w-full border border-gray-700 bg-gray-800 text-gray-100 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
+                            className="mt-1 block h-10 w-full border border-[#3d444d] bg-[#0d1117] text-gray-100 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
                         >
                             <option value="Object">Object</option>
                             <option value="Magical Item">Magical Item</option>
                         </select>
                     </div>
                 </div>
-                <div className="flex gap-4">
 
-                    <div className="flex-1">
-                        <label className="block text-sm font-semibold text-gray-300 mb-1">Attribute Name</label>
-                        <input
-                            type="text"
-                            name="attribute_name"
-                            value={item.attribute_name}
-                            onChange={handleChange}
-                            className="mt-1 h-10 block w-full border border-gray-700 bg-gray-800 text-gray-100 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
-                            placeholder="e.g. health, strength"
-                        />
-                    </div>
-                </div>
+                {/* Only show attribute/amount if type is Magical Item */}
+                {item.type === "Magical Item" && (
+                    <>
+                        <div className="flex gap-4">
+                            <div className="flex-1">
+                                <label className="block text-sm font-semibold text-gray-300 mb-1">Attribute Name</label>
+                                <select
+                                    value={selectedAttribute}
+                                    onChange={handleAttributeChange}
+                                    className="mt-1 h-10 block w-full border border-[#3d444d] bg-[#0d1117] text-gray-100 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
+                                >
+                                    {/* Remove "None" option for Magical Item */}
+                                    {ATTRIBUTE_OPTIONS.filter(opt => opt.value !== "").map(opt => (
+                                        <option key={opt.value} value={opt.value}>{opt.label}</option>
+                                    ))}
+                                </select>
+                            </div>
+                        </div>
+                        {selectedAttribute === "health" || selectedAttribute === "experience" ? (
+                            <div>
+                                <label className="block text-sm font-semibold text-gray-300 mb-1">
+                                    {selectedAttribute.charAt(0).toUpperCase() + selectedAttribute.slice(1)} Amount
+                                </label>
+                                <input
+                                    type="number"
+                                    name="amount"
+                                    value={item.amount || 0}
+                                    onChange={handleChange}
+                                    className="mt-1 h-10 block w-full border border-[#3d444d] bg-[#0d1117] text-gray-100 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
+                                    placeholder={`Enter ${selectedAttribute} amount`}
+                                />
+                            </div>
+                        ) : null}
+
+                        {/* Skill selection for attribute_name === "skills" */}
+                        {selectedAttribute === "skills" && (
+                            <div className="flex gap-4">
+                                <div className="flex-1">
+                                    <label className="block text-sm font-semibold text-gray-300 mb-1">Skill</label>
+                                    <select
+                                        name="attribute_name"
+                                        value={item.attribute_name || ""}
+                                        onChange={handleChange}
+                                        className="mt-1 h-10 block w-full border border-[#3d444d] bg-[#0d1117] text-gray-100 rounded-lg px-3 py-2 focus:ring-2 focus:ring-purple-500 focus:outline-none transition"
+                                    >
+                                        <option value="">Select skill</option>
+                                        {skills && skills.map(s => (
+                                            <option key={s.skill} value={s.skill}>{s.skill}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div className="flex-1">
+                                    <label className="block text-sm font-semibold text-gray-300 mb-1">Amount</label>
+                                    <input
+                                        type="number"
+                                        name="amount"
+                                        value={item.amount || 0}
+                                        onChange={handleChange}
+                                        className="mt-1 h-10 block w-full border border-[#3d444d] bg-[#0d1117] text-gray-100 rounded-lg px-3 py-2 focus:ring-2 focus:ring-purple-500 focus:outline-none transition"
+                                        placeholder="Enter amount"
+                                    />
+                                </div>
+                            </div>
+                        )}
+                    </>
+                )}
+
                 <button
                     onClick={handleSave}
                     className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg w-full flex items-center justify-center gap-2 transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 mt-4"

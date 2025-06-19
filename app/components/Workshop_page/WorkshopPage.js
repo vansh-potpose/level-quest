@@ -3,43 +3,11 @@
 import React, { useState } from "react";
 import CreateQuest from "./CreateQuest";
 import Reward from "../Reward";
+import Item from "../Item";
 import CreateItem from "./CreateItem";
-export default function WorkshopPage({user,StoreItems,setStoreItems,setQuests}) {
+export default function WorkshopPage({user,StoreItems,setStoreItems,setQuests , claimObjects, claimItems}) {
     // Example initial quest data (can be replaced with real data later)
     const [tempQuest, setTempQuest] = useState({
-        // id: 1,
-        // image: "/images/quest-default.jpg",
-        // name: "Welcome Quest",
-        // endDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(), // 7 days from now
-        // description: "Start your journey by completing your first quest! Explore the features and have fun.",
-        // priority: "Medium",
-        // status: "Active",
-        // rewards: [
-        //     new Reward("coins", { amount: 500 }),
-        //     new Reward("experience", { amount: 200 }),
-        // ],
-        // sub_quests: [
-        //     {
-        //         id: 1,
-        //         name: "Read the introduction",
-        //         completed: false,
-        //         claim: false,
-        //         rewards: [
-        //             new Reward("coins", { amount: 25 }),
-        //             new Reward("experience", { amount: 10 }),
-        //         ],
-        //     },
-        //     {
-        //         id: 2,
-        //         name: "Complete your profile",
-        //         completed: false,
-        //         claim: false,
-        //         rewards: [
-        //             new Reward("coins", { amount: 25 }),
-        //             new Reward("experience", { amount: 10 }),
-        //         ],
-        //     },
-        // ],
         id: 10,
         image: "/images.jpeg",
         name: "Quest 1",
@@ -73,8 +41,32 @@ export default function WorkshopPage({user,StoreItems,setStoreItems,setQuests}) 
     
     });
 
+    const [item, setItem] = useState({ 
+        id: 50,
+        name: "Shadow Fight Game", 
+        price: 300, 
+        description: "Epic battles and martial arts.", 
+        image: "/image_b.jpg", 
+        type: "Object", 
+        amount: 0, 
+        claimed: false, 
+        attribute_name: "none" 
+    });
+
     const addItemToStore = (item) => {
-        setStoreItems(prev => [...prev, item]);
+        let newItem;
+        if (item.type === "Magical Item") {
+            newItem = new Item({
+                
+                ...item},claimItems
+            );
+        } else if (item.type === "Object") {
+            newItem = new Item({
+                
+                ...item},claimObjects
+            );
+        }
+        setStoreItems(prev => [...prev, newItem]);
         console.log("Item added to store:", JSON.stringify(StoreItems, null, 2));
     }
     const addQuest = (quest) => {
@@ -91,7 +83,7 @@ export default function WorkshopPage({user,StoreItems,setStoreItems,setQuests}) 
 
     const tabs = [
         { name: "Quests", component: <CreateQuest tempQuest={tempQuest} setTempQuest={setTempQuest} StoreItems={StoreItems} skills={user.stats}  addQuest={addQuest} /> },
-        { name: "Items", component: <CreateItem addItemToStore={addItemToStore} /> },
+        { name: "Items", component: <CreateItem addItemToStore={addItemToStore}  item={item} setItem={setItem} skills={user.stats} /> },
     ];
 
     const [activeTab, setTab] = useState(0);
