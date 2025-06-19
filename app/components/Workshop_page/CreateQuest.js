@@ -173,7 +173,7 @@ export default function CreateQuest({ tempQuest, setTempQuest, StoreItems, skill
                         <button
                             type="button"
                             onClick={handleAddSubquest}
-                            className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg flex items-center gap-1 transition"
+                            className="bg-[#212830] hover:bg-blue-700 text-white px-3 py-2 rounded-lg flex items-center gap-1 transition"
                             title="Add Subquest"
                         >
                             <FiPlus /> Add

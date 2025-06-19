@@ -135,7 +135,7 @@ export default function RewardSelection({
                 <select
                     value={rewardTypeInput}
                     onChange={handleRewardTypeChange}
-                    className="flex-1 min-w-[160px] border border-gray-700 bg-gray-800 text-gray-100 rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-500"
+                    className="flex-1 min-w-[160px] border border-[#3d444d] bg-[#0d1117] text-gray-100 rounded-lg px-3 py-2 h-10 focus:ring-2 focus:ring-green-500"
                 >
                     <option value="">Select reward type</option>
                     {REWARD_TYPES.map(rt => (
@@ -152,7 +152,7 @@ export default function RewardSelection({
                             value={rewardDataInput.amount || ""}
                             onChange={e => handleRewardDataChange("amount", e.target.value)}
                             placeholder="Amount"
-                            className="w-28 border border-gray-700 bg-gray-800 text-gray-100 rounded-lg px-3 py-2 focus:ring-2 focus:ring-yellow-400"
+                            className="w-28 border border-[#3d444d] bg-[#0d1117] text-gray-100 rounded-lg px-3 py-2 h-10 focus:ring-2 focus:ring-yellow-400"
                         />
                     </div>
                 )}
@@ -165,7 +165,7 @@ export default function RewardSelection({
                             value={rewardDataInput.amount || ""}
                             onChange={e => handleRewardDataChange("amount", e.target.value)}
                             placeholder="Amount"
-                            className="w-28 border border-gray-700 bg-gray-800 text-gray-100 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400"
+                            className="w-28 border border-[#3d444d] bg-[#0d1117] text-gray-100 rounded-lg px-3 py-2 h-10 focus:ring-2 focus:ring-blue-400"
                         />
                     </div>
                 )}
@@ -174,7 +174,7 @@ export default function RewardSelection({
                         <select
                             value={rewardDataInput.skill || ""}
                             onChange={e => handleRewardDataChange("skill", e.target.value)}
-                            className="flex-1 min-w-[120px] border border-gray-700 bg-gray-800 text-gray-100 rounded-lg px-3 py-2 focus:ring-2 focus:ring-purple-400"
+                            className="flex-1 min-w-[120px] border border-[#3d444d] bg-[#0d1117] text-gray-100 rounded-lg px-3 py-2 h-10 focus:ring-2 focus:ring-purple-400"
                         >
                             <option value="">Select skill</option>
                             {skills && skills.map(s => (
@@ -187,7 +187,7 @@ export default function RewardSelection({
                             value={rewardDataInput.amount || ""}
                             onChange={e => handleRewardDataChange("amount", e.target.value)}
                             placeholder="Amount"
-                            className="w-24 border border-gray-700 bg-gray-800 text-gray-100 rounded-lg px-3 py-2 focus:ring-2 focus:ring-purple-400"
+                            className="w-24 border border-[#3d444d] bg-[#0d1117] text-gray-100 rounded-lg px-3 py-2 h-10 focus:ring-2 focus:ring-purple-400"
                         />
                     </>
                 )}
@@ -197,7 +197,7 @@ export default function RewardSelection({
                         <select
                             value={rewardDataInput.itemId || ""}
                             onChange={e => handleRewardDataChange("itemId", e.target.value)}
-                            className="flex-1 min-w-[120px] border border-gray-700 bg-gray-800 text-gray-100 rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-400"
+                            className="flex-1 min-w-[120px] border border-[#3d444d] bg-[#0d1117] text-gray-100 rounded-lg px-3 py-2 h-10 focus:ring-2 focus:ring-green-400"
                         >
                             <option value="">Select item</option>
                             {StoreItems && StoreItems.map(item => (
@@ -209,7 +209,7 @@ export default function RewardSelection({
                 <button
                     type="button"
                     onClick={handleAddReward}
-                    className="bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded-lg flex items-center gap-1 transition"
+                    className="bg-[#212830] hover:bg-blue-700 text-white px-3 py-2 h-10 rounded-lg flex items-center gap-1 transition"
                     title="Add reward"
                 >
                     <FiPlus />
@@ -220,7 +220,7 @@ export default function RewardSelection({
                 {(tempQuest.rewards || []).map((reward, idx) => (
                     <li
                         key={idx}
-                        className="flex items-center justify-between bg-gray-700 rounded-sm px-3 py-2 shadow-sm"
+                        className="flex items-center justify-between bg-[#151b23] rounded-sm px-3 py-2 shadow-sm"
                     >
                         <span className="flex items-center gap-2 text-gray-100">
                             {reward.type === "coins" && (
