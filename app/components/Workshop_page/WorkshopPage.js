@@ -93,7 +93,7 @@ export default function WorkshopPage({user,StoreItems,setStoreItems,setQuests , 
     }
 
     return (
-        <div className="flex flex-col items-center w-full text-white">
+        <div className="flex flex-col items-center w-full text-white ">
            
             <div className="w-full px-10">
                 <div className="flex max-w-md mx-auto mb-4 gap-2">
