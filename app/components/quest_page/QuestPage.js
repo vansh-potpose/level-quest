@@ -1,14 +1,17 @@
 "use client";
-import { useState, useMemo, useCallback } from "react";
-import QuestCard from "./QuestCard";
+import { useState, useMemo, useCallback, useRef, useEffect } from "react";
+import QuestSection from "./QuestSection";
 import QuestModal from "./QuestModal";
 
 export default function QuestPage({ quests, setQuests, claimRewards }) {
-  // State
   const [selectedQuest, setSelectedQuest] = useState(null);
   const [sortOption, setSortOption] = useState("name");
   const [searchTerm, setSearchTerm] = useState("");
   const [showCompleted, setShowCompleted] = useState(false);
+
+  // Floating menu state
+  const [selectedQuestId, setSelectedQuestId] = useState(null);
+  const menuRef = useRef(null);
 
   // Handlers
   const openModal = useCallback((quest) => setSelectedQuest(quest), []);
@@ -57,6 +60,36 @@ export default function QuestPage({ quests, setQuests, claimRewards }) {
     );
   }, [setQuests]);
 
+  // Floating menu: close on outside click
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (
+        menuRef.current &&
+        !menuRef.current.contains(event.target) &&
+        !event.target.closest(".quest-card")
+      ) {
+        setSelectedQuestId(null);
+      }
+    }
+    document.addEventListener("contextmenu", handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("contextmenu", handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  // Edit and Delete handlers
+  function handleEdit(quest) {
+    setSelectedQuestId(null);
+    alert(`Edit Quest: ${quest.name}`);
+  }
+
+  function handleDelete(quest) {
+    setQuests((prev) => prev.filter((q) => q.id !== quest.id));
+    setSelectedQuestId(null);
+  }
+
   // Filtering and sorting
   const filterQuests = useCallback(
     (quests) =>
@@ -79,10 +112,10 @@ export default function QuestPage({ quests, setQuests, claimRewards }) {
         sorted.sort((a, b) => a.name.localeCompare(b.name));
       } else if (sortOption === "date") {
         sorted.sort((a, b) => new Date(a.endDate) - new Date(b.endDate));
-      } else if (sortOption === "difficulty") {
+      } else if (sortOption === "difficulty" || sortOption === "priority") {
         const priorityOrder = { High: 1, Medium: 2, Low: 3 };
         sorted.sort(
-          (a, b) => priorityOrder[a.priority] - priorityOrder[b.priority]
+          (a, b) => (priorityOrder[a.priority] || 99) - (priorityOrder[b.priority] || 99)
         );
       }
       return sorted;
@@ -95,9 +128,8 @@ export default function QuestPage({ quests, setQuests, claimRewards }) {
     [quests, filterQuests, sortQuests]
   );
 
-  // Render
   return (
-    <div className="flex flex-col items-center h-screen">
+    <div className="flex flex-col items-center ">
       {/* Controls */}
       <div className="flex items-center gap-3 bg-[#0d1117] p-3 rounded-lg shadow-md">
         <select
@@ -108,6 +140,7 @@ export default function QuestPage({ quests, setQuests, claimRewards }) {
           <option value="name">Sort by Name</option>
           <option value="date">Sort by Date</option>
           <option value="difficulty">Sort by Difficulty</option>
+          <option value="priority">Sort by Priority</option>
         </select>
 
         <input
@@ -129,18 +162,16 @@ export default function QuestPage({ quests, setQuests, claimRewards }) {
         </button>
       </div>
 
-      {/* Quest Cards */}
-      <div className="w-full max-w-[1200px] mx-auto mt-4">
-        <div className="flex flex-wrap gap-4">
-          {displayedQuests.map((quest) => (
-            <QuestCard
-              quest={quest}
-              key={quest.id}
-              onQuestClick={openModal}
-            />
-          ))}
-        </div>
-      </div>
+      {/* Quest Section */}
+      <QuestSection
+        quests={displayedQuests}
+        openModal={openModal}
+        selectedQuestId={selectedQuestId}
+        setSelectedQuestId={setSelectedQuestId}
+        menuRef={menuRef}
+        handleEdit={handleEdit}
+        handleDelete={handleDelete}
+      />
 
       {/* Modal */}
       {selectedQuest && (
