@@ -3,7 +3,7 @@ import { useState, useMemo, useCallback, useRef, useEffect } from "react";
 import QuestSection from "./QuestSection";
 import QuestModal from "./QuestModal";
 
-export default function QuestPage({ quests, setQuests, claimRewards }) {
+export default function QuestPage({ quests, setQuests, claimRewards,onEditQuest }) {
   const [selectedQuest, setSelectedQuest] = useState(null);
   const [sortOption, setSortOption] = useState("name");
   const [searchTerm, setSearchTerm] = useState("");
@@ -81,8 +81,8 @@ export default function QuestPage({ quests, setQuests, claimRewards }) {
 
   // Edit and Delete handlers
   function handleEdit(quest) {
+    onEditQuest(quest);
     setSelectedQuestId(null);
-    alert(`Edit Quest: ${quest.name}`);
   }
 
   function handleDelete(quest) {
@@ -171,6 +171,7 @@ export default function QuestPage({ quests, setQuests, claimRewards }) {
         menuRef={menuRef}
         handleEdit={handleEdit}
         handleDelete={handleDelete}
+        onEditQuest={onEditQuest}
       />
 
       {/* Modal */}

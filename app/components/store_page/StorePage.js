@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import StoreSection from "./StoreSection";
 
-export default function StorePage({ StoreItems, buyItem }) {
+export default function StorePage({ StoreItems, buyItem, onEditItem,setStoreItems }) {
   const [selectedItemId, setSelectedItemId] = useState(null);
   const menuRef = useRef(null);
 
@@ -26,14 +26,15 @@ export default function StorePage({ StoreItems, buyItem }) {
 
   function handleEdit(item) {
     // Implement edit logic here
+    onEditItem(item);
     setSelectedItemId(null);
-    alert(`Edit: ${item.name}`);
+    
   }
 
   function handleDelete(item) {
     // Implement delete logic here
     setSelectedItemId(null);
-    alert(`Delete: ${item.name}`);
+    setStoreItems(prevItems => prevItems.filter(i => i.id !== item.id));
   }
 
   return (

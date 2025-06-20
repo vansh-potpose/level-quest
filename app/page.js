@@ -297,6 +297,7 @@ export default function Home() {
               setEditingItem(item);
               setScreen("Workshop");
             }}
+            setStoreItems={setStoreItems}
           />
         )}
         {screen === "Quests" && (
