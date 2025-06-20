@@ -43,7 +43,7 @@ export default function CreateItem({ skills, item, setItem, addItemToStore, orig
                         originalItem.attribute_name === "health" ? "health" :
                             "skill",
                     amount: originalItem.amount || 0
-                }
+                } 
             ];
             const oldCost = calculateEffectCost(oldEffects);
             setCost(Math.max(5, 5 + Math.floor((newCost - oldCost) )));
