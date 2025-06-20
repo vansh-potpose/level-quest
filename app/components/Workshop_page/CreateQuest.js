@@ -1,6 +1,6 @@
 'use client'
-import { useRef, useState } from "react";
-import { FiUpload, FiPlus, FiTrash2, FiSave,FiClipboard  } from "react-icons/fi";
+import { useRef, useState, useEffect } from "react";
+import { FiUpload, FiPlus, FiTrash2, FiSave, FiClipboard } from "react-icons/fi";
 import { BsCoin } from "react-icons/bs";
 import RewardSelection from "./RewardSelection";
 import QuestImage from "./QuestImage";
@@ -13,12 +13,40 @@ const REWARD_TYPES = [
     { value: "item", label: "Item" }
 ];
 
-export default function CreateQuest({ tempQuest, setTempQuest, StoreItems, skills,addQuest }) {
+export default function CreateQuest({ tempQuest, setTempQuest, StoreItems, skills, addQuest, userCoins,
+    calculateEffectCost,
+    originalQuest }) {
     const [subquestInput, setSubquestInput] = useState("");
     const [rewardTypeInput, setRewardTypeInput] = useState("");
     const [rewardDataInput, setRewardDataInput] = useState({});
     const fileInputRef = useRef();
     const [cost, setCost] = useState(0);
+
+    useEffect(() => {
+        const extractEffects = (quest) => {
+            return quest.rewards.map(r => {
+                if (r.type === "coins") return { type: "coins", amount: r.data.amount };
+                if (r.type === "skill") return { type: "skill", amount: r.data.amount };
+                if (r.type === "health") return { type: "health", amount: r.data.amount };
+                if (r.type === "experience") return { type: "experience", amount: r.data.amount };
+                if (r.type === "item") return { type: "item", amount: r.data.item?.price || 0 };
+                return null;
+            }).filter(Boolean);
+        };
+
+        const newEffects = extractEffects(tempQuest);
+        const newCost = calculateEffectCost(newEffects);
+
+        if (originalQuest) {
+            const oldEffects = extractEffects(originalQuest);
+            const oldCost = calculateEffectCost(oldEffects);
+            const editingCost = Math.max(10, 10+Math.floor((newCost - oldCost)));
+            setCost(editingCost);
+        } else {
+            const createCost = 50 + newCost;
+            setCost(createCost);
+        }
+    }, [tempQuest.rewards, originalQuest]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -74,7 +102,7 @@ export default function CreateQuest({ tempQuest, setTempQuest, StoreItems, skill
         <div className="flex flex-col md:flex-row rounded-xl px-8 py-5 gap-8 ">
             <div className="md:w-1/2 w-full space-y-6 ">
                 <h2 className="text-2xl font-bold mb-4 text-gray-100 flex items-center gap-2">
-                    <FiClipboard  className="inline-block text-blue-400" /> Edit Quest
+                    <FiClipboard className="inline-block text-blue-400" /> Edit Quest
                 </h2>
                 {/* Image upload */}
                 <div>
@@ -215,12 +243,12 @@ export default function CreateQuest({ tempQuest, setTempQuest, StoreItems, skill
                 <button
                     onClick={() => {
                         console.log(JSON.stringify(tempQuest, null, 2));
-                        addQuest(tempQuest)
-                        
+                        addQuest(tempQuest,cost)
+
                     }}
                     className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg w-full flex items-center justify-center gap-2 transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 mt-4"
                 >
-                    <FiSave /> Save Quest
+                    <FiSave /> {originalQuest ? "Update Quest" : "Create Quest"}
                 </button>
             </div>
             <div className="md:w-1/2 w-full flex flex-col items-center justify-center">

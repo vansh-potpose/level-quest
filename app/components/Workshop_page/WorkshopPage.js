@@ -5,6 +5,7 @@ import CreateQuest from "./CreateQuest";
 import Reward from "../Reward";
 import Item from "../Item";
 import CreateItem from "./CreateItem";
+import { showGameToast } from "../ShowGameToast";
 
 export default function WorkshopPage({
     user,
@@ -17,6 +18,7 @@ export default function WorkshopPage({
     item,
     setEditingQuest,
     setEditingItem,
+    updateCoins
 }) {
     // Fallback quest if not editing
     const defaultQuest = {
@@ -59,11 +61,15 @@ export default function WorkshopPage({
 
         for (let effect of effects) {
             if (effect.type === "health") {
-                totalCost += effect.amount * 10;
+                totalCost += effect.amount * 5;
             } else if (effect.type === "experience") {
-                totalCost += effect.amount * 1;
+                totalCost += effect.amount * 2;
             } else if (effect.type === "skill") {
-                totalCost += effect.amount * 12;
+                totalCost += effect.amount * 2;
+            }else if (effect.type === "coins") {
+                totalCost += effect.amount * 0.5;
+            } else if (effect.type === "item") {
+                totalCost += effect.amount * 0.5; // Assuming items cost 5 coins per unit
             }
         }
 
@@ -76,7 +82,7 @@ export default function WorkshopPage({
         if (item) setTab(1);  // Items tab
     }, [quest, item]);
 
-    const addItemToStore = (newItem) => {
+    const addItemToStore = (newItem, cost) => {
         const wrappedItem =
             newItem.type === "Magical Item"
                 ? new Item({ ...newItem }, claimItems)
@@ -89,11 +95,12 @@ export default function WorkshopPage({
                 return [...prev, wrappedItem]; // Add new
             }
         });
+        updateCoins(-cost); // Deduct cost from user coins
 
         setEditingItem(null); // Clear edit state
     };
 
-    const addQuest = (newQuest) => {
+    const addQuest = (newQuest, cost) => {
         setQuests(prev => {
             if (quest) {
                 return prev.map(q => q.id === quest.id ? newQuest : q); // Replace existing
@@ -101,7 +108,20 @@ export default function WorkshopPage({
                 return [...prev, newQuest]; // Add new
             }
         });
+        updateCoins(-cost); // Deduct cost from user coins
 
+        const message = quest
+            ? "Quest updated successfully!"
+            : "Quest created successfully!";
+        showGameToast({
+            icon: "🎉",
+            title: quest ? "Quest Updated!" : "Quest Created!",
+            description: message,
+            border_color: "border-blue-500",
+            text_color: "text-blue-400",
+            progressClass_color: "!bg-blue-500",
+        });
+        
         setEditingQuest(null); // Clear edit state
     };
 
@@ -115,6 +135,9 @@ export default function WorkshopPage({
                     StoreItems={StoreItems}
                     skills={user.stats}
                     addQuest={addQuest}
+                    userCoins={user.coins}
+                    calculateEffectCost={calculateEffectCost}
+                    originalQuest={quest}  // <-- pass this
                 />
             ),
         },
@@ -144,8 +167,8 @@ export default function WorkshopPage({
                             key={tab.name}
                             onClick={() => setActiveTab(idx)}
                             className={`flex-1 py-2 px-4 rounded-t transition-colors duration-200 ${activeTab === idx
-                                    ? "bg-blue-600 text-white shadow-lg scale-105"
-                                    : "bg-gray-800 text-gray-400 hover:bg-gray-700"
+                                ? "bg-blue-600 text-white shadow-lg scale-105"
+                                : "bg-gray-800 text-gray-400 hover:bg-gray-700"
                                 }`}
                             style={{
                                 transition: "all 0.25s cubic-bezier(0.4,0,0.2,1)",
@@ -160,8 +183,8 @@ export default function WorkshopPage({
                         <div
                             key={tab.name}
                             className={`absolute inset-0 transition-all duration-500 ${activeTab === idx
-                                    ? "opacity-100 z-10 translate-y-0 scale-100"
-                                    : "opacity-0 z-0 pointer-events-none translate-y-8 scale-95"
+                                ? "opacity-100 z-10 translate-y-0 scale-100"
+                                : "opacity-0 z-0 pointer-events-none translate-y-8 scale-95"
                                 }`}
                             style={{
                                 transition: "all 0.5s cubic-bezier(0.4,0,0.2,1)",

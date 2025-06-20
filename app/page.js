@@ -334,6 +334,7 @@ export default function Home() {
             item={editingItem}
             setEditingQuest={setEditingQuest}
             setEditingItem={setEditingItem}
+            updateCoins={updateCoins}
           />
         )}
       </main>
