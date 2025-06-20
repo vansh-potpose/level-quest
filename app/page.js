@@ -10,7 +10,7 @@ import { useEffect, useState, useRef, use } from "react";
 import StorePage from "./components/store_page/StorePage";
 import HabitPage from "./components/Habit_page/HabitPage";
 import WorkshopPage from "./components/Workshop_page/WorkshopPage";
-import {exampleUser, exampleStoreItems, exampleQuests,dailyChallenge} from "./data";
+import { exampleUser, exampleStoreItems, exampleQuests, dailyChallenge } from "./data";
 import SettingsPage from "./components/settings_page/SettingsPage";
 
 export default function Home() {
@@ -24,6 +24,9 @@ export default function Home() {
   const [coins, setCoins] = useState(user.coins || 0);
   const [dailyChallenges, setDailyChallenges] = useState(dailyChallenge);
   const [tasks, setTasks] = useState(user.Tasks);
+  const [editingQuest, setEditingQuest] = useState(null);
+  const [editingItem, setEditingItem] = useState(null);
+
 
   // --- Utility Functions ---
   const getMaxExpForLevel = (level) => Math.floor(BASE_XP * level ** 1.5);
@@ -58,7 +61,7 @@ export default function Home() {
             newLevel += 1;
             maxPoints = getMaxSkillPoints(newLevel);
           }
-          newValue=stat.value + amount;
+          newValue = stat.value + amount;
           return { ...stat, value: newValue, level: newLevel };
         }
         return stat;
@@ -77,7 +80,7 @@ export default function Home() {
         newLevel += 1;
         maxExp = getMaxExpForLevel(newLevel);
       }
-      
+
 
       return { ...prev, exp: newExp, level: newLevel };
     });
@@ -161,8 +164,8 @@ export default function Home() {
       progressClass_color: "!bg-green-500",
     });
   };
-  
-  
+
+
   // --- Store Logic ---
   function buyItem(item) {
     if (user.coins >= item.price) {
@@ -194,7 +197,7 @@ export default function Home() {
   }
 
   // --- Store Items ---
-  const [StoreItems,setStoreItems] = useState(exampleStoreItems(claimItems, claimObjects));
+  const [StoreItems, setStoreItems] = useState(exampleStoreItems(claimItems, claimObjects));
 
   // --- Quests ---
   const [quests, setQuests] = useState(exampleQuests(claimItems));
@@ -287,10 +290,25 @@ export default function Home() {
           />
         )}
         {screen === "Store" && (
-          <StorePage StoreItems={StoreItems} buyItem={buyItem} />
+          <StorePage
+            StoreItems={StoreItems}
+            buyItem={buyItem}
+            onEditItem={(item) => {
+              setEditingItem(item);
+              setScreen("Workshop");
+            }}
+          />
         )}
         {screen === "Quests" && (
-          <QuestPage quests={quests} setQuests={setQuests} claimRewards={claimRewards} />
+          <QuestPage
+            quests={quests}
+            setQuests={setQuests}
+            claimRewards={claimRewards}
+            onEditQuest={(quest) => {
+              setEditingQuest(quest);
+              setScreen("Workshop");
+            }}
+          />
         )}
         {screen === "Habits" && (
           <HabitPage
@@ -304,13 +322,17 @@ export default function Home() {
           <SettingsPage user={user} setUser={setUser} updateCoins={updateCoins} updateHealth={updateHealth} updateExp={updateExp} updateSkill={updateSkill} />
         )}
         {screen === "Workshop" && (
-          <WorkshopPage 
-          user={user} 
-          StoreItems={StoreItems} 
-          setStoreItems={setStoreItems} 
-          setQuests={setQuests} 
-          claimItems={claimItems}
-          claimObjects={claimObjects}
+          <WorkshopPage
+            user={user}
+            StoreItems={StoreItems}
+            setStoreItems={setStoreItems}
+            setQuests={setQuests}
+            claimItems={claimItems}
+            claimObjects={claimObjects}
+            quest={editingQuest}
+            item={editingItem}
+            setEditingQuest={setEditingQuest}
+            setEditingItem={setEditingItem}
           />
         )}
       </main>

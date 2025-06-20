@@ -8,7 +8,7 @@ export default function QuestPage({ quests, setQuests, claimRewards }) {
   const [sortOption, setSortOption] = useState("name");
   const [searchTerm, setSearchTerm] = useState("");
   const [showCompleted, setShowCompleted] = useState(false);
-
+ 
   // Floating menu state
   const [selectedQuestId, setSelectedQuestId] = useState(null);
   const menuRef = useRef(null);

@@ -6,7 +6,7 @@ export default function StorePage({ StoreItems, buyItem }) {
   const menuRef = useRef(null);
 
   // Close menu when clicking outside
-  useEffect(() => {
+  useEffect(() => { 
     function handleClickOutside(event) {
       if (
         menuRef.current &&
