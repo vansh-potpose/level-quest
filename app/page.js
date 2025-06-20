@@ -6,11 +6,12 @@ import QuestPage from "./components/quest_page/QuestPage";
 import { showGameToast } from "./components/ShowGameToast";
 import Reward from "./components/Reward";
 import Item from "./components/Item";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, use } from "react";
 import StorePage from "./components/store_page/StorePage";
 import HabitPage from "./components/Habit_page/HabitPage";
 import WorkshopPage from "./components/Workshop_page/WorkshopPage";
 import {exampleUser, exampleStoreItems, exampleQuests,dailyChallenge} from "./data";
+import SettingsPage from "./components/settings_page/SettingsPage";
 
 export default function Home() {
   // --- Constants ---
@@ -103,7 +104,7 @@ export default function Home() {
       text_color: "text-blue-400",
       progressClass_color: "!bg-blue-500",
     });
-    
+
   }
 
 
@@ -300,7 +301,7 @@ export default function Home() {
           />
         )}
         {screen === "Settings" && (
-          <h1 className="text-4xl font-bold mb-4">Settings Page</h1>
+          <SettingsPage user={user} setUser={setUser} updateCoins={updateCoins} updateHealth={updateHealth} updateExp={updateExp} updateSkill={updateSkill} />
         )}
         {screen === "Workshop" && (
           <WorkshopPage 
