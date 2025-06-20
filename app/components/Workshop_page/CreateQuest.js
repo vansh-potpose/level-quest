@@ -234,21 +234,23 @@ export default function CreateQuest({ tempQuest, setTempQuest, StoreItems, skill
                     </ul>
                 </div>
 
-                <div className="flex items-center gap-2 mt-6 text-lg font-semibold ">
+                <div className="flex items-center gap-2 mt-6 text-lg font-semibold text-gray-300">
                     <span>Creation cost:</span>
                     <span className="flex items-center gap-1">
                         {cost} <BsCoin className="inline-block text-yellow-500" />
                     </span>
                 </div>
+                
                 <button
                     onClick={() => {
                         console.log(JSON.stringify(tempQuest, null, 2));
                         addQuest(tempQuest,cost)
 
                     }}
+                    disabled={(userCoins < cost)|| tempQuest.name.trim() === "" || tempQuest.description.trim() === ""  }
                     className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg w-full flex items-center justify-center gap-2 transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 mt-4"
                 >
-                    <FiSave /> {originalQuest ? "Update Quest" : "Create Quest"}
+                    <FiSave /> {userCoins < cost ? "Not enough coins" :originalQuest ? "Update Quest" : "Create Quest"}
                 </button>
             </div>
             <div className="md:w-1/2 w-full flex flex-col items-center justify-center">

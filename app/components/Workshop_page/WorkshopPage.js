@@ -66,7 +66,7 @@ export default function WorkshopPage({
                 totalCost += effect.amount * 2;
             } else if (effect.type === "skill") {
                 totalCost += effect.amount * 2;
-            }else if (effect.type === "coins") {
+            } else if (effect.type === "coins") {
                 totalCost += effect.amount * 0.5;
             } else if (effect.type === "item") {
                 totalCost += effect.amount * 0.5; // Assuming items cost 5 coins per unit
@@ -121,7 +121,7 @@ export default function WorkshopPage({
             text_color: "text-blue-400",
             progressClass_color: "!bg-blue-500",
         });
-        
+
         setEditingQuest(null); // Clear edit state
     };
 
@@ -149,6 +149,9 @@ export default function WorkshopPage({
                     item={itemState}
                     setItem={setItem}
                     skills={user.stats}
+                    originalItem={item}
+                    userCoins={user.coins}
+                    calculateEffectCost={calculateEffectCost}
                 />
             ),
         },
