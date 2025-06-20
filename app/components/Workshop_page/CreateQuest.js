@@ -1,6 +1,7 @@
 'use client'
 import { useRef, useState } from "react";
 import { FiUpload, FiPlus, FiTrash2, FiSave,FiClipboard  } from "react-icons/fi";
+import { BsCoin } from "react-icons/bs";
 import RewardSelection from "./RewardSelection";
 import QuestImage from "./QuestImage";
 
@@ -17,6 +18,7 @@ export default function CreateQuest({ tempQuest, setTempQuest, StoreItems, skill
     const [rewardTypeInput, setRewardTypeInput] = useState("");
     const [rewardDataInput, setRewardDataInput] = useState({});
     const fileInputRef = useRef();
+    const [cost, setCost] = useState(0);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -159,43 +161,57 @@ export default function CreateQuest({ tempQuest, setTempQuest, StoreItems, skill
                 {/* Subquests */}
                 <div>
                     <label className="block text-sm font-semibold text-gray-300 mb-1">Subquests</label>
-                    <div className="text-red-500 text-xs mb-1">
-                        The reward of each subquest will be 5% of the coins and experience of quest
+                    <div className="text-xs mb-2 flex items-center gap-2">
+                        <span className="bg-yellow-900/30 text-yellow-300 px-2 py-1 rounded">
+                            Each subquest rewards 5% of quest coins & experience
+                        </span>
                     </div>
-                    <div className="flex gap-2 mb-2">
+                    <div className="flex gap-2 mb-3">
                         <input
                             type="text"
                             value={subquestInput}
                             onChange={e => setSubquestInput(e.target.value)}
-                            className="flex-1 border border-[#3d444d] bg-[#0d1117] text-gray-100 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
-                            placeholder="Add subquest"
+                            className="flex-1 border border-[#2d3340] bg-[#161b22] text-gray-100 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none transition placeholder:text-gray-400"
+                            placeholder="Add a subquest..."
                         />
                         <button
                             type="button"
                             onClick={handleAddSubquest}
-                            className="bg-[#212830] hover:bg-blue-700 text-white px-3 py-2 rounded-lg flex items-center gap-1 transition"
+                            className="bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-1 shadow transition"
                             title="Add Subquest"
                         >
                             <FiPlus /> Add
                         </button>
                     </div>
-                    <ul className="space-y-1">
+                    <ul className="space-y-2">
                         {(tempQuest.sub_quests || []).map((sq, idx) => (
-                            <li key={sq.id || idx} className="flex items-center justify-between  bg-[#151b23] rounded px-2 py-1">
-                                <span>{sq.name}</span>
+                            <li
+                                key={sq.id || idx}
+                                className="flex items-center justify-between bg-[#1a2230] border border-[#232b3a] rounded-lg px-3 py-2 group transition"
+                            >
+                                <span className="text-gray-100">{sq.name}</span>
                                 <button
                                     type="button"
                                     onClick={() => handleRemoveSubquest(idx)}
-                                    className="text-red-400 hover:text-red-600 ml-2 p-1 rounded transition"
+                                    className="text-red-400 hover:text-red-600 ml-2 p-1 rounded transition opacity-70 group-hover:opacity-100"
                                     title="Remove Subquest"
                                 >
                                     <FiTrash2 />
                                 </button>
                             </li>
                         ))}
+                        {!(tempQuest.sub_quests && tempQuest.sub_quests.length) && (
+                            <li className="text-gray-500 text-sm italic px-2 py-1">No subquests added yet.</li>
+                        )}
                     </ul>
                 </div>
 
+                <div className="flex items-center gap-2 mt-6 text-lg font-semibold ">
+                    <span>Creation cost:</span>
+                    <span className="flex items-center gap-1">
+                        {cost} <BsCoin className="inline-block text-yellow-500" />
+                    </span>
+                </div>
                 <button
                     onClick={() => {
                         console.log(JSON.stringify(tempQuest, null, 2));

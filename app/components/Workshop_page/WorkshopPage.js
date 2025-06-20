@@ -7,156 +7,171 @@ import Item from "../Item";
 import CreateItem from "./CreateItem";
 
 export default function WorkshopPage({
-  user,
-  StoreItems,
-  setStoreItems,
-  setQuests,
-  claimObjects,
-  claimItems,
-  quest,
-  item,
-  setEditingQuest,
-  setEditingItem,
+    user,
+    StoreItems,
+    setStoreItems,
+    setQuests,
+    claimObjects,
+    claimItems,
+    quest,
+    item,
+    setEditingQuest,
+    setEditingItem,
 }) {
-  // Fallback quest if not editing
-  const defaultQuest = {
-    id: Date.now(),
-    image: "/images.jpeg",
-    name: "Quest title",
-    endDate: new Date().toISOString(),
-    description: "This is a sample quest description. Complete tasks to earn rewards.",
-    priority: "Low",
-    status: "Active",
-    rewards: [
-      new Reward("coins", { amount: 1000 }),
-      new Reward("experience", { amount: 500 }),
-    ],
-    sub_quests: [
-      { id: 1, name: "Sub-quest 1", completed: false, claim: false, rewards: [] },
-      { id: 2, name: "Sub-quest 2", completed: false, claim: false, rewards: [] },
-    ],
-  };
+    // Fallback quest if not editing
+    const defaultQuest = {
+        id: Date.now(),
+        image: "/images.jpeg",
+        name: "Quest title",
+        endDate: new Date().toISOString(),
+        description: "This is a sample quest description. Complete tasks to earn rewards.",
+        priority: "Low",
+        status: "Active",
+        rewards: [
+            new Reward("coins", { amount: 1000 }),
+            new Reward("experience", { amount: 500 }),
+        ],
+        sub_quests: [
+            { id: 1, name: "Sub-quest 1", completed: false, claim: false, rewards: [] },
+            { id: 2, name: "Sub-quest 2", completed: false, claim: false, rewards: [] },
+        ],
+    };
 
-  const defaultItem = {
-    id: Date.now(),
-    name: "Shadow Fight Game",
-    price: 300,
-    description: "Epic battles and martial arts.",
-    image: "/image_b.jpg",
-    type: "Object",
-    amount: 0,
-    claimed: false,
-    attribute_name: "none",
-  };
+    const defaultItem = {
+        id: Date.now(),
+        name: "Shadow Fight Game",
+        price: 300,
+        description: "Epic battles and martial arts.",
+        image: "/image_b.jpg",
+        type: "Object",
+        amount: 0,
+        claimed: false,
+        attribute_name: "none",
+    };
 
-  const [tempQuest, setTempQuest] = useState(quest || defaultQuest);
-  const [itemState, setItem] = useState(item || defaultItem);
-  const [activeTab, setTab] = useState(0);
+    const [tempQuest, setTempQuest] = useState(quest || defaultQuest);
+    const [itemState, setItem] = useState(item || defaultItem);
+    const [activeTab, setTab] = useState(0);
 
-  // Auto-switch tab based on incoming edit data
-  useEffect(() => {
-    if (quest) setTab(0); // Quests tab
-    if (item) setTab(1);  // Items tab
-  }, [quest, item]);
 
-  const addItemToStore = (newItem) => {
-    const wrappedItem =
-      newItem.type === "Magical Item"
-        ? new Item({ ...newItem }, claimItems)
-        : new Item({ ...newItem }, claimObjects);
+    function calculateEffectCost(effects = []) {
+        let totalCost = 0;
 
-    setStoreItems(prev => {
-      if (item) {
-        return prev.map(i => i.id === item.id ? wrappedItem : i); // Replace existing
-      } else {
-        return [...prev, wrappedItem]; // Add new
-      }
-    });
+        for (let effect of effects) {
+            if (effect.type === "health") {
+                totalCost += effect.amount * 10;
+            } else if (effect.type === "experience") {
+                totalCost += effect.amount * 1;
+            } else if (effect.type === "skill") {
+                totalCost += effect.amount * 12;
+            }
+        }
 
-    setEditingItem(null); // Clear edit state
-  };
+        return Math.max(20, totalCost); // Minimum baseline cost
+    }
 
-  const addQuest = (newQuest) => {
-    setQuests(prev => {
-      if (quest) {
-        return prev.map(q => q.id === quest.id ? newQuest : q); // Replace existing
-      } else {
-        return [...prev, newQuest]; // Add new
-      }
-    });
+    // Auto-switch tab based on incoming edit data
+    useEffect(() => {
+        if (quest) setTab(0); // Quests tab
+        if (item) setTab(1);  // Items tab
+    }, [quest, item]);
 
-    setEditingQuest(null); // Clear edit state
-  };
+    const addItemToStore = (newItem) => {
+        const wrappedItem =
+            newItem.type === "Magical Item"
+                ? new Item({ ...newItem }, claimItems)
+                : new Item({ ...newItem }, claimObjects);
 
-  const tabs = [
-    {
-      name: "Quests",
-      component: (
-        <CreateQuest
-          tempQuest={tempQuest}
-          setTempQuest={setTempQuest}
-          StoreItems={StoreItems}
-          skills={user.stats}
-          addQuest={addQuest}
-        />
-      ),
-    },
-    {
-      name: "Items",
-      component: (
-        <CreateItem
-          addItemToStore={addItemToStore}
-          item={itemState}
-          setItem={setItem}
-          skills={user.stats}
-        />
-      ),
-    },
-  ];
+        setStoreItems(prev => {
+            if (item) {
+                return prev.map(i => i.id === item.id ? wrappedItem : i); // Replace existing
+            } else {
+                return [...prev, wrappedItem]; // Add new
+            }
+        });
 
-  function setActiveTab(idx) {
-    setTab(idx);
-  }
+        setEditingItem(null); // Clear edit state
+    };
 
-  return (
-    <div className="flex flex-col items-center w-full text-white">
-      <div className="w-full px-10">
-        <div className="flex max-w-md mx-auto mb-4 gap-2">
-          {tabs.map((tab, idx) => (
-            <button
-              key={tab.name}
-              onClick={() => setActiveTab(idx)}
-              className={`flex-1 py-2 px-4 rounded-t transition-colors duration-200 ${
-                activeTab === idx
-                  ? "bg-blue-600 text-white shadow-lg scale-105"
-                  : "bg-gray-800 text-gray-400 hover:bg-gray-700"
-              }`}
-              style={{
-                transition: "all 0.25s cubic-bezier(0.4,0,0.2,1)",
-              }}
-            >
-              {tab.name}
-            </button>
-          ))}
-        </div>
-        <div className="relative">
-          {tabs.map((tab, idx) => (
-            <div
-              key={tab.name}
-              className={`absolute inset-0 transition-all duration-500 ${
-                activeTab === idx
-                  ? "opacity-100 z-10 translate-y-0 scale-100"
-                  : "opacity-0 z-0 pointer-events-none translate-y-8 scale-95"
-              }`}
-              style={{
-                transition: "all 0.5s cubic-bezier(0.4,0,0.2,1)",
-              }}
-            >
-              {tab.component}
+    const addQuest = (newQuest) => {
+        setQuests(prev => {
+            if (quest) {
+                return prev.map(q => q.id === quest.id ? newQuest : q); // Replace existing
+            } else {
+                return [...prev, newQuest]; // Add new
+            }
+        });
+
+        setEditingQuest(null); // Clear edit state
+    };
+
+    const tabs = [
+        {
+            name: "Quests",
+            component: (
+                <CreateQuest
+                    tempQuest={tempQuest}
+                    setTempQuest={setTempQuest}
+                    StoreItems={StoreItems}
+                    skills={user.stats}
+                    addQuest={addQuest}
+                />
+            ),
+        },
+        {
+            name: "Items",
+            component: (
+                <CreateItem
+                    addItemToStore={addItemToStore}
+                    item={itemState}
+                    setItem={setItem}
+                    skills={user.stats}
+                />
+            ),
+        },
+    ];
+
+    function setActiveTab(idx) {
+        setTab(idx);
+    }
+
+    return (
+        <div className="flex flex-col items-center w-full text-white">
+            <div className="w-full px-10">
+                <div className="flex max-w-md mx-auto mb-4 gap-2">
+                    {tabs.map((tab, idx) => (
+                        <button
+                            key={tab.name}
+                            onClick={() => setActiveTab(idx)}
+                            className={`flex-1 py-2 px-4 rounded-t transition-colors duration-200 ${activeTab === idx
+                                    ? "bg-blue-600 text-white shadow-lg scale-105"
+                                    : "bg-gray-800 text-gray-400 hover:bg-gray-700"
+                                }`}
+                            style={{
+                                transition: "all 0.25s cubic-bezier(0.4,0,0.2,1)",
+                            }}
+                        >
+                            {tab.name}
+                        </button>
+                    ))}
+                </div>
+                <div className="relative">
+                    {tabs.map((tab, idx) => (
+                        <div
+                            key={tab.name}
+                            className={`absolute inset-0 transition-all duration-500 ${activeTab === idx
+                                    ? "opacity-100 z-10 translate-y-0 scale-100"
+                                    : "opacity-0 z-0 pointer-events-none translate-y-8 scale-95"
+                                }`}
+                            style={{
+                                transition: "all 0.5s cubic-bezier(0.4,0,0.2,1)",
+                            }}
+                        >
+                            {tab.component}
+                        </div>
+                    ))}
+                </div>
             </div>
-          ))}
         </div>
-      </div>
-    </div>
-  );
+    );
 }
