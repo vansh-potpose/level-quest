@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import StoreSection from "./StoreSection";
+import { confirmToast } from "../confirmToast";
 
 export default function StorePage({ StoreItems, buyItem, onEditItem,setStoreItems }) {
   const [selectedItemId, setSelectedItemId] = useState(null);
@@ -31,8 +32,17 @@ export default function StorePage({ StoreItems, buyItem, onEditItem,setStoreItem
     
   }
 
-  function handleDelete(item) {
+  async function handleDelete(item) {
     // Implement delete logic here
+    
+    const confirmed = await confirmToast({
+      message: `Are you sure you want to delete "${item.name}" from the store?`,
+      confirmText: "Delete",
+      cancelText: "Cancel",
+      type: "warning",
+    });
+
+    if (!confirmed) return;
     setSelectedItemId(null);
     setStoreItems(prevItems => prevItems.filter(i => i.id !== item.id));
   }
