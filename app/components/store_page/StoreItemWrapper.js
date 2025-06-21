@@ -1,3 +1,4 @@
+'use client';
 import StoreItemCard from "./StoreItemCard";
 import StoreItemMenu from "./StoreItemMenu";
 

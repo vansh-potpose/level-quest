@@ -92,16 +92,16 @@ export const exampleUser = (claimItems) => {
 
 // --- Example Store Items ---
 export const exampleStoreItems = (claimItems, claimObjects) => [
-  new Item({ id: 1, name: "Shadow Fight Game", price: 300, description: "Epic battles and martial arts.", image: "/image_b.jpg", type: "Object", amount: 1, claimed: false, attribute_name: "agility" }, claimObjects),
-  new Item({ id: 2, name: "Playing Mobile Game", price: 300, description: "Immersive gaming experience.", image: "/images.jpeg", type: "Object", amount: 1, claimed: false, attribute_name: "intelligence" }, claimObjects),
-  new Item({ id: 3, name: "Gali Cricket", price: 300, description: "Play with friends in streets.", image: "/images.jpeg", type: "Object", amount: 1, claimed: false, attribute_name: "strength" }, claimObjects),
-  new Item({ id: 4, name: "Casio MTP 1183", price: 1000, description: "Stylish wristwatch with leather strap.", image: "/images.jpeg", type: "Object", amount: 1, claimed: false, attribute_name: "luck" }, claimObjects),
-  new Item({ id: 5, name: "Chatting With Her", price: 500, description: "Romantic texting session.", image: "/images.jpeg", type: "Object", amount: 1, claimed: false, attribute_name: "health" }, claimObjects),
-  new Item({ id: 6, name: "Butter Scotch Ice Cream", price: 300, description: "Delicious frozen dessert.", image: "/images.jpeg", type: "Object", amount: 1, claimed: false, attribute_name: "health" }, claimObjects),
-  new Item({ id: 7, name: "Meeting Her", price: 1500, description: "Calling her and asking her to meet, you both can talk, walk, dance, etc.", image: "/image_b.jpg", type: "Object", amount: 1, claimed: false, attribute_name: "stamina" }, claimObjects),
-  new Item({ id: 8, name: "Magical Sword", price: 5000, description: "A sword that glows with magical energy.", image: "/images.jpeg", type: "Magical Item", amount: 60, claimed: false, attribute_name: "strength" }, claimItems),
-  new Item({ id: 9, name: "Enchanted Shield", price: 4000, description: "A shield that protects against dark magic.", image: "/images.jpeg", type: "Magical Item", amount: 1, claimed: false, attribute_name: "health" }, claimItems),
-  new Item({ id: 10, name: "Mystic Amulet", price: 6000, description: "An amulet that grants the wearer special powers.", image: "/images.jpeg", type: "Magical Item", amount: 1, claimed: false, attribute_name: "experience" }, claimItems),
+    new Item({ id: 1, name: "Shadow Fight Game", price: 300, description: "Epic battles and martial arts.", image: "/shadow_fight.webp", type: "Object", amount: 1, claimed: false, attribute_name: "agility" }, claimObjects),
+    new Item({ id: 2, name: "Playing Mobile Game", price: 300, description: "Immersive gaming experience.", image: "/mobile_game.jpg", type: "Object", amount: 1, claimed: false, attribute_name: "intelligence" }, claimObjects),
+    new Item({ id: 3, name: "Gali Cricket", price: 300, description: "Play with friends in streets.", image: "/gali_cricket.jpeg", type: "Object", amount: 1, claimed: false, attribute_name: "strength" }, claimObjects),
+    new Item({ id: 4, name: "Casio MTP 1183", price: 1000, description: "Stylish wristwatch with leather strap.", image: "/casio.webp", type: "Object", amount: 1, claimed: false, attribute_name: "luck" }, claimObjects),
+    new Item({ id: 5, name: "Chatting With Her", price: 500, description: "Romantic texting session.", image: "/chatting.jpg", type: "Object", amount: 1, claimed: false, attribute_name: "health" }, claimObjects),
+    new Item({ id: 6, name: "Butter Scotch Ice Cream", price: 300, description: "Delicious frozen dessert.", image: "/butterscotch-ice-cream.jpg", type: "Object", amount: 1, claimed: false, attribute_name: "health" }, claimObjects),
+    new Item({ id: 7, name: "Meeting Her", price: 1500, description: "Calling her and asking her to meet, you both can talk, walk, dance, etc.", image: "/image_b.jpg", type: "Object", amount: 1, claimed: false, attribute_name: "stamina" }, claimObjects),
+    new Item({ id: 8, name: "GYM membership", price: 500, description: "A gym membership that boosts your strength and stamina.", image: "/gym.webp", type: "Magical Item", amount: 60, claimed: false, attribute_name: "strength" }, claimItems),
+    new Item({ id: 9, name: "Obstacle is the way", price: 400, description: "A book by that teaches how to turn adversity into advantage.", image: "/obstacle-is-the-way.jpg", type: "Magical Item", amount: 100, claimed: false, attribute_name: "experience" }, claimItems),
+    new Item({ id: 10, name: "Movie night", price: 600, description: "Enjoy a relaxing evening watching your favorite movies together.", image: "/movie-night.webp", type: "Magical Item", amount: 100, claimed: false, attribute_name: "health" }, claimItems),
 ];
 
 // --- Example Quests ---

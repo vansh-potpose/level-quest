@@ -1,3 +1,4 @@
+'use client';
 import StoreItemWrapper from "./StoreItemWrapper";
 
 export default function StoreSection({

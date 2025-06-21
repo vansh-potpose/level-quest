@@ -1,5 +1,6 @@
-  import { useEffect, useRef, useState } from "react";
-  import { BsCoin } from "react-icons/bs";
+'use client';
+import { useEffect, useRef, useState } from "react";
+import { BsCoin } from "react-icons/bs";
 import { GiMuscleUp } from "react-icons/gi";
 import { FaHeart, FaStar,FaAward } from "react-icons/fa";
 
@@ -39,6 +40,7 @@ import { FaHeart, FaStar,FaAward } from "react-icons/fa";
             src={item.image}
             alt={item.name}
             className="w-full z-0 h-48 object-cover"
+            loading="lazy"
           />
         </div>
 

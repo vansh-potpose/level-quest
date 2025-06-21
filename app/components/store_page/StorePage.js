@@ -1,3 +1,4 @@
+'use client';
 import { useState, useRef, useEffect } from "react";
 import StoreSection from "./StoreSection";
 import { confirmToast } from "../confirmToast";
