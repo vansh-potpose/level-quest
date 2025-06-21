@@ -1,6 +1,7 @@
 'use client';
 import { use, useEffect, useRef, useState } from "react";
 import { BsCoin } from "react-icons/bs";
+import { FaHeart, FaStar, FaAward } from "react-icons/fa";
 
 export default function ItemImage({
   item
@@ -37,6 +38,31 @@ export default function ItemImage({
       >
 
         <div className="text-gray-300 text-sm mb-2">{item.description}</div>
+        {item.type === "Magical Item" && (
+                    <div className="text-gray-300 text-sm mb-2 flex items-center gap-2">
+                      Gives:&nbsp;
+                      {item.attribute_name === "health" ? (
+                        <>
+                          <span className="font-bold text-red-400">+ {item.amount}</span>
+                          <FaHeart className="text-red-400" />
+                          <span className="text-xs">HP</span>
+                        </>
+                      ) : item.attribute_name === "experience" ? (
+                        <>
+                          <span className="font-bold text-blue-400">+ {item.amount}</span>
+                          <FaStar  className="text-blue-400 mb-1" />
+                          <span  className="text-xs">XP</span>
+                        </>
+                      ) : (
+                        <>
+                          <span className="font-bold text-green-400">+ {item.amount}</span>
+                          <FaAward className="text-green-400 " />
+                          <span className="text-xs capitalize">{item.attribute_name}</span>
+                          
+                        </>
+                      )}
+                    </div>
+                  )}
         <button
           className="bg-yellow-500 hover:bg-yellow-600 text-black px-4 py-2 rounded text-sm font-semibold"
         >
