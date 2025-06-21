@@ -96,6 +96,17 @@ export default function WorkshopPage({
             }
         });
         updateCoins(-cost); // Deduct cost from user coins
+        const message = item
+            ? "Item updated successfully!"
+            : "Item added to store successfully!";
+        showGameToast({
+            icon: "🎉", 
+            title: item ? "Item Updated!" : "Item Added!",
+            description: message,
+            border_color: "border-blue-500",
+            text_color: "text-blue-400",
+            progressClass_color: "!bg-blue-500",
+        });
 
         setEditingItem(null); // Clear edit state
     };

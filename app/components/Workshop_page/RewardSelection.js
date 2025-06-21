@@ -209,7 +209,7 @@ export default function RewardSelection({
                 <button
                     type="button"
                     onClick={handleAddReward}
-                    className="bg-[#212830] hover:bg-blue-700 text-white px-3 py-2 h-10 rounded-lg flex items-center gap-1 transition"
+                    className="bg-[#212830] hover:bg-[#FF8000]  text-white px-3 py-2 h-10 rounded-lg flex items-center gap-1 transition"
                     title="Add reward"
                 >
                     <FiPlus />

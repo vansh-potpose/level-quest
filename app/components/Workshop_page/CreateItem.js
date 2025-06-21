@@ -1,57 +1,68 @@
-'use client'
+'use client';
 import { useRef, useState, useEffect } from "react";
 import { FiUpload, FiSave, FiBox } from "react-icons/fi";
-import ItemImage from "./ItemImage";
 import { BsCoin } from "react-icons/bs";
+import ItemImage from "./ItemImage";
 
-export default function CreateItem({ skills, item, setItem, addItemToStore, originalItem,
+const ATTRIBUTE_OPTIONS = [
+    { value: "health", label: "Health" },
+    { value: "experience", label: "Experience" },
+    { value: "skills", label: "Skills" },
+];
+
+export default function CreateItem({
+    skills,
+    item,
+    setItem,
+    addItemToStore,
+    originalItem,
     userCoins,
-    calculateEffectCost }) {
+    calculateEffectCost
+}) {
     const fileInputRef = useRef();
-
-    // Only local state for selectedAttribute
     const [selectedAttribute, setSelectedAttribute] = useState("health");
     const [cost, setCost] = useState(0);
+    const [minPrice, setMinPrice] = useState(10);
 
-    const ATTRIBUTE_OPTIONS = [
-        { value: "", label: "None" },
-        { value: "health", label: "Health" },
-        { value: "experience", label: "Experience" },
-        { value: "skills", label: "Skills" },
-    ];
-
+    // Update cost and minPrice based on item state
     useEffect(() => {
         if (item.type !== "Magical Item") {
             setCost(originalItem ? 5 : 10);
+            setMinPrice(5);
             return;
         }
 
-        const effects = [
-            {
-                type: item.attribute_name === "experience" ? "experience" :
-                    item.attribute_name === "health" ? "health" :
-                        "skill",
-                amount: item.amount || 0
-            }
-        ];
+        const getEffectType = (attr) =>
+            attr === "experience" ? "experience" :
+            attr === "health" ? "health" : "skill";
 
+        const effects = [{
+            type: getEffectType(item.attribute_name),
+            amount: item.amount || 0
+        }];
         const newCost = calculateEffectCost(effects);
+
         if (originalItem) {
-            const oldEffects = [
-                {
-                    type: originalItem.attribute_name === "experience" ? "experience" :
-                        originalItem.attribute_name === "health" ? "health" :
-                            "skill",
-                    amount: originalItem.amount || 0
-                } 
-            ];
+            const oldEffects = [{
+                type: getEffectType(originalItem.attribute_name),
+                amount: originalItem.amount || 0
+            }];
             const oldCost = calculateEffectCost(oldEffects);
-            setCost(Math.max(5, 5 + Math.floor((newCost - oldCost) )));
+            setCost(Math.max(5, 5 + Math.floor(newCost - oldCost)));
         } else {
             setCost(Math.max(20, newCost));
         }
-    }, [item.attribute_name, item.amount, item.type]);
+        setMinPrice(Math.max(20, newCost));
+    }, [item.attribute_name, item.amount, item.type, originalItem, calculateEffectCost]);
 
+    // Ensure price is never below minPrice
+    useEffect(() => {
+        if (item.price < minPrice) {
+            setItem(prev => ({ ...prev, price: minPrice }));
+        }
+    }, [minPrice, item.price, setItem]);
+
+    // Handle input changes
     const handleChange = (e) => {
         const { name, value, type } = e.target;
         setItem(prev => ({
@@ -60,24 +71,21 @@ export default function CreateItem({ skills, item, setItem, addItemToStore, orig
         }));
     };
 
+    // Handle image upload
     const handleImageChange = (e) => {
         const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setItem(prev => ({
-                    ...prev,
-                    image: reader.result
-                }));
-            };
-            reader.readAsDataURL(file);
-        }
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            setItem(prev => ({ ...prev, image: reader.result }));
+        };
+        reader.readAsDataURL(file);
     };
 
+    // Handle attribute selection
     const handleAttributeChange = (e) => {
         const value = e.target.value;
         setSelectedAttribute(value);
-        // Reset related fields in item
         setItem(prev => ({
             ...prev,
             attribute_name: value === "skills" ? "" : value,
@@ -85,7 +93,12 @@ export default function CreateItem({ skills, item, setItem, addItemToStore, orig
         }));
     };
 
-    
+    // Validation for save button
+    const isSaveDisabled =
+        item.name.trim() === "" ||
+        item.price <= 0 ||
+        (item.type === "Magical Item" && (item.attribute_name === "" || item.amount <= 0)) ||
+        userCoins < cost;
 
     return (
         <div className="flex flex-col md:flex-row rounded-xl px-8 py-5 gap-8">
@@ -93,21 +106,22 @@ export default function CreateItem({ skills, item, setItem, addItemToStore, orig
                 <h2 className="text-2xl font-bold mb-4 text-gray-100 flex items-center gap-2">
                     <FiBox className="inline-block text-blue-400" /> Create Item
                 </h2>
-                {/* Image upload */}
+
+                {/* Image Upload */}
                 <div>
                     <label className="text-sm font-semibold text-gray-300 mb-1 flex items-center gap-2">
                         <FiUpload className="text-blue-400" /> Item Image
                     </label>
-                    <div className="flex items-center gap-2">
-                        <input
-                            type="file"
-                            accept="image/*"
-                            ref={fileInputRef}
-                            onChange={handleImageChange}
-                            className="mt-1 block w-full text-gray-100 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700 transition"
-                        />
-                    </div>
+                    <input
+                        type="file"
+                        accept="image/*"
+                        ref={fileInputRef}
+                        onChange={handleImageChange}
+                        className="mt-1 block w-full text-gray-100 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700 transition"
+                    />
                 </div>
+
+                {/* Name */}
                 <div>
                     <label className="block text-sm font-semibold text-gray-300 mb-1">Item Name</label>
                     <input
@@ -119,6 +133,8 @@ export default function CreateItem({ skills, item, setItem, addItemToStore, orig
                         placeholder="Enter item name"
                     />
                 </div>
+
+                {/* Description */}
                 <div>
                     <label className="block text-sm font-semibold text-gray-300 mb-1">Description</label>
                     <textarea
@@ -130,6 +146,8 @@ export default function CreateItem({ skills, item, setItem, addItemToStore, orig
                         placeholder="Describe the item"
                     />
                 </div>
+
+                {/* Price & Type */}
                 <div className="flex gap-4">
                     <div className="flex-1">
                         <label className="block text-sm font-semibold text-gray-300 mb-1">Price</label>
@@ -138,6 +156,7 @@ export default function CreateItem({ skills, item, setItem, addItemToStore, orig
                             name="price"
                             value={item.price}
                             onChange={handleChange}
+                            min={minPrice}
                             className="mt-1 h-10 block w-full border border-[#3d444d] bg-[#0d1117] text-gray-100 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
                             placeholder="Enter price"
                         />
@@ -156,7 +175,7 @@ export default function CreateItem({ skills, item, setItem, addItemToStore, orig
                     </div>
                 </div>
 
-                {/* Only show attribute/amount if type is Magical Item */}
+                {/* Magical Item Attributes */}
                 {item.type === "Magical Item" && (
                     <>
                         <div className="flex gap-4">
@@ -167,14 +186,14 @@ export default function CreateItem({ skills, item, setItem, addItemToStore, orig
                                     onChange={handleAttributeChange}
                                     className="mt-1 h-10 block w-full border border-[#3d444d] bg-[#0d1117] text-gray-100 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
                                 >
-                                    {/* Remove "None" option for Magical Item */}
-                                    {ATTRIBUTE_OPTIONS.filter(opt => opt.value !== "").map(opt => (
+                                    {ATTRIBUTE_OPTIONS.map(opt => (
                                         <option key={opt.value} value={opt.value}>{opt.label}</option>
                                     ))}
                                 </select>
                             </div>
                         </div>
-                        {selectedAttribute === "health" || selectedAttribute === "experience" ? (
+
+                        {(selectedAttribute === "health" || selectedAttribute === "experience") && (
                             <div>
                                 <label className="block text-sm font-semibold text-gray-300 mb-1">
                                     {selectedAttribute.charAt(0).toUpperCase() + selectedAttribute.slice(1)} Amount
@@ -188,9 +207,8 @@ export default function CreateItem({ skills, item, setItem, addItemToStore, orig
                                     placeholder={`Enter ${selectedAttribute} amount`}
                                 />
                             </div>
-                        ) : null}
+                        )}
 
-                        {/* Skill selection for attribute_name === "skills" */}
                         {selectedAttribute === "skills" && (
                             <div className="flex gap-4">
                                 <div className="flex-1">
@@ -222,24 +240,25 @@ export default function CreateItem({ skills, item, setItem, addItemToStore, orig
                     </>
                 )}
 
+                {/* Cost */}
                 <div className="flex items-center gap-2">
                     <label className="text-md flex items-center gap-1 font-semibold text-gray-300">
                         Cost: {cost} <BsCoin className="inline-block text-yellow-500" />
                     </label>
                 </div>
 
+                {/* Save Button */}
                 <button
-                    onClick={()=>{
-                        console.log("Saving item:", item);
-                        addItemToStore(item,cost);
-                    }}
-                    disabled={item.name.trim() === "" || item.price <= 0 || (item.type === "Magical Item" && (item.attribute_name === "" || item.amount <= 0)) || userCoins < cost}
+                    onClick={() => addItemToStore(item, cost)}
+                    disabled={isSaveDisabled}
                     className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg w-full flex items-center justify-center gap-2 transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 mt-4"
                 >
-                    <FiSave /> Save Item
+                    <FiSave /> {isSaveDisabled ? "Insufficient Coins" : originalItem ? "Update Item" : "Create Item"}
                 </button>
             </div>
-            <div className="md:w-1/2 w-full  flex items-center justify-center">
+
+            {/* Preview */}
+            <div className="md:w-1/2 w-full flex items-center justify-center">
                 <ItemImage item={item} />
             </div>
         </div>

@@ -190,7 +190,7 @@ export default function CreateQuest({ tempQuest, setTempQuest, StoreItems, skill
                 <div>
                     <label className="block text-sm font-semibold text-gray-300 mb-1">Subquests</label>
                     <div className="text-xs mb-2 flex items-center gap-2">
-                        <span className="bg-yellow-900/30 text-yellow-300 px-2 py-1 rounded">
+                        <span className="bg-yellow-900/30 text-[#FF8000] px-2 py-1 rounded">
                             Each subquest rewards 5% of quest coins & experience
                         </span>
                     </div>
@@ -205,7 +205,7 @@ export default function CreateQuest({ tempQuest, setTempQuest, StoreItems, skill
                         <button
                             type="button"
                             onClick={handleAddSubquest}
-                            className="bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-1 shadow transition"
+                            className="hover:bg-[#FF8000] bg-[#212830] text-white px-4 py-2 rounded-lg flex items-center gap-1 shadow transition"
                             title="Add Subquest"
                         >
                             <FiPlus /> Add
