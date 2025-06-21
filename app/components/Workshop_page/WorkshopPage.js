@@ -112,6 +112,26 @@ export default function WorkshopPage({
     };
 
     const addQuest = (newQuest, cost) => {
+        
+        // Find the coins reward if it exists, otherwise default to 0
+        const coinsReward = newQuest.rewards.find(r => r.type === "coins");
+        const questCoins = coinsReward ? (r => r.amount ?? (r.data?.amount ?? 0))(coinsReward) : 0;
+
+        // Find the experience reward if it exists, otherwise default to 0
+        const experienceReward = newQuest.rewards.find(r => r.type === "experience");
+        const questExperience = experienceReward ? (r => r.amount ?? (r.data?.amount ?? 0))(experienceReward) : 0;
+
+        // Set subquest rewards as 5% of quest coins and experience
+        newQuest.sub_quests = newQuest.sub_quests.map(sub => {
+            const subRewards = [];
+            if (questCoins > 0) {
+            subRewards.push(new Reward("coins", { amount: Math.floor(questCoins * 0.05) }));
+            }
+            if (questExperience > 0) {
+            subRewards.push(new Reward("experience", { amount: Math.floor(questExperience * 0.05) }));
+            }
+            return { ...sub, rewards: subRewards };
+        });
         setQuests(prev => {
             if (quest) {
                 return prev.map(q => q.id === quest.id ? newQuest : q); // Replace existing

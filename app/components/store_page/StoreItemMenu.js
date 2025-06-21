@@ -4,7 +4,7 @@ export default function StoreItemMenu({ menuRef, onEdit, onDelete }) {
   return (
     <div
       ref={menuRef}
-      className="absolute top-2 right-2 bg-gray-800 rounded shadow-lg z-50 flex flex-col"
+      className="absolute top-2 left-2 bg-gray-800 overflow-hidden rounded shadow-lg z-50 flex flex-col"
       style={{ minWidth: 100 }}
     >
       <button

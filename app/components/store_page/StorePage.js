@@ -50,7 +50,7 @@ export default function StorePage({ StoreItems, buyItem, onEditItem,setStoreItem
         handleEdit={handleEdit}
         handleDelete={handleDelete}
       />
-      <h1 className="text-3xl font-bold text-center mt-20 mb-8">Magical Items</h1>
+      <h1 className="text-3xl font-bold text-center mt-24 mb-8">Magical Items</h1>
       <StoreSection
         title="Magical Items"
         items={StoreItems.filter(item => item.type === "Magical Item")}
