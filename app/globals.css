@@ -18,20 +18,26 @@
   
 }
 
-@theme { 
-  /* Background Layers */
-  --bg-color: #010409; /* App base background */
-  --fg-color: #f0f6fc; /* Main text color on background */
-  --muted-bg-color: #0d1117; /* Card, container */
-  --element-bg-color: #151b23; /* Inputs, buttons */
-  --overlay-bg-color: #212830; /* Modals, popups */
-  --border-color: #3d444d; /* Borders */
+/* Custom scrollbar styles for better appearance */
+::-webkit-scrollbar {
+  width: 12px;
+  background: var(--muted-background-color);
+}
 
-  /* Text */
-  --muted-color: #d8dee3; /* Subtle text */
-  --disabled-color: #9198a1; /* Disabled/muted text */
-  --active-element: #FF8000; /* Active elements */
-  
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 6px;
+  border: 3px solid var(--muted-background-color);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--active-element);
+}
+
+/* Firefox scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-color) var(--muted-background-color);
 }
 
 

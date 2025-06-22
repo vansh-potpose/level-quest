@@ -2,6 +2,7 @@
 import { useState, useMemo, useCallback, useRef, useEffect } from "react";
 import QuestSection from "./QuestSection";
 import QuestModal from "./QuestModal";
+import { confirmToast } from "../confirmToast";
 
 export default function QuestPage({ quests, setQuests, claimRewards,onEditQuest }) {
   const [selectedQuest, setSelectedQuest] = useState(null);
@@ -50,15 +51,19 @@ export default function QuestPage({ quests, setQuests, claimRewards,onEditQuest 
   }, [setQuests]);
 
   // Update quest status
-  const updateQuestCompleted = useCallback((questId, completed) => {
-    setQuests((prev) =>
-      prev.map((quest) =>
-        quest.id === questId
-          ? { ...quest, status: completed ? "Completed" : "Active" }
-          : quest
-      )
-    );
-  }, [setQuests]);
+  const updateQuestCompleted = useCallback((questId) => {
+  setQuests((prev) =>
+    prev.map((quest) =>
+      quest.id === questId
+        ? { ...quest, status: "Completed" }
+        : quest
+    )
+  );
+  // Also update selectedQuest if it's the same quest
+  setSelectedQuest((prev) =>
+    prev && prev.id === questId ? { ...prev, status: "Completed" } : prev
+  );
+}, [setQuests]);
 
   // Floating menu: close on outside click
   useEffect(() => {
@@ -85,7 +90,16 @@ export default function QuestPage({ quests, setQuests, claimRewards,onEditQuest 
     setSelectedQuestId(null);
   }
 
-  function handleDelete(quest) {
+  async function handleDelete(quest) {
+    // Implement delete logic here
+    const confirmed = await confirmToast({
+      message: `Are you sure you want to delete "${quest.name}" from the quests?`,
+      confirmText: "Delete",
+      cancelText: "Cancel",
+      type: "warning",
+    });
+
+    if (!confirmed) return;
     setQuests((prev) => prev.filter((q) => q.id !== quest.id));
     setSelectedQuestId(null);
   }
@@ -175,7 +189,7 @@ export default function QuestPage({ quests, setQuests, claimRewards,onEditQuest 
       />
 
       {/* Modal */}
-      {selectedQuest && (
+      {selectedQuest && ( 
         <QuestModal
           quest={selectedQuest}
           onClose={closeModal}

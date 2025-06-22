@@ -15,7 +15,7 @@ export const showGameToast = ({ title, description, icon,border_color,text_color
         {
             className: `!bg-[#0e0e2c] border-2 ${border_color}  rounded-xl shadow-lg`,
             progressClassName: `${progressClass_color}`,
-            autoClose: 3500,
+            autoClose: 4000,
             hideProgressBar: false,
             closeOnClick: true,
             pauseOnHover: true,

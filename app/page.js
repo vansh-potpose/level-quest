@@ -280,7 +280,7 @@ export default function Home() {
           user={user}
         />
       </div>
-      <main className="flex-1 flex flex-col items-center justify-start pt-24 mb-10 w-full overflow-auto">
+      <main className="flex-1 flex flex-col items-center justify-start pt-24 w-full overflow-auto">
         {screen === "Home" && (
           <Dashboard
             user={user}

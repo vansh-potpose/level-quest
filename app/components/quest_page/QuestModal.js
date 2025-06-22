@@ -26,26 +26,33 @@ const QuestModal = ({
     if (
       subQuests.length > 0 &&
       subQuests.every((sq) => sq.completed) &&
-      quest.status != "Completed"
+      quest.status !== "Completed"
     ) {
+      
+      console.log("All subquests completed, marking quest as completed", quest.name);
+      console.log("Subquests:", subQuests);
+      console.log("Quest status before completion:", quest);
       handleQuestCompleted();
+      console.log("Quest status after completion:", quest);
     }
     // eslint-disable-next-line
+    // Update quest status if all subquests are completed
+    // This ensures the UI reflects the correct status
   }, [subQuests, quest.status]);
-
-  const handleQuestCompleted = () => {
-    
-    updateQuestCompleted(quest.id, true);
-    claimRewards(quest);
-    showGameToast({
-      icon: "🏆",
-      title: "Quest Completed!",
-      description: `You completed the quest: ${quest.name}`,
-      border_color: "border-yellow-500",
-      text_color: "text-yellow-400",
-      progressClass_color: "!bg-yellow-500",
-    });
-  };
+ 
+const handleQuestCompleted = () => {
+  if (quest.status === "Completed") return; // Prevent double call
+  updateQuestCompleted(quest.id);
+  claimRewards(quest);
+  showGameToast({
+    icon: "🏆",
+    title: "Quest Completed!",
+    description: `You completed the quest: ${quest.name}`,
+    border_color: "border-yellow-500",
+    text_color: "text-yellow-400",
+    progressClass_color: "!bg-yellow-500",
+  });
+};
 
   const handleSubQuestComplete = async (subQuestId, isCompleted) => {
     if (isCompleted) {
@@ -82,7 +89,7 @@ const QuestModal = ({
       )
     );
     updateSubQuestClaimed(quest.id, subQuest.id, true);
-    claimRewards(quest);
+    claimRewards(subQuest);
   };
 
   // Progress calculation

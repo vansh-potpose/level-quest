@@ -193,8 +193,8 @@ export default function WorkshopPage({
     }
 
     return (
-        <div className="flex flex-col items-center w-full text-white">
-            <div className="w-full px-10">
+        <div className="flex flex-col  items-center w-full text-white">
+            <div className="w-full  px-10">
                 <div className="flex max-w-md mx-auto mb-4 gap-2">
                     {tabs.map((tab, idx) => (
                         <button

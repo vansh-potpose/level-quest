@@ -66,7 +66,11 @@ export default function QuestCard({ quest, onQuestClick }) {
       className={`group relative bg-[#0d1117] border border-[#3d444d] rounded-lg shadow-md w-96`}
     >
       <div className="h-[200px] overflow-hidden rounded-t-lg">
-        <img src={quest.image} alt={quest.name} className="w-full object-fill rounded-t-md " />
+        <img
+          src={quest.image}
+          alt={quest.name}
+          className="w-full h-full object-cover rounded-t-md"
+        />
       </div>
       <ProgressBar value={progress} color="bg-[#22c55e]" h="h-[5px] rounded-none" />
       <div className="p-4">
@@ -82,7 +86,7 @@ export default function QuestCard({ quest, onQuestClick }) {
       </div>
       {quest.status === "Completed" && (
         <div className="absolute top-0  justify-center  w-full bg-black/60 h-full flex items-center gap-2  text-[#22c55e] rounded-md p-2">
-          <FaCheck size={50} />
+          <FaCheck size={80} />
         </div>
       )}
       <p className="group-hover:opacity-100 opacity-0 duration-700 absolute top-2 right-2 font-medium text-sm  bg-black/60 w-fit p-2 rounded-md transition-opacity">
