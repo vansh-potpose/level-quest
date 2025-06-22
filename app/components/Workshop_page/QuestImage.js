@@ -68,7 +68,7 @@ const QuestImage = ({ quest }) => {
         
 
         {/* Quest Image with overlay */}
-        <div className="relative w-full h-56 overflow-hidden">
+        <div className="relative w-full h-60 overflow-hidden">
           <img
             src={quest.image || "/images.jpeg"}
             alt={quest.name}

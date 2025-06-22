@@ -65,7 +65,7 @@ export default function QuestCard({ quest, onQuestClick }) {
       onClick={() => onQuestClick(quest)}
       className={`group relative bg-[#0d1117] border border-[#3d444d] rounded-lg shadow-md w-96`}
     >
-      <div className="h-40 overflow-hidden rounded-t-lg">
+      <div className="h-[200px] overflow-hidden rounded-t-lg">
         <img src={quest.image} alt={quest.name} className="w-full object-fill rounded-t-md " />
       </div>
       <ProgressBar value={progress} color="bg-[#22c55e]" h="h-[5px] rounded-none" />

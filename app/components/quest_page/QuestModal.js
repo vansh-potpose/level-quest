@@ -142,17 +142,10 @@ const QuestModal = ({
         className="relative bg-[#181c24] rounded-lg  w-[95%] max-w-2xl shadow-2xl  overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Close Button */}
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 text-2xl font-bold text-white bg-black/30 hover:bg-red-600/80 transition rounded-full w-9 h-9 flex items-center justify-center"
-          aria-label="Close"
-        >
-          ×
-        </button>
+        
 
         {/* Quest Image with overlay */}
-        <div className="relative w-full h-56 overflow-hidden">
+        <div className="relative w-full h-60  overflow-hidden">
           <img
             src={quest.image || "/images.jpeg"}
             alt={quest.name}
