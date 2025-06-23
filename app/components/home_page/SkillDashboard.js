@@ -7,7 +7,7 @@ const SkillDashboard = ({skills,getMaxSkillPoints}) => {
   return (
     <div className="w-fit  text-white px-6 py-12 font-orbitron">
          <h2 className="text-[#f0f6fc] border-b  border-[#3d444d] text-md mb-4 font-medium tracking-wider uppercase">
-            Skill Points
+            Stats
           </h2>
       <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-8">
 

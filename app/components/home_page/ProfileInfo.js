@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { MdEdit } from "react-icons/md";
 import ProgressBar from "../ProgressBar";
 
 const ProfileInfo = ({ user ,getMaxHealthForLevel,getMaxExpForLevel }) => {
@@ -18,9 +17,6 @@ const ProfileInfo = ({ user ,getMaxHealthForLevel,getMaxExpForLevel }) => {
           sizes="320px"
           priority
         />
-        <div className="absolute bottom-4 right-4 z-50 p-2 bg-[#276fea] rounded-full border border-[#3d444d] cursor-pointer hover:bg-blue-700 transition">
-          <MdEdit className="text-white" size={20} />
-        </div>
       </div>
 
       <div className="mt-4 text-center">
