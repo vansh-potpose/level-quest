@@ -143,7 +143,7 @@ export default function QuestPage({ quests, setQuests, claimRewards,onEditQuest 
   );
 
   return (
-    <div className="flex flex-col items-center ">
+    <div className="flex flex-col items-center mb-20">
       {/* Controls */}
       <div className="flex items-center gap-3 bg-[#0d1117] p-3 rounded-lg shadow-md">
         <select

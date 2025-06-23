@@ -305,6 +305,25 @@ export default function Home() {
             deleteFromInventory={deleteFromInventory}
           />
         )}
+          {screen === "Quests" && (
+            <QuestPage
+              quests={quests}
+              setQuests={setQuests}
+              claimRewards={claimRewards}
+              onEditQuest={(quest) => {
+                setEditingQuest(quest);
+                setScreen("Workshop");
+              }}
+            />
+          )}
+          {screen === "Habits" && (
+            <HabitPage
+              dailyChallenges={dailyChallenges}
+              setDailyChallenges={setDailyChallenges}
+              tasks={tasks}
+              setTasks={setTasks}
+            />
+          )}
         {screen === "Store" && (
           <StorePage
             StoreItems={StoreItems}
@@ -314,25 +333,6 @@ export default function Home() {
               setScreen("Workshop");
             }}
             setStoreItems={setStoreItems}
-          />
-        )}
-        {screen === "Quests" && (
-          <QuestPage
-            quests={quests}
-            setQuests={setQuests}
-            claimRewards={claimRewards}
-            onEditQuest={(quest) => {
-              setEditingQuest(quest);
-              setScreen("Workshop");
-            }}
-          />
-        )}
-        {screen === "Habits" && (
-          <HabitPage
-            dailyChallenges={dailyChallenges}
-            setDailyChallenges={setDailyChallenges}
-            tasks={tasks}
-            setTasks={setTasks}
           />
         )}
         {screen === "Settings" && (
