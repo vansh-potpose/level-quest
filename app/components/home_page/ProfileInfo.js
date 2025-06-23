@@ -13,9 +13,10 @@ const ProfileInfo = ({ user ,getMaxHealthForLevel,getMaxExpForLevel }) => {
         <Image
           src={user.profilePic}
           alt={`${user.name}'s Profile Picture`}
-          width={320}
-          height={320}
-          className="object-cover"
+          fill
+          className="object-cover rounded-full"
+          sizes="320px"
+          priority
         />
         <div className="absolute bottom-4 right-4 z-50 p-2 bg-[#276fea] rounded-full border border-[#3d444d] cursor-pointer hover:bg-blue-700 transition">
           <MdEdit className="text-white" size={20} />
