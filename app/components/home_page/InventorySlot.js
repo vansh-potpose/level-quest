@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { BsCoin } from "react-icons/bs";
+import { FaHeart, FaStar,FaAward } from "react-icons/fa";
+
 
 export default function InventorySlot({ item }) {
   const [expanded, setExpanded] = useState(false);
@@ -59,6 +61,32 @@ export default function InventorySlot({ item }) {
       >
 
         <div className="text-gray-300 text-sm mb-2">{item.description}</div>
+        {item.type === "Magical Item" && (
+                    <div className="text-gray-300 text-sm mb-2 flex items-center gap-2">
+                      Gives:&nbsp;
+                      {item.attribute_name === "health" ? (
+                        <>
+                          <span className="font-bold text-red-400">+ {item.amount}</span>
+                          <FaHeart className="text-red-400" />
+                          <span className="text-xs">HP</span>
+                        </>
+                      ) : item.attribute_name === "experience" ? (
+                        <>
+                          <span className="font-bold text-blue-400">+ {item.amount}</span>
+                          <FaStar  className="text-blue-400 mb-1" />
+                          <span  className="text-xs">XP</span>
+                        </>
+                      ) : (
+                        <>
+                          <span className="font-bold text-green-400">+ {item.amount}</span>
+                          <FaAward className="text-green-400 " />
+                          <span className="text-xs capitalize">{item.attribute_name}</span>
+                          
+                        </>
+                      )}
+                    </div>
+                  )}
+        {!item.claimed && (
         <button
           disabled={item.claimed}
           onClick={() => {
@@ -67,8 +95,8 @@ export default function InventorySlot({ item }) {
           }}
           className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded text-sm font-semibold"
         >
-          {item.claimed ? "Claimed" : "Claim"}
-        </button>
+          Claim
+        </button>)}
       </div>
 
 

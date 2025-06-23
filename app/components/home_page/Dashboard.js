@@ -4,7 +4,7 @@ import ProfileInfo from "./ProfileInfo";
 import SkillDashboard from "./SkillDashboard";
 import InventorySlot from "./InventorySlot";
 
-const Dashboard = ({ user,getMaxHealthForLevel,getMaxExpForLevel,getMaxSkillPoints }) => {
+const Dashboard = ({ user,getMaxHealthForLevel,getMaxExpForLevel,getMaxSkillPoints,deleteFromInventory }) => {
   return (
     <div className="flex flex-col items-center justify-center  h-fit ">
       <div className="flex w-full gap-10 justify-center items-center">
@@ -27,6 +27,7 @@ const Dashboard = ({ user,getMaxHealthForLevel,getMaxExpForLevel,getMaxSkillPoin
       <div className="px-5 mt-10 mb-30">
       <h1 className="text-3xl font-bold text-[#f0f6fc] mb-9 flex w-ull justify-center">Inventory</h1>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6">
+        
         {user.inventory.map((item) => (
           <InventorySlot
             key={item.id}

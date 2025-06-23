@@ -94,6 +94,14 @@ export default function Home() {
       case "experience": updateExp(amount); break;
       default: updateSkill(attribute_name, amount);
     }
+    showGameToast({
+      icon: "🎉",
+      title: "Item Claimed!",
+      description: `You received ${amount} ${attribute_name}.`,
+      border_color: "border-blue-500",
+      text_color: "text-blue-400",
+      progressClass_color: "!bg-blue-500",
+    });
   }
 
 
@@ -115,6 +123,13 @@ export default function Home() {
     setUser(prev => ({
       ...prev,
       inventory: [...prev.inventory, item],
+    }));
+  }
+
+  function deleteFromInventory(itemId) {
+    setUser(prev => ({
+      ...prev,
+      inventory: prev.inventory.filter(item => item.id !== itemId),
     }));
   }
 
@@ -287,6 +302,7 @@ export default function Home() {
             getMaxHealthForLevel={getMaxHealthForLevel}
             getMaxExpForLevel={getMaxExpForLevel}
             getMaxSkillPoints={getMaxSkillPoints}
+            deleteFromInventory={deleteFromInventory}
           />
         )}
         {screen === "Store" && (

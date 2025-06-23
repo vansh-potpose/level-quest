@@ -1,7 +1,6 @@
 'use client';
 import { useEffect, useRef, useState } from "react";
 import { BsCoin } from "react-icons/bs";
-import { GiMuscleUp } from "react-icons/gi";
 import { FaHeart, FaStar,FaAward } from "react-icons/fa";
 
   export default function StoreItemCard({

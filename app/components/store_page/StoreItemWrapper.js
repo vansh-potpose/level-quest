@@ -15,7 +15,7 @@ export default function StoreItemWrapper({
     <div
       className="relative store-item-card"
       onContextMenu={e => {
-        e.preventDefault();
+        e.preventDefault(); 
         setSelectedItemId(item.id);
       }}
       onMouseDown={() => {
