@@ -1,14 +1,12 @@
 'use client';
-import StoreItemCard from "./StoreItemCard";
-import StoreItemMenu from "./StoreItemMenu";
+import InventorySlot from "./InventorySlot";
+import InventorySlotMenu from "./InventorySlotMenu"; // Use the delete-only menu
 
 export default function InventorySlotWrapper({
     item,
-    buyItem,
     selectedItemId,
     setSelectedItemId,
     menuRef,
-    handleEdit,
     handleDelete,
 }) {
     return (
@@ -29,10 +27,9 @@ export default function InventorySlotWrapper({
                 item={item}
             />      
             {selectedItemId === item.id && (
-                <StoreItemMenu
+                <InventorySlotMenu
                     menuRef={menuRef}
-                    onEdit={() => handleEdit(item)}
-                    onDelete={() => handleDelete(item)}
+                    onDelete={handleDelete}
                 />
             )}
         </div>

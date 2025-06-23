@@ -1,10 +1,44 @@
+'use client';
+import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import ProgressBar from "../ProgressBar";
 import ProfileInfo from "./ProfileInfo";
 import SkillDashboard from "./SkillDashboard";
-import InventorySlot from "./InventorySlot";
-
+import InventorySlotWrapper from "./InventorySlotWrapper";
+import { confirmToast } from "../confirmToast";
 const Dashboard = ({ user,getMaxHealthForLevel,getMaxExpForLevel,getMaxSkillPoints,deleteFromInventory }) => {
+  const [selectedItemId, setSelectedItemId] = useState(null);
+  const menuRef = useRef(null);
+  async function handleDelete(item) {
+    const confirmed = await confirmToast({
+          message: `Are you sure you want to delete "${item.name}" from the inventory?`,
+          confirmText: "Delete",
+          cancelText: "Cancel",
+          type: "warning",
+        });
+    
+        if (!confirmed) return;
+    deleteFromInventory(item.id);
+    setSelectedItemId(null);
+  }
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (
+        menuRef.current &&
+        !menuRef.current.contains(event.target)
+      ) {
+        setSelectedItemId(null);
+      }
+    }
+    if (selectedItemId !== null) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [selectedItemId]);
+
   return (
     <div className="flex flex-col items-center justify-center  h-fit ">
       <div className="flex w-full gap-10 justify-center items-center">
@@ -27,13 +61,16 @@ const Dashboard = ({ user,getMaxHealthForLevel,getMaxExpForLevel,getMaxSkillPoin
       <div className="px-5 mt-10 mb-30">
       <h1 className="text-3xl font-bold text-[#f0f6fc] mb-9 flex w-ull justify-center">Inventory</h1>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6">
-        
         {user.inventory.map((item) => (
-          <InventorySlot
-            key={item.id}
-            item={item}
+            <InventorySlotWrapper
+              key={item.id}
+              item={item}
+              selectedItemId={selectedItemId}
+              setSelectedItemId={setSelectedItemId}
+              menuRef={menuRef}
+              handleDelete={() => handleDelete(item)}
             />
-        ))}
+          ))}
 
       </div>
         </div>
