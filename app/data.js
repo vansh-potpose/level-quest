@@ -53,7 +53,7 @@ export const exampleUser = (claimItems) => {
                 amount: 50,
                 claimed: false,
                 attribute_name: "experience",
-            }, claimItems), 
+            }, claimItems),
         ],
         Tasks: [
             {
@@ -370,9 +370,11 @@ export const exampleQuests = (claimItems) => [
 // --- Daily Challenge Example Data Structure ---
 export const dailyChallenge = () => {
     // Rewards for completing all daily challenges
+    const claimedDate = new Date(Date.now() - 86400000).toISOString(); // Example: yesterday's date
     const rewards = [
         new Reward("coins", { amount: 10 }),
         new Reward("experience", { amount: 10 }),
+        new Reward("health", { amount: 5 }),
     ];
 
     // Template for today's daily challenges
@@ -382,74 +384,88 @@ export const dailyChallenge = () => {
             name: "Complete 5 Tasks",
             description: "Finish any 5 tasks from your to-do list today.",
             completed: false,
+            skill: "Skill",
         },
         {
             id: 2,
             name: "Read for 30 Minutes",
             description: "Spend at least 30 minutes reading any book.",
             completed: false,
+            skill: "intelligence",
         },
         {
             id: 3,
             name: "Drink 2L Water",
             description: "Stay hydrated by drinking at least 2 liters of water.",
             completed: false,
+            skill: "stamina",
         },
+        {
+            id: 4,
+            name: "Meditate for 10 Minutes",
+            description: "Take a break and meditate for at least 10 minutes.",
+            completed: false,
+            skill: null,
+        }
     ];
 
     // History of last 10 daily challenges
     const history = [
+        
         {
-            date: new Date(Date.now() - 86400000).toISOString(),
+            date: new Date(Date.now() -  86400000).toISOString(),
             challenges: [
                 { id: 1, name: "Complete 5 Tasks", completed: true },
                 { id: 2, name: "Read for 30 Minutes", completed: true },
-                { id: 3, name: "Drink 2L Water", completed: false },
-            ],
-            rewardsClaimed: true,
-        },
-        {
-            date: new Date(Date.now() - 2 * 86400000).toISOString(),
-            challenges: [
-            { id: 1, name: "Complete 5 Tasks", completed: true },
-            { id: 2, name: "Read for 30 Minutes", completed: false },
-            { id: 3, name: "Drink 2L Water", completed: true },
+                { id: 3, name: "Drink 2L Water", completed: true },
             ],
             rewardsClaimed: false,
         },
+
+        {
+            date: new Date(Date.now() - 2 * 86400000).toISOString(),
+            challenges: [
+                { id: 1, name: "Complete 5 Tasks", completed: false },
+                { id: 2, name: "Read for 30 Minutes", completed: false },
+                { id: 3, name: "Drink 2L Water", completed: false },
+            ],
+            rewardsClaimed: false,
+        },
+
+
         {
             date: new Date(Date.now() - 3 * 86400000).toISOString(),
             challenges: [
-            { id: 1, name: "Complete 5 Tasks", completed: false },
-            { id: 2, name: "Read for 30 Minutes", completed: false },
-            { id: 3, name: "Drink 2L Water", completed: false },
+                { id: 1, name: "Complete 5 Tasks", completed: false },
+                { id: 2, name: "Read for 30 Minutes", completed: false },
+                { id: 3, name: "Drink 2L Water", completed: false },
             ],
             rewardsClaimed: false,
         },
         {
             date: new Date(Date.now() - 4 * 86400000).toISOString(),
             challenges: [
-            { id: 1, name: "Complete 5 Tasks", completed: true },
-            { id: 2, name: "Read for 30 Minutes", completed: true },
-            { id: 3, name: "Drink 2L Water", completed: true },
+                { id: 1, name: "Complete 5 Tasks", completed: true },
+                { id: 2, name: "Read for 30 Minutes", completed: true },
+                { id: 3, name: "Drink 2L Water", completed: true },
             ],
             rewardsClaimed: true,
         },
         {
             date: new Date(Date.now() - 5 * 86400000).toISOString(),
             challenges: [
-            { id: 1, name: "Complete 5 Tasks", completed: false },
-            { id: 2, name: "Read for 30 Minutes", completed: true },
-            { id: 3, name: "Drink 2L Water", completed: false },
+                { id: 1, name: "Complete 5 Tasks", completed: false },
+                { id: 2, name: "Read for 30 Minutes", completed: true },
+                { id: 3, name: "Drink 2L Water", completed: false },
             ],
             rewardsClaimed: false,
         },
         {
             date: new Date(Date.now() - 6 * 86400000).toISOString(),
             challenges: [
-            { id: 1, name: "Complete 5 Tasks", completed: true },
-            { id: 2, name: "Read for 30 Minutes", completed: true },
-            { id: 3, name: "Drink 2L Water", completed: true },
+                { id: 1, name: "Complete 5 Tasks", completed: true },
+                { id: 2, name: "Read for 30 Minutes", completed: true },
+                { id: 3, name: "Drink 2L Water", completed: true },
             ],
             rewardsClaimed: true,
         },
@@ -490,11 +506,12 @@ export const dailyChallenge = () => {
             rewardsClaimed: true,
         }
     ];
-    
+
     return {
         date: new Date().toISOString(),
         challenges,
         rewards,
         history,
+        claimedDate,
     };
 };

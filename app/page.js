@@ -278,7 +278,7 @@ export default function Home() {
   // --- Render ---
   return (
     <div className="relative min-h-screen flex flex-col">
-      {/* Background */}
+
       <div
         className="absolute inset-0 -z-10"
         style={{
@@ -287,7 +287,7 @@ export default function Home() {
           transition: "background 0.8s cubic-bezier(0.4,0,0.2,1)",
         }}
       />
-      <div className="fixed top-0 left-0 w-full z-50">
+      <div className="w-full z-50">
         <Navbar
           screen={screen}
           setScreen={setScreen}
@@ -305,25 +305,31 @@ export default function Home() {
             deleteFromInventory={deleteFromInventory}
           />
         )}
-          {screen === "Quests" && (
-            <QuestPage
-              quests={quests}
-              setQuests={setQuests}
-              claimRewards={claimRewards}
-              onEditQuest={(quest) => {
-                setEditingQuest(quest);
-                setScreen("Workshop");
-              }}
-            />
-          )}
-          {screen === "Habits" && (
-            <HabitPage
-              dailyChallenges={dailyChallenges}
-              setDailyChallenges={setDailyChallenges}
-              tasks={tasks}
-              setTasks={setTasks}
-            />
-          )}
+        {screen === "Quests" && (
+          <QuestPage
+            quests={quests}
+            setQuests={setQuests}
+            claimRewards={claimRewards}
+            onEditQuest={(quest) => {
+              setEditingQuest(quest);
+              setScreen("Workshop");
+            }}
+          />
+        )}
+        {screen === "Habits" && (
+          <HabitPage
+            dailyChallenges={dailyChallenges}
+            setDailyChallenges={setDailyChallenges}
+            tasks={tasks}
+            setTasks={setTasks}
+            updateSkill={updateSkill}
+            updateExp={updateExp}
+            updateHealth={updateHealth}
+            skills={user.stats}
+            claimReward={claimReward}
+
+          />
+        )}
         {screen === "Store" && (
           <StorePage
             StoreItems={StoreItems}
@@ -334,9 +340,6 @@ export default function Home() {
             }}
             setStoreItems={setStoreItems}
           />
-        )}
-        {screen === "Settings" && (
-          <SettingsPage user={user} setUser={setUser} updateCoins={updateCoins} updateHealth={updateHealth} updateExp={updateExp} updateSkill={updateSkill} />
         )}
         {screen === "Workshop" && (
           <WorkshopPage
@@ -353,9 +356,12 @@ export default function Home() {
             updateCoins={updateCoins}
           />
         )}
+        {screen === "Settings" && (
+          <SettingsPage user={user} setUser={setUser} updateCoins={updateCoins} updateHealth={updateHealth} updateExp={updateExp} updateSkill={updateSkill} />
+        )}
       </main>
 
-      
+
     </div>
   );
 }
