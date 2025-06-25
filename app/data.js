@@ -49,7 +49,7 @@ export const exampleUser = (claimItems) => {
                 price: 150,
                 description: "Restores 30 mana points.",
                 image: "/images.jpeg",
-                type: "Magical Item",
+                type: "Magical_Item",
                 amount: 50,
                 claimed: false,
                 attribute_name: "experience",
