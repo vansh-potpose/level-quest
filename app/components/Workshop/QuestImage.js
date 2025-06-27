@@ -2,7 +2,7 @@
 
 import React from "react";
 import Reward from "../Reward";
-import Rewards from "../quest_page/Rewards";
+import Rewards from "../quest/Rewards";
 import ProgressBar from "../ProgressBar";
 import { FaCheck } from "react-icons/fa";
 

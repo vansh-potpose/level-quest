@@ -1,32 +1,25 @@
-'use client'
-import Image from "next/image";
-import Navbar from "./components/Navbar";
-import Dashboard from "./components/home/Dashboard";
-import QuestPage from "./components/quest/QuestPage";
-import { showGameToast } from "./components/ShowGameToast";
-import Reward from "./components/Reward";
-import Item from "./components/Item";
-import { useEffect, useState, useRef, use } from "react";
-import StorePage from "./components/store/StorePage";
-import HabitPage from "./components/Habit/HabitPage";
-import WorkshopPage from "./components/Workshop/WorkshopPage";
-import { exampleUser, exampleStoreItems, exampleQuests, dailyChallenge } from "./data";
-import SettingsPage from "./components/settings/SettingsPage";
+'use client';
+import React, { createContext, useContext, useState, useRef, useEffect } from "react";
+import { exampleUser, exampleStoreItems, exampleQuests, dailyChallenge } from "../data";
+import Item from "../components/Item";
+import { showGameToast } from "../components/ShowGameToast";
 
-export default function Home() {
+const GameContext = createContext();
+
+export function GameProvider({ children }) {
   // --- Constants ---
   const BASE_HEALTH = 100;
   const BASE_XP = 100;
 
   // --- State ---
-  const [screen, setScreen] = useState("Home");
   const [user, setUser] = useState(exampleUser(claimItems));
   const [coins, setCoins] = useState(user.coins || 0);
   const [dailyChallenges, setDailyChallenges] = useState(dailyChallenge);
   const [tasks, setTasks] = useState(user.Tasks);
   const [editingQuest, setEditingQuest] = useState(null);
   const [editingItem, setEditingItem] = useState(null);
-
+  const [StoreItems, setStoreItems] = useState(exampleStoreItems(claimItems, claimObjects));
+  const [quests, setQuests] = useState(exampleQuests(claimItems));
 
   // --- Utility Functions ---
   const getMaxExpForLevel = (level) => Math.floor(BASE_XP * level ** 1.5);
@@ -80,8 +73,6 @@ export default function Home() {
         newLevel += 1;
         maxExp = getMaxExpForLevel(newLevel);
       }
-
-
       return { ...prev, exp: newExp, level: newLevel };
     });
   }
@@ -104,8 +95,6 @@ export default function Home() {
     });
   }
 
-
-
   function claimObjects(message) {
     showGameToast({
       icon: "🎉",
@@ -115,9 +104,7 @@ export default function Home() {
       text_color: "text-blue-400",
       progressClass_color: "!bg-blue-500",
     });
-
   }
-
 
   function addToInventory(item) {
     setUser(prev => ({
@@ -132,7 +119,6 @@ export default function Home() {
       inventory: prev.inventory.filter(item => item.id !== itemId),
     }));
   }
-
 
   const claimReward = (reward) => {
     switch (reward.type) {
@@ -152,7 +138,6 @@ export default function Home() {
         console.warn(`Unhandled reward type: ${reward.type}`);
     }
   };
-
 
   const claimRewards = (quest) => {
     let rewars_names = quest.rewards.map(reward => {
@@ -179,7 +164,6 @@ export default function Home() {
       progressClass_color: "!bg-green-500",
     });
   };
-
 
   // --- Store Logic ---
   function buyItem(item) {
@@ -211,16 +195,11 @@ export default function Home() {
     }
   }
 
-  // --- Store Items ---
-  const [StoreItems, setStoreItems] = useState(exampleStoreItems(claimItems, claimObjects));
-
-  // --- Quests ---
-  const [quests, setQuests] = useState(exampleQuests(claimItems));
-
   // --- Level Up Toasts ---
   const prevSkillLevels = useRef(user.stats.map(stat => stat.level));
   const prevUserLevel = useRef(user.level);
   const prevUserHealth = useRef(user.health);
+
   useEffect(() => {
     user.stats.forEach((stat, idx) => {
       const prevLevel = prevSkillLevels.current[idx];
@@ -275,93 +254,22 @@ export default function Home() {
     prevUserHealth.current = user.health;
   }, [user.health]);
 
-  // --- Render ---
+  // --- Provide everything needed to children ---
   return (
-    <div className="relative min-h-screen flex flex-col">
-
-      <div
-        className="absolute inset-0 -z-10"
-        style={{
-          background: "linear-gradient(135deg, #000 50%, rgba(0,60,130,0.85) 100%)",
-          filter: "blur(40px)",
-          transition: "background 0.8s cubic-bezier(0.4,0,0.2,1)",
-        }}
-      />
-      <div className="w-full z-50">
-        <Navbar
-          screen={screen}
-          setScreen={setScreen}
-          coins={coins}
-          user={user}
-        />
-      </div>
-      <main className="flex-1 flex flex-col items-center justify-start pt-24 w-full overflow-auto">
-        {screen === "Home" && (
-          <Dashboard
-            user={user}
-            getMaxHealthForLevel={getMaxHealthForLevel}
-            getMaxExpForLevel={getMaxExpForLevel}
-            getMaxSkillPoints={getMaxSkillPoints}
-            deleteFromInventory={deleteFromInventory}
-          />
-        )}
-        {screen === "Quests" && (
-          <QuestPage
-            quests={quests}
-            setQuests={setQuests}
-            claimRewards={claimRewards}
-            onEditQuest={(quest) => {
-              setEditingQuest(quest);
-              setScreen("Workshop");
-            }}
-          />
-        )}
-        {screen === "Habits" && (
-          <HabitPage
-            dailyChallenges={dailyChallenges}
-            setDailyChallenges={setDailyChallenges}
-            tasks={tasks}
-            setTasks={setTasks}
-            updateSkill={updateSkill}
-            updateExp={updateExp}
-            updateHealth={updateHealth}
-            skills={user.stats}
-            claimReward={claimReward}
-
-          />
-        )}
-        {screen === "Store" && (
-          <StorePage
-            StoreItems={StoreItems}
-            buyItem={buyItem}
-            onEditItem={(item) => {
-              setEditingItem(item);
-              setScreen("Workshop");
-            }}
-            setStoreItems={setStoreItems}
-          />
-        )}
-        {screen === "Workshop" && (
-          <WorkshopPage
-            user={user}
-            StoreItems={StoreItems}
-            setStoreItems={setStoreItems}
-            setQuests={setQuests}
-            claimItems={claimItems}
-            claimObjects={claimObjects}
-            quest={editingQuest}
-            item={editingItem}
-            setEditingQuest={setEditingQuest}
-            setEditingItem={setEditingItem}
-            updateCoins={updateCoins}
-          />
-        )}
-        {screen === "Settings" && (
-          <SettingsPage user={user} setUser={setUser} updateCoins={updateCoins} updateHealth={updateHealth} updateExp={updateExp} updateSkill={updateSkill} />
-        )}
-      </main>
-
-
-    </div>
+    <GameContext.Provider value={{
+      user, setUser, coins, setCoins, dailyChallenges, setDailyChallenges, tasks, setTasks,
+      editingQuest, setEditingQuest, editingItem, setEditingItem,
+      StoreItems, setStoreItems, quests, setQuests,
+      getMaxExpForLevel, getMaxHealthForLevel, getMaxSkillPoints,
+      updateCoins, updateHealth, updateSkill, updateExp,
+      claimItems, claimObjects, addToInventory, deleteFromInventory,
+      claimReward, claimRewards, buyItem
+    }}>
+      {children}
+    </GameContext.Provider>
   );
+}
+
+export function useGame() {
+  return useContext(GameContext);
 }

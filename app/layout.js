@@ -1,4 +1,5 @@
 import { Geist, Geist_Mono } from "next/font/google";
+import { GameProvider } from "./context/GameContext";
 import "./globals.css";
 
 import { ToastContainer } from "react-toastify";
@@ -25,24 +26,26 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        {children}
+        <GameProvider>
+          {children}
 
-        {/* React Toastify */}
-        <ToastContainer
-          position="top-right"
-          autoClose={3000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="dark"
-        />
+          {/* React Toastify */}
+          <ToastContainer
+            position="top-right"
+            autoClose={3000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="dark"
+          />
 
-        {/* Sonner */}
-        <Toaster position="top-center" richColors closeButton theme="dark" />
+          {/* Sonner */}
+          <Toaster position="top-center" richColors closeButton theme="dark" />
+        </GameProvider>
       </body>
     </html>
   );
