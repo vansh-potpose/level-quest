@@ -2,14 +2,22 @@
 import { useState, useMemo, useCallback, useRef, useEffect } from "react";
 import QuestSection from "./QuestSection";
 import QuestModal from "./QuestModal";
-import { confirmToast } from "../confirmToast";
+import { confirmToast } from "../components/confirmToast";
+import { useGame } from "../context/GameContext";
 
-export default function QuestPage({ quests, setQuests, claimRewards,onEditQuest }) {
+export default function QuestPage() {
+  const {
+    quests,
+    setQuests,
+    claimRewards,
+    setEditingQuest,
+  } = useGame();
+
   const [selectedQuest, setSelectedQuest] = useState(null);
   const [sortOption, setSortOption] = useState("name");
   const [searchTerm, setSearchTerm] = useState("");
   const [showCompleted, setShowCompleted] = useState(false);
- 
+
   // Floating menu state
   const [selectedQuestId, setSelectedQuestId] = useState(null);
   const menuRef = useRef(null);
@@ -52,18 +60,17 @@ export default function QuestPage({ quests, setQuests, claimRewards,onEditQuest 
 
   // Update quest status
   const updateQuestCompleted = useCallback((questId) => {
-  setQuests((prev) =>
-    prev.map((quest) =>
-      quest.id === questId
-        ? { ...quest, status: "Completed" }
-        : quest
-    )
-  );
-  // Also update selectedQuest if it's the same quest
-  setSelectedQuest((prev) =>
-    prev && prev.id === questId ? { ...prev, status: "Completed" } : prev
-  );
-}, [setQuests]);
+    setQuests((prev) =>
+      prev.map((quest) =>
+        quest.id === questId
+          ? { ...quest, status: "Completed" }
+          : quest
+      )
+    );
+    setSelectedQuest((prev) =>
+      prev && prev.id === questId ? { ...prev, status: "Completed" } : prev
+    );
+  }, [setQuests]);
 
   // Floating menu: close on outside click
   useEffect(() => {
@@ -86,12 +93,11 @@ export default function QuestPage({ quests, setQuests, claimRewards,onEditQuest 
 
   // Edit and Delete handlers
   function handleEdit(quest) {
-    onEditQuest(quest);
+    setEditingQuest(quest);
     setSelectedQuestId(null);
   }
 
   async function handleDelete(quest) {
-    // Implement delete logic here
     const confirmed = await confirmToast({
       message: `Are you sure you want to delete "${quest.name}" from the quests?`,
       confirmText: "Delete",
@@ -185,11 +191,10 @@ export default function QuestPage({ quests, setQuests, claimRewards,onEditQuest 
         menuRef={menuRef}
         handleEdit={handleEdit}
         handleDelete={handleDelete}
-        onEditQuest={onEditQuest}
       />
 
       {/* Modal */}
-      {selectedQuest && ( 
+      {selectedQuest && (
         <QuestModal
           quest={selectedQuest}
           onClose={closeModal}

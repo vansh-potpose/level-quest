@@ -1,14 +1,22 @@
 'use client';
 import { useState, useRef, useEffect } from "react";
 import StoreSection from "./StoreSection";
-import { confirmToast } from "../confirmToast";
+import { confirmToast } from "../components/confirmToast";
+import { useGame } from "../context/GameContext";
 
-export default function StorePage({ StoreItems, buyItem, onEditItem,setStoreItems }) {
+export default function StorePage() {
+  const {
+    StoreItems,
+    buyItem,
+    setStoreItems,
+    setEditingItem,
+  } = useGame();
+
   const [selectedItemId, setSelectedItemId] = useState(null);
   const menuRef = useRef(null);
 
   // Close menu when clicking outside
-  useEffect(() => { 
+  useEffect(() => {
     function handleClickOutside(event) {
       if (
         menuRef.current &&
@@ -27,15 +35,11 @@ export default function StorePage({ StoreItems, buyItem, onEditItem,setStoreItem
   }, []);
 
   function handleEdit(item) {
-    // Implement edit logic here
-    onEditItem(item);
+    setEditingItem(item);
     setSelectedItemId(null);
-    
   }
 
   async function handleDelete(item) {
-    // Implement delete logic here
-    
     const confirmed = await confirmToast({
       message: `Are you sure you want to delete "${item.name}" from the store?`,
       confirmText: "Delete",
@@ -49,7 +53,7 @@ export default function StorePage({ StoreItems, buyItem, onEditItem,setStoreItem
   }
 
   return (
-    <div className="min-h-screen text-white py-10 px-24">
+    <div className="min-h-screen text-white py-10 px-4 sm:px-8 md:px-16 lg:px-24">
       <h1 className="text-3xl font-bold text-center mb-8">Store</h1>
       <StoreSection
         title="Store"

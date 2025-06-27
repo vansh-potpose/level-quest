@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { FaCheck } from "react-icons/fa";
 import { toast } from "react-toastify";
-import ProgressBar from "../ProgressBar";
-import { showGameToast } from "../ShowGameToast";
-import { confirmToast } from "../confirmToast";
+import ProgressBar from "../components/ProgressBar";
+import { showGameToast } from "../components/ShowGameToast";
+import { confirmToast } from "../components/confirmToast";
 import Rewards from "./Rewards";
 
 const QuestModal = ({

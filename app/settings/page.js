@@ -1,9 +1,14 @@
+'use client'; // This file uses React hooks and context, so it needs to be a client component
 import React, { useState } from "react";
 import ProfilePictureUpload from "./ProfilePictureUpload";
 import SettingsInput from "./SettingsInput";
 import SettingsTextarea from "./SettingsTextarea";
+import { useGame } from "../context/GameContext"; // 1. Import the hook
 
-export default function SettingsPage({ user, setUser }) {
+
+export default function SettingsPage() {
+    const { user, setUser } = useGame(); // 2. Use context instead of props
+
     const [form, setForm] = useState({
         name: user.name || "",
         job: user.job || "",

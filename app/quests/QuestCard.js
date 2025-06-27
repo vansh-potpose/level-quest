@@ -1,6 +1,6 @@
 "use client";
 
-import ProgressBar from "../ProgressBar";
+import ProgressBar from "../components/ProgressBar";
 import { BsCoin } from "react-icons/bs";
 import { IoCube } from "react-icons/io5";
 import { FaCheck } from "react-icons/fa";

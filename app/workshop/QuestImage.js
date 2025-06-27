@@ -1,9 +1,9 @@
 'use client'
 
 import React from "react";
-import Reward from "../Reward";
-import Rewards from "../quest/Rewards";
-import ProgressBar from "../ProgressBar";
+import Reward from "../components/Reward";
+import Rewards from "../quests/Rewards";
+import ProgressBar from "../components/ProgressBar";
 import { FaCheck } from "react-icons/fa";
 
 // This component renders a quest as a static image-like card, no interactivity.

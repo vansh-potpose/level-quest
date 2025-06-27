@@ -2,24 +2,29 @@
 
 import React, { useState, useEffect } from "react";
 import CreateQuest from "./CreateQuest";
-import Reward from "../Reward";
-import Item from "../Item";
+import Reward from "../components/Reward";
+import Item from "../components/Item";
 import CreateItem from "./CreateItem";
-import { showGameToast } from "../ShowGameToast";
+import { showGameToast } from "../components/ShowGameToast";
+import { useGame } from "../context/GameContext"; // Import context
 
-export default function WorkshopPage({
-    user,
-    StoreItems,
-    setStoreItems,
-    setQuests,
-    claimObjects,
-    claimItems,
-    quest,
-    item,
-    setEditingQuest,
-    setEditingItem,
-    updateCoins
-}) {
+export default function WorkshopPage() {
+    // Use context for all shared state/functions
+    const {
+        user,
+        StoreItems,
+        setStoreItems,
+        setQuests,
+        claimObjects,
+        claimItems,
+        quests,
+        item: editingItem,
+        quest: editingQuest,
+        setEditingQuest,
+        setEditingItem,
+        updateCoins,
+    } = useGame();
+
     // Fallback quest if not editing
     const defaultQuest = {
         id: Date.now(),
@@ -51,14 +56,12 @@ export default function WorkshopPage({
         attribute_name: "none",
     };
 
-    const [tempQuest, setTempQuest] = useState(quest || defaultQuest);
-    const [itemState, setItem] = useState(item || defaultItem);
+    const [tempQuest, setTempQuest] = useState(editingQuest || defaultQuest);
+    const [itemState, setItem] = useState(editingItem || defaultItem);
     const [activeTab, setTab] = useState(0);
-
 
     function calculateEffectCost(effects = []) {
         let totalCost = 0;
-
         for (let effect of effects) {
             if (effect.type === "health") {
                 totalCost += effect.amount * 5;
@@ -69,18 +72,17 @@ export default function WorkshopPage({
             } else if (effect.type === "coins") {
                 totalCost += effect.amount * 0.5;
             } else if (effect.type === "item") {
-                totalCost += effect.amount * 0.5; // Assuming items cost 5 coins per unit
+                totalCost += effect.amount * 0.5;
             }
         }
-
-        return Math.max(20, totalCost); // Minimum baseline cost
+        return Math.max(20, totalCost);
     }
 
     // Auto-switch tab based on incoming edit data
     useEffect(() => {
-        if (quest) setTab(0); // Quests tab
-        if (item) setTab(1);  // Items tab
-    }, [quest, item]);
+        if (editingQuest) setTab(0);
+        if (editingItem) setTab(1);
+    }, [editingQuest, editingItem]);
 
     const addItemToStore = (newItem, cost) => {
         const wrappedItem =
@@ -89,71 +91,66 @@ export default function WorkshopPage({
                 : new Item({ ...newItem }, claimObjects);
 
         setStoreItems(prev => {
-            if (item) {
-                return prev.map(i => i.id === item.id ? wrappedItem : i); // Replace existing
+            if (editingItem) {
+                return prev.map(i => i.id === editingItem.id ? wrappedItem : i);
             } else {
-                return [...prev, wrappedItem]; // Add new
+                return [...prev, wrappedItem];
             }
         });
-        updateCoins(-cost); // Deduct cost from user coins
-        const message = item
+        updateCoins(-cost);
+        const message = editingItem
             ? "Item updated successfully!"
             : "Item added to store successfully!";
         showGameToast({
-            icon: "🎉", 
-            title: item ? "Item Updated!" : "Item Added!",
+            icon: "🎉",
+            title: editingItem ? "Item Updated!" : "Item Added!",
             description: message,
             border_color: "border-blue-500",
             text_color: "text-blue-400",
             progressClass_color: "!bg-blue-500",
         });
 
-        setEditingItem(null); // Clear edit state
+        setEditingItem(null);
     };
 
     const addQuest = (newQuest, cost) => {
-        
-        // Find the coins reward if it exists, otherwise default to 0
         const coinsReward = newQuest.rewards.find(r => r.type === "coins");
         const questCoins = coinsReward ? (r => r.amount ?? (r.data?.amount ?? 0))(coinsReward) : 0;
-
-        // Find the experience reward if it exists, otherwise default to 0
         const experienceReward = newQuest.rewards.find(r => r.type === "experience");
         const questExperience = experienceReward ? (r => r.amount ?? (r.data?.amount ?? 0))(experienceReward) : 0;
 
-        // Set subquest rewards as 5% of quest coins and experience
         newQuest.sub_quests = newQuest.sub_quests.map(sub => {
             const subRewards = [];
             if (questCoins > 0) {
-            subRewards.push(new Reward("coins", { amount: Math.floor(questCoins * 0.05) }));
+                subRewards.push(new Reward("coins", { amount: Math.floor(questCoins * 0.05) }));
             }
             if (questExperience > 0) {
-            subRewards.push(new Reward("experience", { amount: Math.floor(questExperience * 0.05) }));
+                subRewards.push(new Reward("experience", { amount: Math.floor(questExperience * 0.05) }));
             }
             return { ...sub, rewards: subRewards };
         });
         setQuests(prev => {
-            if (quest) {
-                return prev.map(q => q.id === quest.id ? newQuest : q); // Replace existing
+            if (editingQuest) {
+                return prev.map(q => q.id === editingQuest.id ? newQuest : q);
             } else {
-                return [...prev, newQuest]; // Add new
+                return [...prev, newQuest];
             }
         });
-        updateCoins(-cost); // Deduct cost from user coins
+        updateCoins(-cost);
 
-        const message = quest
+        const message = editingQuest
             ? "Quest updated successfully!"
             : "Quest created successfully!";
         showGameToast({
             icon: "🎉",
-            title: quest ? "Quest Updated!" : "Quest Created!",
+            title: editingQuest ? "Quest Updated!" : "Quest Created!",
             description: message,
             border_color: "border-blue-500",
             text_color: "text-blue-400",
             progressClass_color: "!bg-blue-500",
         });
 
-        setEditingQuest(null); // Clear edit state
+        setEditingQuest(null);
     };
 
     const tabs = [
@@ -168,7 +165,7 @@ export default function WorkshopPage({
                     addQuest={addQuest}
                     userCoins={user.coins}
                     calculateEffectCost={calculateEffectCost}
-                    originalQuest={quest}  // <-- pass this
+                    originalQuest={editingQuest}
                 />
             ),
         },
@@ -180,7 +177,7 @@ export default function WorkshopPage({
                     item={itemState}
                     setItem={setItem}
                     skills={user.stats}
-                    originalItem={item}
+                    originalItem={editingItem}
                     userCoins={user.coins}
                     calculateEffectCost={calculateEffectCost}
                 />
@@ -193,8 +190,8 @@ export default function WorkshopPage({
     }
 
     return (
-        <div className="flex flex-col  items-center w-full text-white">
-            <div className="w-full  px-10">
+        <div className="flex flex-col items-center w-full text-white">
+            <div className="w-full px-2 sm:px-4 md:px-10">
                 <div className="flex max-w-md mx-auto mb-4 gap-2">
                     {tabs.map((tab, idx) => (
                         <button
@@ -212,7 +209,7 @@ export default function WorkshopPage({
                         </button>
                     ))}
                 </div>
-                <div className="relative">
+                <div className="relative min-h-[400px]">
                     {tabs.map((tab, idx) => (
                         <div
                             key={tab.name}

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FiEdit, FiTrash2, FiSave, FiX, FiPlus } from "react-icons/fi";
-import { confirmToast } from "../confirmToast";
+import { confirmToast } from "../components/confirmToast";
 
 export default function HabitChallengeList({
   challenges,

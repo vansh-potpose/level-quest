@@ -4,19 +4,23 @@ import { FiEdit } from "react-icons/fi";
 import Calendar from './Calendar';
 import HabitChallengeList from './HabitChallengeList';
 import HabitChallengeHistory from './HabitChallengeHistory';
-import { showGameToast } from '../ShowGameToast';
+import { showGameToast } from '../components/ShowGameToast';
+import { useGame } from "../context/GameContext";
 
-export default function HabitPage({
-    dailyChallenges,
-    setDailyChallenges,
-    tasks,
-    setTasks,
-    updateSkill,
-    updateExp,
-    updateHealth,
-    skills,
-    claimReward
-}) {
+export default function HabitPage() {
+    const {
+        dailyChallenges,
+        setDailyChallenges,
+        tasks,
+        setTasks,
+        updateSkill,
+        updateExp,
+        updateHealth,
+        user,
+        claimReward
+    } = useGame();
+
+    const skills = user.stats;
     const [editMode, setEditMode] = useState(false);
     const hasPenalizedRef = useRef(false);
 
@@ -117,7 +121,6 @@ export default function HabitPage({
         dailyChallenges.challenges.every(ch => ch.completed);
     const disableCheckboxes = allCompleted && dailyChallenges.claimedDate === todayStr;
 
-
     const getTodayChallengeCompleted = (challengeId) => {
         const todayStr = new Date().toISOString().split('T')[0];
         const todayHistory = dailyChallenges.history?.find(day => day.date.startsWith(todayStr));
@@ -129,46 +132,44 @@ export default function HabitPage({
         return ch ? ch.completed : false;
     };
 
-
     return (
-        <div className="flex flex-col items-center justify-center mb-20 min-h-screen">
-            <div className="grid grid-cols-2 gap-6 ">
-                <div className="bg-[#0d1117] rounded-lg p-6 flex flex-col grow col-span-1 row-span-2">
-                    <div className="flex items-center justify-between mb-2">
-                        <span className="text-white">Daily Challenge</span>
-                        <button
-                            className="text-orange-400 hover:text-orange-300 flex items-center gap-1"
-                            onClick={() => setEditMode((prev) => !prev)}
-                            title="Edit Challenge Template"
-                        >
-                            <FiEdit /> {editMode ? "Done" : "Edit Template"}
-                        </button>
-                    </div>
-                    <HabitChallengeList
-                        challenges={dailyChallenges.challenges}
-                        onCheckboxChange={handleCheckboxChange}
-                        editMode={editMode}
-                        onEditChallenge={handleEditChallenge}
-                        onDeleteChallenge={handleDeleteChallenge}
-                        onAddChallenge={handleAddChallenge}
-                        skillOptions={skillOptions}
-                        disableCheckboxes={disableCheckboxes}
-                    />
-                </div>
-                <div className="bg-[#0d1117] rounded-lg p-6 flex grow flex-col items-center justify-center">
-                    <span className="text-white mb-4 font-semibold">Challenge History</span>
-                    <HabitChallengeHistory
-                        challenges={dailyChallenges.challenges}
-                        history={dailyChallenges.history}
-                        today={new Date()}
-                        getTodayChallengeCompleted={getTodayChallengeCompleted}
-
-                    />
-                </div>
-                <div className="rounded-lg flex items-center justify-center">
-                    <Calendar tasks={tasks} setTasks={setTasks} />
-                </div>
-            </div>
+  <div className="w-full flex flex-col px-10 items-center justify-center mb-20">
+    <div className="w-full mx-auto px-2 sm:px-4 md:px-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="bg-[#0d1117] rounded-lg p-6 flex flex-col grow col-span-1 row-span-2">
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-white">Daily Challenge</span>
+          <button
+            className="text-orange-400 hover:text-orange-300 flex items-center gap-1"
+            onClick={() => setEditMode((prev) => !prev)}
+            title="Edit Challenge Template"
+          >
+            <FiEdit /> {editMode ? "Done" : "Edit Template"}
+          </button>
         </div>
-    );
+        <HabitChallengeList
+          challenges={dailyChallenges.challenges}
+          onCheckboxChange={handleCheckboxChange}
+          editMode={editMode}
+          onEditChallenge={handleEditChallenge}
+          onDeleteChallenge={handleDeleteChallenge}
+          onAddChallenge={handleAddChallenge}
+          skillOptions={skillOptions}
+          disableCheckboxes={disableCheckboxes}
+        />
+      </div>
+      <div className="bg-[#0d1117] rounded-lg p-6 flex grow flex-col items-center justify-center">
+        <span className="text-white mb-4 font-semibold">Challenge History</span>
+        <HabitChallengeHistory
+          challenges={dailyChallenges.challenges}
+          history={dailyChallenges.history}
+          today={new Date()}
+          getTodayChallengeCompleted={getTodayChallengeCompleted}
+        />
+      </div>
+      <div className="rounded-lg flex items-center justify-center">
+        <Calendar tasks={tasks} setTasks={setTasks} />
+      </div>
+    </div>
+  </div>
+);
 }
