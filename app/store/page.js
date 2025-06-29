@@ -3,15 +3,18 @@ import { useState, useRef, useEffect } from "react";
 import StoreSection from "./StoreSection";
 import { confirmToast } from "../components/confirmToast";
 import { useGame } from "../context/GameContext";
+import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
 export default function StorePage() {
   const {
     StoreItems,
     buyItem,
     setStoreItems,
-    setEditingItem,
+    // setEditingItem, // Remove direct usage
   } = useGame();
 
+  const router = useRouter();
   const [selectedItemId, setSelectedItemId] = useState(null);
   const menuRef = useRef(null);
 
@@ -35,8 +38,8 @@ export default function StorePage() {
   }, []);
 
   function handleEdit(item) {
-    setEditingItem(item);
     setSelectedItemId(null);
+    router.push(`/workshop?editItem=${item.id}`);
   }
 
   async function handleDelete(item) {

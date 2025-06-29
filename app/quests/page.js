@@ -4,14 +4,17 @@ import QuestSection from "./QuestSection";
 import QuestModal from "./QuestModal";
 import { confirmToast } from "../components/confirmToast";
 import { useGame } from "../context/GameContext";
+import { useRouter } from "next/navigation";
 
 export default function QuestPage() {
   const {
     quests,
     setQuests,
     claimRewards,
-    setEditingQuest,
+    // setEditingQuest, // Remove direct usage
   } = useGame();
+
+  const router = useRouter();
 
   const [selectedQuest, setSelectedQuest] = useState(null);
   const [sortOption, setSortOption] = useState("name");
@@ -93,8 +96,8 @@ export default function QuestPage() {
 
   // Edit and Delete handlers
   function handleEdit(quest) {
-    setEditingQuest(quest);
     setSelectedQuestId(null);
+    router.push(`/workshop?editQuest=${quest.id}`);
   }
 
   async function handleDelete(quest) {

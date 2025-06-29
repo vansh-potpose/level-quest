@@ -7,6 +7,7 @@ import Item from "../components/Item";
 import CreateItem from "./CreateItem";
 import { showGameToast } from "../components/ShowGameToast";
 import { useGame } from "../context/GameContext"; // Import context
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function WorkshopPage() {
     // Use context for all shared state/functions
@@ -18,12 +19,14 @@ export default function WorkshopPage() {
         claimObjects,
         claimItems,
         quests,
-        item: editingItem,
-        quest: editingQuest,
+        editingItem,
+        editingQuest,
         setEditingQuest,
         setEditingItem,
         updateCoins,
     } = useGame();
+    const router = useRouter();
+    const searchParams = useSearchParams();
 
     // Fallback quest if not editing
     const defaultQuest = {
@@ -56,9 +59,42 @@ export default function WorkshopPage() {
         attribute_name: "none",
     };
 
+    // --- Sync context editing state with URL ---
+    useEffect(() => {
+        const editQuestId = searchParams.get("editQuest");
+        const editItemId = searchParams.get("editItem");
+        if (editQuestId) {
+            const quest = quests.find(q => String(q.id) === String(editQuestId));
+            setEditingQuest(quest || null);
+            setEditingItem(null);
+        } else if (editItemId) {
+            const item = StoreItems.find(i => String(i.id) === String(editItemId));
+            setEditingItem(item || null);
+            setEditingQuest(null);
+        } else {
+            setEditingQuest(null);
+            setEditingItem(null);
+        }
+    }, [searchParams, quests, StoreItems, setEditingQuest, setEditingItem]);
+
+    // --- Form state, always sync with context editing state ---
     const [tempQuest, setTempQuest] = useState(editingQuest || defaultQuest);
     const [itemState, setItem] = useState(editingItem || defaultItem);
     const [activeTab, setTab] = useState(0);
+
+    // When editingQuest or editingItem changes, update form state
+    useEffect(() => {
+        if (editingQuest) {
+            setTempQuest(editingQuest);
+            setTab(0);
+        } else if (editingItem) {
+            setItem(editingItem);
+            setTab(1);
+        } else {
+            setTempQuest({ ...defaultQuest, id: Date.now() });
+            setItem({ ...defaultItem, id: Date.now() });
+        }
+    }, [editingQuest, editingItem]);
 
     function calculateEffectCost(effects = []) {
         let totalCost = 0;
@@ -109,8 +145,11 @@ export default function WorkshopPage() {
             text_color: "text-blue-400",
             progressClass_color: "!bg-blue-500",
         });
-
         setEditingItem(null);
+        // Remove editItem param from URL
+        const params = new URLSearchParams(searchParams.toString());
+        params.delete("editItem");
+        router.replace(`/workshop${params.toString() ? `?${params}` : ""}`);
     };
 
     const addQuest = (newQuest, cost) => {
@@ -149,8 +188,11 @@ export default function WorkshopPage() {
             text_color: "text-blue-400",
             progressClass_color: "!bg-blue-500",
         });
-
         setEditingQuest(null);
+        // Remove editQuest param from URL
+        const params = new URLSearchParams(searchParams.toString());
+        params.delete("editQuest");
+        router.replace(`/workshop${params.toString() ? `?${params}` : ""}`);
     };
 
     const tabs = [
