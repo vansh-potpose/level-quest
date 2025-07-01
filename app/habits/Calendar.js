@@ -5,19 +5,21 @@ import EditableText from './EditableText';
 
 const Calendar = ({ tasks, setTasks }) => {
     const [currentDate, setCurrentDate] = useState(dayjs());
-    const [selectedDate, setSelectedDate] = useState(dayjs().format('D-M-YY'));
-    const today = dayjs().format('D-M-YY');
+    // Use ISO date (YYYY-MM-DD) for selectedDate and today
+    const [selectedDate, setSelectedDate] = useState(dayjs().toISOString().split('T')[0]);
+    const today = dayjs().toISOString().split('T')[0];
 
     const startOfMonth = currentDate.startOf('month');
     const endOfMonth = currentDate.endOf('month');
     const startDay = startOfMonth.day();
     const daysInMonth = endOfMonth.date();
 
+    // Generate days for the calendar grid, using ISO date (YYYY-MM-DD)
     const days = [...Array(42)].map((_, index) => {
         const day = index - startDay + 1;
         const date =
             day > 0 && day <= daysInMonth
-                ? currentDate.date(day).format('D-M-YY')
+                ? currentDate.date(day).toISOString().split('T')[0]
                 : null;
         return { day, date };
     });
@@ -25,8 +27,12 @@ const Calendar = ({ tasks, setTasks }) => {
     const handlePrevMonth = () => setCurrentDate(currentDate.subtract(1, 'month'));
     const handleNextMonth = () => setCurrentDate(currentDate.add(1, 'month'));
 
-    // Filter tasks for the selected date
-    const tasksForDate = tasks.filter(task => task.date === selectedDate);
+    // Filter tasks for the selected date (compare only YYYY-MM-DD)
+    const tasksForDate = tasks.filter(task => {
+        if (!task.date) return false;
+        const taskDate = dayjs(task.date).toISOString().split('T')[0];
+        return taskDate === selectedDate;
+    });
 
     const toggleTaskCompletion = (taskId) => {
         setTasks(prev => prev.map(task =>
@@ -50,7 +56,7 @@ const Calendar = ({ tasks, setTasks }) => {
             id: `task-${Date.now()}`,
             name: 'New Task',
             isCompleted: false,
-            date: selectedDate
+            date: selectedDate // already in ISO YYYY-MM-DD
         };
         setTasks(prev => [...prev, newTask]);
     };
@@ -59,8 +65,15 @@ const Calendar = ({ tasks, setTasks }) => {
         return daysTasks.length > 0 && daysTasks.every((task) => task.isCompleted);
     };
 
-    // Helper: get tasks for a given date
-    const getTasksForDate = (date) => tasks.filter(task => task.date === date);
+    // Helper: get tasks for a given date (compare only YYYY-MM-DD)
+    const getTasksForDate = (date) => {
+        if (!date) return [];
+        return tasks.filter(task => {
+            if (!task.date) return false;
+            const taskDate = dayjs(task.date).toISOString().split('T')[0];
+            return taskDate === date;
+        });
+    };
 
     return (
         <div className="flex flex-col md:flex-row w-fit gap-4">
@@ -129,6 +142,7 @@ const Calendar = ({ tasks, setTasks }) => {
                                 : "2px solid #ffcc00";
                         }
 
+                        // Format day label as dd (number only)
                         return (
                             <div
                                 key={index}
@@ -176,7 +190,8 @@ const Calendar = ({ tasks, setTasks }) => {
             >
                 <div className="TaskList__header text-xl font-bold mb-8 tracking-wide flex items-center gap-2">
                     <svg width="22" height="22" fill="none" stroke="var(--active-element)" strokeWidth="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-                    Tasks for <span className="ml-1 text-md font-medium" style={{ color: "var(--active-element)" }}>{selectedDate.replace(/-/g,'/') || 'No date selected'}</span>
+                    {/* Format selectedDate as dd/mm/yyyy for UI */}
+                    Tasks for <span className="ml-1 text-md font-medium" style={{ color: "var(--active-element)" }}>{selectedDate ? dayjs(selectedDate).format('DD/MM/YYYY') : 'No date selected'}</span>
                 </div>
                 <div>
                     {tasksForDate.length === 0 && (

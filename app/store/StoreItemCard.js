@@ -31,7 +31,7 @@ import { FaHeart, FaStar,FaAward } from "react-icons/fa";
         ref={cardRef}
         onClick={handleDoubleClick}
         className={`relative rounded-lg  transition-all duration-500 ease-in-out 
-          ${expanded ? "scale-105 bg-[#1e2836] rounded-b-none z-50" : "z-0"}
+          ${expanded ? "scale-105 bg-[#1e2836] rounded-b-none z-40" : "z-0"}
         `}
       >
         <div className="rounded-md  overflow-hidden mb-2">
@@ -53,7 +53,7 @@ import { FaHeart, FaStar,FaAward } from "react-icons/fa";
 
         {/* Smooth popup expanded content */}
         <div
-          className={`grid z-50 absolute w-full  transition-all  duration-400 ease-in-out  rounded-b-lg   ${
+          className={`grid z-40 absolute w-full  transition-all  duration-400 ease-in-out  rounded-b-lg   ${
             expanded
               ? "max-h-48 opacity-100 px-4 pb-4 bg-[#1e2836] -translate-y-[1px] " 
               : "max-h-0 opacity-0 px-4 pb-0 "

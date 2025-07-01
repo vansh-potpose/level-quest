@@ -60,31 +60,31 @@ export const exampleUser = (claimItems) => {
                 id: 'task-1',
                 name: 'Buy groceries',
                 isCompleted: false,
-                date: `3-${currentMonth}-${currentYear}`
+                date: dayjs().date(3).toISOString()
             },
             {
                 id: 'task-2',
                 name: 'Doctor appointment',
                 isCompleted: true,
-                date: `7-${currentMonth}-${currentYear}`
+                date: dayjs().date(7).toISOString()
             },
             {
                 id: 'task-3',
                 name: 'Team meeting',
                 isCompleted: false,
-                date: `12-${currentMonth}-${currentYear}`
+                date: dayjs().date(12).toISOString()
             },
             {
                 id: 'task-4',
                 name: 'Workout session',
                 isCompleted: false,
-                date: `18-${currentMonth}-${currentYear}`
+                date: dayjs().date(18).toISOString()
             },
             {
                 id: 'task-5',
                 name: 'Read a book',
                 isCompleted: true,
-                date: `25-${currentMonth}-${currentYear}`
+                date: dayjs().date(25).toISOString()
             }
         ]
     };

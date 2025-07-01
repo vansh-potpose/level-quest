@@ -26,7 +26,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="fixed w-full flex justify-between items-center bg-[#010409] h-16 px-5 border-b-[1px] border-[#3d444d] z-50">
+    <nav className="fixed w-full  flex justify-between items-center bg-[#010409] h-16 px-5 border-b-[1px] border-[#3d444d] z-50">
       {/* Left - Logo */}
       <div className="flex items-center gap-2">
         <Image
