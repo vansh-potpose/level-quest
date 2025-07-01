@@ -66,12 +66,12 @@ export default function QuestPage() {
     setQuests((prev) =>
       prev.map((quest) =>
         quest.id === questId
-          ? { ...quest, status: "Completed" }
+          ? { ...quest, isCompleted:true }
           : quest
       )
     );
     setSelectedQuest((prev) =>
-      prev && prev.id === questId ? { ...prev, status: "Completed" } : prev
+      prev && prev.id === questId ? { ...prev, isCompleted: true } : prev
     );
   }, [setQuests]);
 
@@ -121,8 +121,8 @@ export default function QuestPage() {
           .toLowerCase()
           .includes(searchTerm.trim().toLowerCase());
         const matchesStatus = showCompleted
-          ? quest.status === "Completed"
-          : quest.status !== "Completed";
+          ? quest.isCompleted
+          : !quest.isCompleted;
         return matchesSearch && matchesStatus;
       }),
     [searchTerm, showCompleted]
@@ -135,10 +135,10 @@ export default function QuestPage() {
         sorted.sort((a, b) => a.name.localeCompare(b.name));
       } else if (sortOption === "date") {
         sorted.sort((a, b) => new Date(a.endDate) - new Date(b.endDate));
-      } else if (sortOption === "difficulty" || sortOption === "priority") {
-        const priorityOrder = { High: 1, Medium: 2, Low: 3 };
+      } else if (sortOption === "priority") {
+        // const priorityOrder = { High: 1, Medium: 2, Low: 3 };
         sorted.sort(
-          (a, b) => (priorityOrder[a.priority] || 99) - (priorityOrder[b.priority] || 99)
+          (a, b) => (a.priority || 99) - (b.priority || 99)
         );
       }
       return sorted;
@@ -162,7 +162,6 @@ export default function QuestPage() {
         >
           <option value="name">Sort by Name</option>
           <option value="date">Sort by Date</option>
-          <option value="difficulty">Sort by Difficulty</option>
           <option value="priority">Sort by Priority</option>
         </select>
 

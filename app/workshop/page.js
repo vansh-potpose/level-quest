@@ -32,18 +32,14 @@ export default function WorkshopPage() {
     const defaultQuest = {
         id: Date.now(),
         image: "/images.jpeg",
-        name: "Quest title",
+        name: "",
         endDate: new Date().toISOString(),
-        description: "This is a sample quest description. Complete tasks to earn rewards.",
-        priority: "Low",
-        status: "Active",
+        description: "",
+        priority: 3,
+        isCompleted : false,
         rewards: [
-            new Reward("coins", { amount: 1000 }),
-            new Reward("experience", { amount: 500 }),
         ],
         sub_quests: [
-            { id: 1, name: "Sub-quest 1", completed: false, claim: false, rewards: [] },
-            { id: 2, name: "Sub-quest 2", completed: false, claim: false, rewards: [] },
         ],
     };
 

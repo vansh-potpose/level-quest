@@ -40,7 +40,7 @@ export default function CreateQuest({ tempQuest, setTempQuest, StoreItems, skill
         if (originalQuest) {
             const oldEffects = extractEffects(originalQuest);
             const oldCost = calculateEffectCost(oldEffects);
-            const editingCost = Math.max(10, 10+Math.floor((newCost - oldCost)));
+            const editingCost = Math.max(10, 10 + Math.floor((newCost - oldCost)));
             setCost(editingCost);
         } else {
             const createCost = 50 + newCost;
@@ -104,7 +104,7 @@ export default function CreateQuest({ tempQuest, setTempQuest, StoreItems, skill
                 <h2 className="text-2xl font-bold mb-4 text-gray-100 flex items-center gap-2">
                     <FiClipboard className="inline-block text-blue-400" /> Edit Quest
                 </h2>
-                {/* Image upload */}
+
                 <div>
                     <label className="text-sm font-semibold text-gray-300 mb-1 flex items-center gap-2">
                         <FiUpload className="text-blue-400" /> Quest Image
@@ -162,13 +162,24 @@ export default function CreateQuest({ tempQuest, setTempQuest, StoreItems, skill
                         <label className="block text-sm font-semibold text-gray-300 mb-1">Priority</label>
                         <select
                             name="priority"
-                            value={tempQuest.priority}
-                            onChange={handleChange}
+                            value={
+                                // Normalize string values to numbers for select
+                                tempQuest.priority === "high" ? 1 :
+                                    tempQuest.priority === "medium" ? 2 :
+                                        tempQuest.priority === "low" ? 3 :
+                                            tempQuest.priority || 1
+                            }
+                            onChange={e =>
+                                setTempQuest(prev => ({
+                                    ...prev,
+                                    priority: Number(e.target.value)
+                                }))
+                            }
                             className="mt-1 block h-10 w-full border border-[#3d444d] bg-[#0d1117] text-gray-100 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
                         >
-                            <option value="Low">Low</option>
-                            <option value="Medium">Medium</option>
-                            <option value="High">High</option>
+                            <option value={1}>High</option>
+                            <option value={2}>Medium</option>
+                            <option value={3}>Low</option>
                         </select>
                     </div>
                 </div>
@@ -240,17 +251,17 @@ export default function CreateQuest({ tempQuest, setTempQuest, StoreItems, skill
                         {cost} <BsCoin className="inline-block text-yellow-500" />
                     </span>
                 </div>
-                
+
                 <button
                     onClick={() => {
                         console.log(JSON.stringify(tempQuest, null, 2));
-                        addQuest(tempQuest,cost)
+                        addQuest(tempQuest, cost)
 
                     }}
-                    disabled={(userCoins < cost)|| tempQuest.name.trim() === "" || tempQuest.description.trim() === ""  }
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg w-full flex items-center justify-center gap-2 transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 mt-4"
+                    disabled={(userCoins < cost) || tempQuest.name.trim() === "" || tempQuest.description.trim() === "" || tempQuest.sub_quests.length === 0}
+                    className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white px-4 py-2 rounded-lg w-full flex items-center justify-center gap-2 transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 mt-4"
                 >
-                    <FiSave /> {userCoins < cost ? "Not enough coins" :originalQuest ? "Update Quest" : "Create Quest"}
+                    <FiSave /> {userCoins < cost ? "Not enough coins" : originalQuest ? "Update Quest" : "Create Quest"}
                 </button>
             </div>
             <div className="md:w-1/2 w-full flex flex-col items-center justify-center">

@@ -35,19 +35,19 @@ export default function QuestCard({ quest, onQuestClick }) {
   };
 
   const getPriorityBadge = () => {
-    if (quest.status === "Completed")
+    if (quest.isCompleted)
       return (
         <span className="border-2 border-[#00c160] text-white px-3 py-1 rounded-md text-xs font-bold shadow">
           Completed
         </span>
       );
-        if (quest.priority === "High")
+        if (quest.priority === 1)
       return (
         <span className="border-2 border-[#d52713] text-white px-3 py-1 rounded-md text-xs font-bold shadow">
           High 
         </span>
       );
-        if (quest.priority === "Medium")
+        if (quest.priority === 2)
       return (
         <span className="border-2 border-[#c8a310] text-white px-3 py-1 rounded-md text-xs font-bold shadow">
           Medium 
@@ -84,7 +84,7 @@ export default function QuestCard({ quest, onQuestClick }) {
           <Rewards rewards={quest.rewards} />
         </div>
       </div>
-      {quest.status === "Completed" && (
+      {quest.isCompleted && (
         <div className="absolute top-0  justify-center  w-full bg-black/60 h-full flex items-center gap-2  text-[#22c55e] rounded-md p-2">
           <FaCheck size={80} />
         </div>

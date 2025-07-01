@@ -26,7 +26,7 @@ const QuestModal = ({
     if (
       subQuests.length > 0 &&
       subQuests.every((sq) => sq.completed) &&
-      quest.status !== "Completed"
+      !quest.isCompleted 
     ) {
       
       console.log("All subquests completed, marking quest as completed", quest.name);
@@ -38,10 +38,10 @@ const QuestModal = ({
     // eslint-disable-next-line
     // Update quest status if all subquests are completed
     // This ensures the UI reflects the correct status
-  }, [subQuests, quest.status]);
+  }, [subQuests, quest.isCompleted]);
  
 const handleQuestCompleted = () => {
-  if (quest.status === "Completed") return; // Prevent double call
+  if (quest.isCompleted) return; // Prevent double call
   updateQuestCompleted(quest.id);
   claimRewards(quest);
   showGameToast({
@@ -115,19 +115,19 @@ const handleQuestCompleted = () => {
   // UI
   // Priority badge helper
   const getPriorityBadge = () => {
-    if (quest.status === "Completed")
+    if (quest.isCompleted)
       return (
         <span className="bg-[#00c160] text-white px-3 py-1 rounded-md text-xs font-bold shadow">
           Completed
         </span>
       );
-        if (quest.priority === "High")
+        if (quest.priority === 1)
       return (
         <span className="bg-[#d52713] text-white px-3 py-1 rounded-md text-xs font-bold shadow">
           High Priority
         </span>
       );
-        if (quest.priority === "Medium")
+        if (quest.priority === 2)
       return (
         <span className="bg-[#c8a310] text-white px-3 py-1 rounded-md text-xs font-bold shadow">
           Medium Priority

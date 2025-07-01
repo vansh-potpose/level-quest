@@ -35,19 +35,19 @@ const QuestImage = ({ quest }) => {
   // UI
   // Priority badge helper
   const getPriorityBadge = () => {
-    if (quest.status === "Completed")
+    if (quest.isCompleted)
       return (
         <span className="bg-[#00c160] text-white px-3 py-1 rounded-md text-xs font-bold shadow">
           Completed
         </span>
       );
-        if (quest.priority === "High")
+        if (quest.priority === 1)
       return (
         <span className="bg-[#d52713] text-white px-3 py-1 rounded-md text-xs font-bold shadow">
           High Priority
         </span>
       );
-        if (quest.priority === "Medium")
+        if (quest.priority === 2)
       return (
         <span className="bg-[#c8a310] text-white px-3 py-1 rounded-md text-xs font-bold shadow">
           Medium Priority

@@ -63,7 +63,7 @@ const Navbar = () => {
           <BsCoin size={24} className="text-yellow-500 font-bold" />
           <p>{coins}</p>
         </div>
-        <div className="flex items-center gap-2 relative">
+        <div className="group flex items-center gap-2 relative">
           <Image
             src={user.profilePic}
             alt="Profile"
@@ -72,8 +72,8 @@ const Navbar = () => {
             className="rounded-full object-cover"
           />
           <p className="text-white text-sm font-medium">{user.name}</p>
-          <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-[#010409] flex items-center justify-center">
-            <button className="w-full h-full rounded-full" onClick={handleLogout} title="Logout"></button>
+          <div className="group-hover:opacity-100 opacity-0 transition-all duration-500 ease-in-out absolute top-14 border border-[#3d444d] right-0  bg-[#0d1117] rounded-md  flex items-center justify-center">
+            <button className="w-full h-full rounded-md my-2 mx-3 bg-red-500 px-3 py-1" onClick={handleLogout} title="Logout">Logout</button>
           </div>
         </div>
       </div>
