@@ -99,8 +99,8 @@ export default function CreateQuest({ tempQuest, setTempQuest, StoreItems, skill
     };
 
     return (
-        <div className="flex flex-col md:flex-row rounded-xl px-8 py-5 gap-8 ">
-            <div className="md:w-1/2 w-full space-y-6 ">
+        <div className="flex flex-col lg:flex-row w-full items-center px-2  rounded-xl md:px-8 py-5 gap-8 ">
+            <div className="lg:w-1/2 w-full space-y-6 ">
                 <h2 className="text-2xl font-bold mb-4 text-gray-100 flex items-center gap-2">
                     <FiClipboard className="inline-block text-blue-400" /> Edit Quest
                 </h2>
@@ -142,21 +142,37 @@ export default function CreateQuest({ tempQuest, setTempQuest, StoreItems, skill
                     />
                 </div>
 
-                <div className="flex gap-4">
+                <div className="flex gap-4 sm:flex-row flex-col">
                     <div className="flex-1">
                         <label className="block text-sm font-semibold text-gray-300 mb-1">End Date</label>
-                        <input
-                            type="datetime-local"
-                            name="endDate"
-                            value={tempQuest.endDate.slice(0, 16)}
-                            onChange={e =>
-                                setTempQuest(prev => ({
-                                    ...prev,
-                                    endDate: new Date(e.target.value).toISOString()
-                                }))
-                            }
-                            className="mt-1 h-10 block w-full border border-[#3d444d] bg-[#0d1117] text-gray-100 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
-                        />
+                        {/* Only render input if endDate is defined */}
+                        {tempQuest.endDate ? (
+                            <input
+                                type="datetime-local"
+                                name="endDate"
+                                value={tempQuest.endDate.slice(0, 16)}
+                                onChange={e =>
+                                    setTempQuest(prev => ({
+                                        ...prev,
+                                        endDate: new Date(e.target.value).toISOString()
+                                    }))
+                                }
+                                className="mt-1 h-10 block w-full border border-[#3d444d] bg-[#0d1117] text-gray-100 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
+                            />
+                        ) : (
+                            <input
+                                type="datetime-local"
+                                name="endDate"
+                                value=""
+                                onChange={e =>
+                                    setTempQuest(prev => ({
+                                        ...prev,
+                                        endDate: new Date(e.target.value).toISOString()
+                                    }))
+                                }
+                                className="mt-1 h-10 block w-full border border-[#3d444d] bg-[#0d1117] text-gray-100 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
+                            />
+                        )}
                     </div>
                     <div className="flex-1">
                         <label className="block text-sm font-semibold text-gray-300 mb-1">Priority</label>
@@ -264,7 +280,7 @@ export default function CreateQuest({ tempQuest, setTempQuest, StoreItems, skill
                     <FiSave /> {userCoins < cost ? "Not enough coins" : originalQuest ? "Update Quest" : "Create Quest"}
                 </button>
             </div>
-            <div className="md:w-1/2 w-full flex flex-col items-center justify-center">
+            <div className="lg:w-1/2 w-full flex flex-col items-center justify-center">
                 <QuestImage quest={tempQuest} />
             </div>
         </div>

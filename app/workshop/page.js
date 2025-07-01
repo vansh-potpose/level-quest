@@ -45,9 +45,9 @@ export default function WorkshopPage() {
 
     const defaultItem = {
         id: Date.now(),
-        name: "Shadow Fight Game",
+        name: "",
         price: 300,
-        description: "Epic battles and martial arts.",
+        description: "",
         image: "/image_b.jpg",
         type: "Object",
         amount: 0,

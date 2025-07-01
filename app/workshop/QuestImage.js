@@ -63,7 +63,7 @@ const QuestImage = ({ quest }) => {
   return (
  
       <div
-        className="relative bg-[#181c24] rounded-lg mx-auto  w-[85%] max-w-2xl shadow-2xl overflow-hidden"
+        className="relative bg-[#181c24] rounded-lg mx-auto  md:w-[85%] max-w-2xl shadow-2xl overflow-hidden"
       >
         
 

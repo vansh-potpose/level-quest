@@ -3,7 +3,7 @@ import React from "react";
 export default function ProfilePictureUpload({ preview, onChange }) {
     return (
         <div className="flex flex-col items-center gap-2">
-            <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-gray-700 bg-gray-900 flex items-center justify-center mb-2">
+            <div className="w-24 h-24 lg:w-50 lg:h-50 rounded-full overflow-hidden border-2 border-gray-700 bg-gray-900 flex items-center justify-center mb-2">
                 {preview ? (
                     <img
                         src={preview}

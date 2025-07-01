@@ -45,9 +45,9 @@ export default function SettingsPage() {
 
     return (
         <div className="flex justify-center items-center text-white px-2 w-full ">
-            <div className="bg-gray-900 border border-gray-800 rounded-3xl shadow-2xl w-full max-w-screen-2xl m-4 p-4 md:p-8 flex flex-col gap-8">
-                <div className="flex flex-col lg:flex-row gap-8 items-start w-full">
-                    <div className="flex flex-col items-center w-full lg:w-1/3">
+            <div className="  w-full max-w-screen-2xl m-2 md:m-4 p-4 md:p-8 flex flex-col gap-8">
+                <div className="flex flex-col lg:flex-row gap-8 items-center w-full">
+                    <div className="flex flex-col h-full justify-center items-center w-full lg:w-1/3">
                         <ProfilePictureUpload preview={preview} onChange={handleImageChange} />
                         <span className="text-gray-400 text-sm mt-2">Profile Picture</span>
                     </div>
