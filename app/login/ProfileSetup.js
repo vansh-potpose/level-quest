@@ -1,6 +1,8 @@
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function ProfileSetup({ onComplete }) {
+    const router = useRouter();
     const [profile, setProfile] = useState({
         job: "",
         about: "",
@@ -29,14 +31,24 @@ export default function ProfileSetup({ onComplete }) {
         });
     };
 
+    // Prevent form submit on Enter except for textarea
+    const handleKeyDown = (e) => {
+        if (e.key === "Enter" && e.target.tagName !== "TEXTAREA") {
+            e.preventDefault();
+        }
+    };
+
     const handleProfileSubmit = (e) => {
         e.preventDefault();
         setSuccess("Profile setup complete!");
         if (onComplete) onComplete(profile);
+        setTimeout(() => {
+            router.push("/");
+        }, 600);
     };
 
     return (
-        <form className="flex flex-col gap-4 w-full  mx-auto" onSubmit={handleProfileSubmit}>
+        <form className="flex flex-col gap-4 w-full  mx-auto" onSubmit={handleProfileSubmit} onKeyDown={handleKeyDown}>
             <h2 className="text-center mb-4 text-xl font-bold text-[#FF8000]">Set Up Your Profile</h2>
             <input
                 type="text"

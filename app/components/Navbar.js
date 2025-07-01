@@ -3,7 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { BsCoin } from "react-icons/bs";
 import { useGame } from "../context/GameContext";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import auth from "../appwrite/auth";
 
 const navItems = [
   { name: "Home", href: "/" },
@@ -17,6 +18,12 @@ const navItems = [
 const Navbar = () => {
   const { user, coins } = useGame();
   const pathname = usePathname();
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    await auth.logout();
+    router.push("/login");
+  };
 
   return (
     <nav className="fixed w-full flex justify-between items-center bg-[#010409] h-16 px-5 border-b-[1px] border-[#3d444d] z-50">
@@ -56,7 +63,7 @@ const Navbar = () => {
           <BsCoin size={24} className="text-yellow-500 font-bold" />
           <p>{coins}</p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 relative">
           <Image
             src={user.profilePic}
             alt="Profile"
@@ -65,6 +72,9 @@ const Navbar = () => {
             className="rounded-full object-cover"
           />
           <p className="text-white text-sm font-medium">{user.name}</p>
+          <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-[#010409] flex items-center justify-center">
+            <button className="w-full h-full rounded-full" onClick={handleLogout} title="Logout"></button>
+          </div>
         </div>
       </div>
     </nav>
