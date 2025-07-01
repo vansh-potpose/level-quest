@@ -1,4 +1,4 @@
-import ProgressBar from "../ProgressBar";
+import ProgressBar from "../components/ProgressBar";
 
 const SkillProgressBar = ({ skill, level, value,getMaxSkillPoints }) => {
   

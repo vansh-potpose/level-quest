@@ -1,12 +1,12 @@
 'use client';
 import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
-import ProgressBar from "../ProgressBar";
 import ProfileInfo from "./ProfileInfo";
 import SkillDashboard from "./SkillDashboard";
 import InventorySlotWrapper from "./InventorySlotWrapper";
-import { confirmToast } from "../confirmToast";
-import { useGame } from "../../context/GameContext";
+import { confirmToast } from "../components/confirmToast";
+import { useGame } from "./../context/GameContext";
+import ProgressBar from "../components/ProgressBar";
 
 const Dashboard = () => {
   const {

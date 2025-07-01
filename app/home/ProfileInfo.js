@@ -1,5 +1,5 @@
 import Image from "next/image";
-import ProgressBar from "../ProgressBar";
+import ProgressBar from "../components/ProgressBar";
 
 const ProfileInfo = ({ user ,getMaxHealthForLevel,getMaxExpForLevel }) => {
  
