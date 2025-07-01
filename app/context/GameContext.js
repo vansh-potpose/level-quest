@@ -23,13 +23,16 @@ export function GameProvider({ children }) {
 
   // --- Utility Functions ---
   const getMaxExpForLevel = (level) => Math.floor(BASE_XP * level ** 1.5);
-  const getMaxHealthForLevel = (level) => Math.floor(BASE_HEALTH * 1.05 ** level);
+  const getMaxHealthForLevel = (level) => Math.floor(BASE_HEALTH * 1.05 ** (level - 1));
   const getMaxSkillPoints = (level) => Math.floor(BASE_XP * level ** 1.5);
 
   // --- Update Functions ---
   function updateCoins(amount) {
-    setUser(prev => ({ ...prev, coins: prev.coins + amount }));
-    setCoins(prev => prev + amount);
+    setUser(prev => {
+      const newCoins = prev.coins + amount;
+      setCoins(newCoins);
+      return { ...prev, coins: newCoins };
+    });
   }
 
   function updateHealth(amount) {
@@ -44,20 +47,19 @@ export function GameProvider({ children }) {
     setUser(prev => ({
       ...prev,
       stats: prev.stats.map(stat => {
-        if (stat.skill === skillName) {
-          let newValue = stat.value + amount;
-          let newLevel = stat.level;
-          let maxPoints = getMaxSkillPoints(stat.level);
-
-          while (newValue >= maxPoints) {
-            newValue -= maxPoints;
-            newLevel += 1;
-            maxPoints = getMaxSkillPoints(newLevel);
-          }
-          newValue = stat.value + amount;
-          return { ...stat, value: newValue, level: newLevel };
+        if (stat.skill !== skillName) return stat;
+        let newValue = stat.value + amount;
+        let newLevel = stat.level;
+        let maxPoints;
+        while (true) {
+          maxPoints = getMaxSkillPoints(newLevel);
+          if (newValue < maxPoints) break;
+          newValue -= maxPoints;
+          newLevel += 1;
         }
-        return stat;
+        newValue = stat.value + amount;
+
+        return { ...stat, value: newValue, level: newLevel };
       })
     }));
   }
@@ -66,12 +68,11 @@ export function GameProvider({ children }) {
     setUser(prev => {
       let newExp = prev.exp + amount;
       let newLevel = prev.level;
-      let maxExp = getMaxExpForLevel(newLevel);
-
-      while (newExp >= maxExp) {
+      while (true) {
+        const maxExp = getMaxExpForLevel(newLevel);
+        if (newExp < maxExp) break;
         newExp -= maxExp;
         newLevel += 1;
-        maxExp = getMaxExpForLevel(newLevel);
       }
       return { ...prev, exp: newExp, level: newLevel };
     });
@@ -79,12 +80,13 @@ export function GameProvider({ children }) {
 
   // --- Claim Functions ---
   function claimItems(attribute_name, amount) {
-    switch (attribute_name) {
-      case "health": updateHealth(amount); break;
-      case "coins": updateCoins(amount); break;
-      case "experience": updateExp(amount); break;
-      default: updateSkill(attribute_name, amount);
-    }
+    const actions = {
+      health: updateHealth,
+      coins: updateCoins,
+      experience: updateExp,
+    };
+    (actions[attribute_name] || ((amt) => updateSkill(attribute_name, amt)))(amount);
+
     showGameToast({
       icon: "🎉",
       title: "Item Claimed!",
@@ -121,44 +123,37 @@ export function GameProvider({ children }) {
   }
 
   const claimReward = (reward) => {
-    switch (reward.type) {
-      case "coins":
-        updateCoins(reward.data.amount);
-        break;
-      case "experience":
-        updateExp(reward.data.amount);
-        break;
-      case "skill":
-        updateSkill(reward.data.skill, reward.data.amount);
-        break;
-      case "item":
-        addToInventory(reward.data.item);
-        break;
-      default:
-        console.warn(`Unhandled reward type: ${reward.type}`);
-    }
+    if (!reward || !reward.type) return;
+    const handlers = {
+      coins: () => updateCoins(reward.data.amount),
+      experience: () => updateExp(reward.data.amount),
+      skill: () => updateSkill(reward.data.skill, reward.data.amount),
+      item: () => addToInventory(reward.data.item),
+    };
+    (handlers[reward.type] || (() => console.warn(`Unhandled reward type: ${reward.type}`)))();
   };
 
   const claimRewards = (quest) => {
-    let rewars_names = quest.rewards.map(reward => {
-      if (reward.type === "item") {
-        return reward.data.item.name;
-      } else if (reward.type === "coins") {
-        return `+${reward.data.amount} coins`;
-      } else if (reward.type === "experience") {
-        return `+${reward.data.amount} experience`;
-      } else if (reward.type === "skill") {
-        return `+${reward.data.amount} ${reward.data.skill}`;
+    if (!quest?.rewards?.length) return;
+    const rewardDescriptions = quest.rewards.map(reward => {
+      switch (reward.type) {
+        case "item":
+          return reward.data.item?.name || "Unknown Item";
+        case "coins":
+          return `+${reward.data.amount} coins`;
+        case "experience":
+          return `+${reward.data.amount} experience`;
+        case "skill":
+          return `+${reward.data.amount} ${reward.data.skill}`;
+        default:
+          return "Unknown Reward";
       }
-      return "Unknown Reward";
-    }).join(", ");
-    quest.rewards.forEach(reward => {
-      claimReward(reward);
     });
+    quest.rewards.forEach(claimReward);
     showGameToast({
       icon: "🎁",
       title: "Rewards Claimed!",
-      description: `You received: ${rewars_names}`,
+      description: `You received: ${rewardDescriptions.join(", ")}`,
       border_color: "border-green-500",
       text_color: "text-green-400",
       progressClass_color: "!bg-green-500",
@@ -167,23 +162,7 @@ export function GameProvider({ children }) {
 
   // --- Store Logic ---
   function buyItem(item) {
-    if (user.coins >= item.price) {
-      updateCoins(-item.price);
-      const newId = Date.now() + Math.floor(Math.random() * 1000000);
-      const newItem = new Item({ ...item, id: newId }, item.onClaim, item.skill_name || "none");
-      setUser(prev => ({
-        ...prev,
-        inventory: [...prev.inventory, newItem],
-      }));
-      showGameToast({
-        icon: "🛒",
-        title: "Item Purchased!",
-        description: `You bought: ${item.name}`,
-        border_color: "border-green-500",
-        text_color: "text-green-400",
-        progressClass_color: "!bg-green-500",
-      });
-    } else {
+    if (user.coins < item.price) {
       showGameToast({
         icon: "❌",
         title: "Purchase Failed",
@@ -192,17 +171,43 @@ export function GameProvider({ children }) {
         text_color: "text-red-500",
         progressClass_color: "!bg-red-700",
       });
+      return;
     }
+
+    updateCoins(-item.price);
+
+    const newItem = new Item(
+      { ...item, id: Date.now() + Math.floor(Math.random() * 1e6) },
+      item.onClaim
+    );
+
+    setUser(prev => ({
+      ...prev,
+      inventory: [...prev.inventory, newItem],
+    }));
+
+    showGameToast({
+      icon: "🛒",
+      title: "Item Purchased!",
+      description: `You bought: ${item.name}`,
+      border_color: "border-green-500",
+      text_color: "text-green-400",
+      progressClass_color: "!bg-green-500",
+    });
   }
 
   // --- Level Up Toasts ---
-  const prevSkillLevels = useRef(user.stats.map(stat => stat.level));
-  const prevUserLevel = useRef(user.level);
-  const prevUserHealth = useRef(user.health);
+  // --- Efficient Level Up Toasts ---
+  const prevStats = useRef({
+    skillLevels: user.stats.map(stat => stat.level),
+    userLevel: user.level,
+    userHealth: user.health,
+  });
 
   useEffect(() => {
+    // Skill level up toasts
     user.stats.forEach((stat, idx) => {
-      const prevLevel = prevSkillLevels.current[idx];
+      const prevLevel = prevStats.current.skillLevels[idx];
       if (stat.level > prevLevel) {
         showGameToast({
           icon: "⚔️",
@@ -214,11 +219,9 @@ export function GameProvider({ children }) {
         });
       }
     });
-    prevSkillLevels.current = user.stats.map(stat => stat.level);
-  }, [user.stats]);
 
-  useEffect(() => {
-    if (user.level > prevUserLevel.current) {
+    // User level up toast
+    if (user.level > prevStats.current.userLevel) {
       showGameToast({
         icon: "🎉",
         title: "Level Up!",
@@ -228,31 +231,37 @@ export function GameProvider({ children }) {
         progressClass_color: "!bg-blue-500",
       });
     }
-    prevUserLevel.current = user.level;
-  }, [user.level]);
 
-  useEffect(() => {
-    if (user.health > prevUserHealth.current) {
-      showGameToast({
-        icon: "❤️",
-        title: "Health Restored!",
-        description: `Your health increased to ${user.health}.`,
-        border_color: "border-red-500",
-        text_color: "text-red-500",
-        progressClass_color: "!bg-red-700",
-      });
-    } else if (user.health < prevUserHealth.current) {
-      showGameToast({
-        icon: "💔",
-        title: "Health Decreased!",
-        description: `Your health dropped to ${user.health}.`,
-        border_color: "border-red-700",
-        text_color: "text-red-600",
-        progressClass_color: "!bg-red-700",
-      });
+    // Health change toast
+    if (user.health !== prevStats.current.userHealth) {
+      if (user.health > prevStats.current.userHealth) {
+        showGameToast({
+          icon: "❤️",
+          title: "Health Restored!",
+          description: `Your health increased to ${user.health}.`,
+          border_color: "border-red-500",
+          text_color: "text-red-500",
+          progressClass_color: "!bg-red-700",
+        });
+      } else {
+        showGameToast({
+          icon: "💔",
+          title: "Health Decreased!",
+          description: `Your health dropped to ${user.health}.`,
+          border_color: "border-red-700",
+          text_color: "text-red-600",
+          progressClass_color: "!bg-red-700",
+        });
+      }
     }
-    prevUserHealth.current = user.health;
-  }, [user.health]);
+
+    // Update refs in one place
+    prevStats.current = {
+      skillLevels: user.stats.map(stat => stat.level),
+      userLevel: user.level,
+      userHealth: user.health,
+    };
+  }, [user.stats, user.level, user.health]);
 
   // --- Provide everything needed to children ---
   return (
