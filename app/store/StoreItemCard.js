@@ -59,7 +59,7 @@ import { FaHeart, FaStar,FaAward } from "react-icons/fa";
           : "max-h-0 opacity-0 px-4 pb-0 "
         } overflow-hidden`}
       >
-        <div className="text-gray-300 sm:text-sm text-xs mb-2">{item.description}</div>
+        <div className="text-gray-300 text-sm  mb-2">{item.description}</div>
         {item.type === "Magical Item" && (
         <div className="text-gray-300 sm:text-sm text-xs mb-2 flex items-center gap-2 sm:flex">
           <span className="hidden sm:inline">Gives:&nbsp;</span>
