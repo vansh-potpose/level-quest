@@ -22,7 +22,7 @@ const SkillDashboard = ({skills,getMaxSkillPoints}) => {
           <div className="flex flex-col gap-1 sm:gap-4 sm:mt-6">
             {skills.map((s, idx) => (
               <SkillProgressBar 
-                key={idx}
+                key={idx} 
                 skill={s.skill}
                 level={s.level}
                 value={s.value}
