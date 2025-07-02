@@ -76,7 +76,7 @@ const Calendar = ({ tasks, setTasks }) => {
     };
 
     return (
-        <div className="flex flex-col md:flex-row w-fit gap-4">
+        <div className="flex flex-col 2xl:flex-row md:flex-row lg:flex-col w-fit gap-4">
             {/* Calendar */}
             <div
                 className="h-fit p-6 rounded-xl max-w-sm shadow-lg border border-[#3d444d]"
@@ -182,7 +182,7 @@ const Calendar = ({ tasks, setTasks }) => {
             </div>
 
             {/* Task List */}
-            <div className="TaskList p-8 xs:w-[28rem] w-[20rem]  rounded-2xl shadow-lg flex-1"
+            <div className="TaskList p-8 xs:w-[28rem] w-[22rem]  rounded-2xl shadow-lg flex-1"
                 style={{
                     background: "var(--muted-background-color)",
                     color: "var(--foreground)"
