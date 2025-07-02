@@ -3,7 +3,7 @@ import ProgressBar from "../components/ProgressBar";
 const SkillProgressBar = ({ skill, level, value,getMaxSkillPoints }) => {
   
   const xpNeeded = getMaxSkillPoints(level);
-  return (
+  return (   
     <div className="mb-5">
       <div className="flex justify-between text-sm  mb-1 font-medium tracking-wide ">
         <span className="capitalize text-[#f0f6fc]">{skill}</span>

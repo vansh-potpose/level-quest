@@ -12,6 +12,7 @@ import {
 const SkillRadarChart = ({ data }) => {
   return (
     <div className="w-full h-[420px]">
+      
       <ResponsiveContainer>
         <RadarChart cx="50%" cy="50%" outerRadius="75%" data={data}>
           <PolarGrid
