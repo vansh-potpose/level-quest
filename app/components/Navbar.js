@@ -94,7 +94,7 @@ const Navbar = () => {
               className={`block px-2 py-1 md:px-3 md:py-2 border-2 rounded-md text-sm md:text-md font-medium cursor-pointer transition-colors duration-200 text-center
                 ${pathname === item.href
                   ? "border-[#FF8000] text-[#FF8000]"
-                  : "border-transparent text-white hover:border-gray-600 hover:text-[#FF8000] hover:bg-[#23272f] cursor-pointer"}
+                  : "border-transparent text-white hover:border-gray-600 hover:text-[#FF8000] cursor-pointer"}
               `}
               onClick={() => setMenuOpen(false)}
             >

@@ -18,6 +18,57 @@
   
 }
 
+@layer utilities {
+  /* Star layers */
+  .star-layer {
+    position: absolute;
+    top: 0; left: 0;
+  }
+  .star-small {
+    width: 1px;
+    height: 1px;
+    background: transparent;
+    box-shadow: runtime random shadows;
+    animation: animStar 50s linear infinite;
+  }
+  .star-medium {
+    width: 2px;
+    height: 2px;
+    background: transparent;
+    box-shadow: runtime random shadows;
+    animation: animStar 100s linear infinite;
+  }
+  .star-big {
+    width: 3px;
+    height: 3px;
+    background: transparent;
+    box-shadow: runtime random shadows;
+    animation: animStar 150s linear infinite;
+  }
+  .text-gradient {
+    background: -webkit-linear-gradient(white, #38495a);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+}
+
+@layer base {
+  html {
+    height: 100%;
+  }
+  body {
+    @apply relative min-h-screen w-full overflow-x-hidden bg-gradient-to-b from-[#1B2735] to-[#090A0F];
+  }
+}
+
+/* Keyframes */
+@layer utilities {
+  @keyframes animStar {
+    from { transform: translateY(0px); }
+    to   { transform: translateY(-2000px); }
+  }
+}
+
 /* Custom scrollbar styles for better appearance */
 ::-webkit-scrollbar {
   width: 12px;
