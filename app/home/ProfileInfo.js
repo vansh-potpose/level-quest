@@ -10,7 +10,7 @@ const ProfileInfo = ({ user ,getMaxHealthForLevel,getMaxExpForLevel }) => {
     <div className="flex flex-col items-center justify-center">
       <div className="relative w-80 h-80 rounded-full border border-[#3d444d] overflow-hidden flex items-center justify-center">
         <Image
-          src={user.profilePic}
+          src={user.profilePic || "/book2.jpg"}
           alt={`${user.name}'s Profile Picture`}
           fill
           className="object-cover rounded-full"
