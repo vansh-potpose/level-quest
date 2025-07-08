@@ -1,10 +1,7 @@
-'use client';
-import Dashboard from "./home/Dashboard";
+"use client";
+import { Provider } from "react-redux";
+import store from "./redux/store";
 
-export default function Home() {
-  return (
-    <div className="w-full flex flex-col items-center justify-center">
-      <Dashboard />
-    </div>
-  );
+export default function Home({ children }) {
+  return <Provider store={store}>{children}</Provider>;
 }

@@ -1,12 +1,16 @@
 import { Geist, Geist_Mono } from "next/font/google";
-import { GameProvider } from "./context/GameContext";
 import "./globals.css";
+
+import AppProviders from "./AppProviders";
+
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Toaster } from "sonner";
 import NavbarWrapper from "./components/NavbarWrapper";
 import StarBackground from "./components/StarBackground";
+import { GameProvider } from "./context/GameContext";
 import AnimatedBackground from "./components/AnimatedBackground";
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,11 +31,12 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <GameProvider>
-          <NavbarWrapper />
+        <AppProviders>
+          <GameProvider>
           {/* Background moved outside content wrapper for visibility */}
-          {/* <StarBackground /> 
-          */}
+
+           {/* <StarBackground />
+           */}
            <AnimatedBackground />
           {/* Add a wrapper with top padding for the navbar */}
           <div className="pt-20 min-h-screen bg-transparent">
@@ -51,6 +56,8 @@ export default function RootLayout({ children }) {
           />
           <Toaster position="top-center" richColors closeButton theme="dark" />
         </GameProvider>
+        </AppProviders>
+
       </body>
     </html>
   );
