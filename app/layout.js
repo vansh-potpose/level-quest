@@ -30,8 +30,8 @@ export default function RootLayout({ children }) {
         <GameProvider>
           <NavbarWrapper />
           {/* Background moved outside content wrapper for visibility */}
-          {/* <StarBackground />
-           */}
+          {/* <StarBackground /> 
+          */}
            <AnimatedBackground />
           {/* Add a wrapper with top padding for the navbar */}
           <div className="pt-20 min-h-screen bg-transparent">
