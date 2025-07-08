@@ -7,6 +7,7 @@ const ProfileInfo = ({ user ,getMaxHealthForLevel,getMaxExpForLevel }) => {
   const maxHealth = getMaxHealthForLevel(user.level);
 
   return (
+
     <div className="flex flex-col sm:flex-col items-center sm:items-center justify-center w-full">
       <div className="flex flex-row sm:flex-col items-center w-full sm:w-auto">
        

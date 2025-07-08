@@ -7,10 +7,11 @@ import InventorySlotWrapper from "./InventorySlotWrapper";
 import { confirmToast } from "../components/confirmToast";
 import { useGame } from "./../context/GameContext";
 import ProgressBar from "../components/ProgressBar";
+import { useSelector } from "react-redux";
 
 const Dashboard = () => {
+  const { user } = useSelector((state) => state.user);
   const {
-    user,
     getMaxHealthForLevel,
     getMaxExpForLevel,
     getMaxSkillPoints,
@@ -76,6 +77,7 @@ const Dashboard = () => {
           </h1>
         </div>
       </div>
+
       <div className="mt-6 sm:mt-10 mb-20 sm:mb-30 w-full max-w-7xl">
         <h1 className="text-2xl sm:text-3xl font-bold text-[#f0f6fc] mb-6 sm:mb-9 flex w-full justify-center">Inventory</h1>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6">

@@ -5,12 +5,12 @@ export class Auth {
   client = new Client();
   account;
 
-  constructor() {
-    this.client
-      .setEndpoint(conf.appwriteUrl)
-      .setProject(conf.appwriteProjectId);
-    this.account = new Account(this.client);
-  }
+  // constructor() {
+  //   this.client
+  //     .setEndpoint(conf.appwriteUrl)
+  //     .setProject(conf.appwriteProjectId);
+  //   this.account = new Account(this.client);
+  // }
 
   async createAccount({ email, password, name }) {
     try {
