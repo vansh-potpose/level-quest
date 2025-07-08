@@ -56,7 +56,7 @@ export default function StorePage() {
   }
 
   return (
-    <div className="min-h-screen text-white py-10 px-4 sm:px-8 md:px-16 lg:px-24">
+    <div className="min-h-screen text-white py-10 px-4 sm:px-8 md:px-6 lg:px-10 xl:px-24">
       <h1 className="text-3xl font-bold text-center mb-8">Store</h1>
       <StoreSection
         title="Store"

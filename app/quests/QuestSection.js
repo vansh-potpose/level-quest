@@ -10,8 +10,8 @@ export default function QuestSection({
   handleDelete,
 }) {
   return (
-    <div className="w-full max-w-[1200px] mx-auto mt-4">
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+    <div className="w-full max-w-[1400px] mx-auto mt-4 px-2">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3  gap-4 sm:gap-6">
         {quests.map((quest) => (
           <QuestItemWrapper
             key={quest.id}

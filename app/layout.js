@@ -1,6 +1,15 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+
 import AppProviders from "./AppProviders";
+
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { Toaster } from "sonner";
+import NavbarWrapper from "./components/NavbarWrapper";
+import StarBackground from "./components/StarBackground";
+import AnimatedBackground from "./components/AnimatedBackground";
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,18 +32,29 @@ export default function RootLayout({ children }) {
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <AppProviders>
           {/* Background moved outside content wrapper for visibility */}
-          <div
-            className="fixed inset-0 -z-10"
-            style={{
-              background:
-                "linear-gradient(135deg, #000 50%, rgba(0,60,130,0.85) 100%)",
-              filter: "blur(40px)",
-              transition: "background 0.8s cubic-bezier(0.4,0,0.2,1)",
-            }}
-            aria-hidden="true"
+           {/* <StarBackground />
+           */}
+           <AnimatedBackground />
+          {/* Add a wrapper with top padding for the navbar */}
+          <div className="pt-20 min-h-screen bg-transparent">
+            {children}
+          </div>
+          <ToastContainer
+            position="top-right"
+            autoClose={3000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="dark"
           />
-          <div className="pt-20 min-h-screen bg-transparent">{children}</div>
+          <Toaster position="top-center" richColors closeButton theme="dark" />
+        </GameProvider>
         </AppProviders>
+
       </body>
     </html>
   );

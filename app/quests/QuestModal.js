@@ -26,9 +26,9 @@ const QuestModal = ({
     if (
       subQuests.length > 0 &&
       subQuests.every((sq) => sq.completed) &&
-      !quest.isCompleted 
+      !quest.isCompleted
     ) {
-      
+
       console.log("All subquests completed, marking quest as completed", quest.name);
       console.log("Subquests:", subQuests);
       console.log("Quest status before completion:", quest);
@@ -39,20 +39,20 @@ const QuestModal = ({
     // Update quest status if all subquests are completed
     // This ensures the UI reflects the correct status
   }, [subQuests, quest.isCompleted]);
- 
-const handleQuestCompleted = () => {
-  if (quest.isCompleted) return; // Prevent double call
-  updateQuestCompleted(quest.id);
-  claimRewards(quest);
-  showGameToast({
-    icon: "🏆",
-    title: "Quest Completed!",
-    description: `You completed the quest: ${quest.name}`,
-    border_color: "border-yellow-500",
-    text_color: "text-yellow-400",
-    progressClass_color: "!bg-yellow-500",
-  });
-};
+
+  const handleQuestCompleted = () => {
+    if (quest.isCompleted) return; // Prevent double call
+    updateQuestCompleted(quest.id);
+    claimRewards(quest);
+    showGameToast({
+      icon: "🏆",
+      title: "Quest Completed!",
+      description: `You completed the quest: ${quest.name}`,
+      border_color: "border-yellow-500",
+      text_color: "text-yellow-400",
+      progressClass_color: "!bg-yellow-500",
+    });
+  };
 
   const handleSubQuestComplete = async (subQuestId, isCompleted) => {
     if (isCompleted) {
@@ -121,13 +121,13 @@ const handleQuestCompleted = () => {
           Completed
         </span>
       );
-        if (quest.priority === 1)
+    if (quest.priority === 1)
       return (
         <span className="bg-[#d52713] text-white px-3 py-1 rounded-md text-xs font-bold shadow">
           High Priority
         </span>
       );
-        if (quest.priority === 2)
+    if (quest.priority === 2)
       return (
         <span className="bg-[#c8a310] text-white px-3 py-1 rounded-md text-xs font-bold shadow">
           Medium Priority
@@ -142,14 +142,16 @@ const handleQuestCompleted = () => {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60"
+      className="fixed  inset-0 z-50 flex items-center justify-center bg-black/60"
       onClick={onClose}
     >
+      {/* Close button for mobile, absolute top-right with 'X' icon */}
+
       <div
         className="relative bg-[#181c24] rounded-lg  w-[95%] max-w-2xl shadow-2xl  overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
-        
+
 
         {/* Quest Image with overlay */}
         <div className="relative w-full h-60  overflow-hidden">
@@ -158,6 +160,16 @@ const handleQuestCompleted = () => {
             alt={quest.name}
             className="w-full h-full object-cover"
           />
+
+          <button
+            className="absolute top-4 right-4 bg-gray-800 text-white p-2 rounded-full shadow-lg font-semibold text-base block md:hidden z-50"
+            onClick={onClose}
+            aria-label="Close"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
           <div className="absolute inset-0 bg-gradient-to-t from-[#181c24] via-transparent to-transparent" />
         </div>
 
@@ -171,10 +183,10 @@ const handleQuestCompleted = () => {
                 <b>
                   {quest.endDate
                     ? new Date(quest.endDate).toLocaleDateString(undefined, {
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                      })
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                    })
                     : ""}
                 </b>
               </span>
@@ -187,7 +199,7 @@ const handleQuestCompleted = () => {
               <p>
                 <b>Time left:</b> {getTimeLeft()}
               </p>
-              
+
             </div>
             <div className="mt-2 flex gap-5 items-start">
               <div className="min-w-fit font-semibold">Rewards:</div>
@@ -212,20 +224,18 @@ const handleQuestCompleted = () => {
                   <div className="flex items-center gap-2 cursor-pointer">
                     <div
                       onClick={() => handleSubQuestComplete(sq.id, sq.completed)}
-                      className={`w-5 h-5 rounded-sm border-2 flex items-center justify-center cursor-pointer transition ${
-                        sq.completed
+                      className={`w-5 h-5 rounded-sm border-2 flex items-center justify-center cursor-pointer transition ${sq.completed
                           ? "border-green-500 text-green-500 bg-green-700/20"
                           : "border-gray-600 text-gray-600 bg-gray-700/20"
-                      }`}
+                        }`}
                     >
                       {sq.completed && <FaCheck size={12} />}
                     </div>
                     <span
-                      className={`text-md ${
-                        sq.completed
+                      className={`text-md ${sq.completed
                           ? "text-green-300 line-through"
                           : "text-gray-300"
-                      }`}
+                        }`}
                     >
                       {sq.name}
                     </span>

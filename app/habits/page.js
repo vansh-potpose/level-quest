@@ -133,9 +133,9 @@ export default function HabitPage() {
     };
 
     return (
-  <div className="w-full flex flex-col px-10 items-center justify-center mb-20">
-    <div className="w-full mx-auto px-2 sm:px-4 md:px-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-      <div className="bg-[#0d1117] rounded-lg p-6 flex flex-col grow col-span-1 row-span-2">
+  <div className="w-full flex flex-col px-0 xl:px-10 items-center justify-center mb-20">
+    <div className="w-full mx-auto px-2 sm:px-4 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="bg-[#0d1117] rounded-lg p-3 sm:p-6 flex flex-col grow col-span-1 row-span-2">
         <div className="flex items-center justify-between mb-2">
           <span className="text-white">Daily Challenge</span>
           <button
@@ -157,7 +157,7 @@ export default function HabitPage() {
           disableCheckboxes={disableCheckboxes}
         />
       </div>
-      <div className="bg-[#0d1117] rounded-lg p-6 flex grow flex-col items-center justify-center">
+      <div className="bg-[#0d1117] rounded-lg p-4 sm:p-6 flex grow flex-col items-center justify-center">
         <span className="text-white mb-4 font-semibold">Challenge History</span>
         <HabitChallengeHistory
           challenges={dailyChallenges.challenges}

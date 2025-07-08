@@ -152,50 +152,65 @@ export default function QuestPage() {
   );
 
   return (
-    <div className="flex flex-col items-center mb-20">
-      {/* Controls */}
-      <div className="flex items-center gap-3 bg-[#0d1117] p-3 rounded-lg shadow-md">
-        <select
-          className="px-3 py-1.5 text-xs rounded-md border border-[#3d444d] bg-[#151b23] text-[#f0f6fc] focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+    <div className="flex flex-col items-center mb-20 px-4 w-full max-w-7xl mx-auto">
+    
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 bg-[#0d1117] p-4 rounded-lg  w-full max-w-2xl mb-6">
+          {/* Sort Dropdown */}
+          <label className="flex items-center gap-2 flex-1 min-w-0">
+            <span className="text-xs text-[#8b949e] hidden sm:inline">Sort:</span>
+            <select
+          className="px-3 py-2 text-xs sm:text-sm rounded-md border border-[#30363d] bg-[#161b22] text-[#f0f6fc] focus:outline-none focus:ring-2 focus:ring-blue-500 transition w-full"
           onChange={(e) => setSortOption(e.target.value)}
           value={sortOption}
-        >
-          <option value="name">Sort by Name</option>
-          <option value="date">Sort by Date</option>
-          <option value="priority">Sort by Priority</option>
-        </select>
+          aria-label="Sort quests"
+            >
+          <option value="name">Name</option>
+          <option value="date">End Date</option>
+          <option value="priority">Priority</option>
+            </select>
+          </label>
 
-        <input
+          {/* Search Input */}
+          <label className="flex items-center gap-2 flex-1 min-w-0">
+            <span className="text-xs text-[#8b949e] hidden sm:inline">Search:</span>
+            <input
           type="text"
-          placeholder="Search…"
+          placeholder="Search quests…"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="px-3 py-1.5 text-xs rounded-md border border-[#3d444d] bg-[#151b23] text-[#f0f6fc] focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+          className="px-3 py-2 text-xs sm:text-sm rounded-md border border-[#30363d] bg-[#161b22] text-[#f0f6fc] focus:outline-none focus:ring-2 focus:ring-blue-500 transition w-full"
+          aria-label="Search quests"
+            />
+          </label>
+
+          {/* Toggle Button */}
+          <div className="flex-shrink-0 w-[140px]">
+            <button
+          className={`px-3 py-2 text-xs sm:text-sm rounded-md border-2 transition whitespace-nowrap font-semibold w-full
+            ${showCompleted
+              ? "border-green-600 bg-green-900/30 text-green-300 hover:bg-green-900/60"
+              : "border-orange-600 bg-orange-900/30 text-orange-200 hover:bg-yellow-900/60"
+            }`}
+          onClick={() => setShowCompleted((prev) => !prev)}
+          aria-pressed={showCompleted}
+          aria-label="Toggle quest status filter"
+          type="button"
+            >
+          {showCompleted ? "Show Active" : "Show Completed"}
+            </button>
+          </div>
+        </div>
+        <QuestSection
+          quests={displayedQuests}
+          openModal={openModal}
+          selectedQuestId={selectedQuestId}
+          setSelectedQuestId={setSelectedQuestId}
+          menuRef={menuRef}
+          handleEdit={handleEdit}
+          handleDelete={handleDelete}
         />
 
-        <button
-          className={`px-3 min-w-32 py-1.5 text-xs rounded-md border-2 ${
-            showCompleted ? "border-green-700" : "border-yellow-600"
-          } text-[#f0f6fc] focus:outline-none transition`}
-          onClick={() => setShowCompleted((prev) => !prev)}
-          aria-label="Toggle quest status filter"
-        >
-          {showCompleted ? "Show Active" : "Show Completed"}
-        </button>
-      </div>
-
-      {/* Quest Section */}
-      <QuestSection
-        quests={displayedQuests}
-        openModal={openModal}
-        selectedQuestId={selectedQuestId}
-        setSelectedQuestId={setSelectedQuestId}
-        menuRef={menuRef}
-        handleEdit={handleEdit}
-        handleDelete={handleDelete}
-      />
-
-      {/* Modal */}
+        {/* Modal */}
       {selectedQuest && (
         <QuestModal
           quest={selectedQuest}

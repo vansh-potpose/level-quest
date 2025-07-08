@@ -63,9 +63,9 @@ export default function QuestCard({ quest, onQuestClick }) {
   return (
     <div
       onClick={() => onQuestClick(quest)}
-      className={`group relative bg-[#0d1117] border border-[#3d444d] rounded-lg shadow-md w-96`}
+      className={`group relative bg-[#0d1117] border border-[#3d444d] rounded-lg shadow-md w-full max-w-sm mx-auto cursor-pointer hover:shadow-lg transition-shadow`}
     >
-      <div className="h-[200px] overflow-hidden rounded-t-lg">
+      <div className="h-[160px] sm:h-[200px] overflow-hidden rounded-t-lg">
         <img
           src={quest.image}
           alt={quest.name}
@@ -73,14 +73,14 @@ export default function QuestCard({ quest, onQuestClick }) {
         />
       </div>
       <ProgressBar value={progress} color="bg-[#22c55e]" h="h-[5px] rounded-none" />
-      <div className="p-4">
-        <h2 className="text-lg font-bold text-[#f0f6fc]">{quest.name}</h2>
-        <p className="text-sm font-normal text-[#9198a1]">{quest.description}</p>
-        <p className="font-medium text-sm w-fit  rounded-md my-3  ">
+      <div className="p-3 sm:p-4">
+        <h2 className="text-base sm:text-lg font-bold text-[#f0f6fc] break-words">{quest.name}</h2>
+        <p className="text-xs sm:text-sm font-normal text-[#9198a1] line-clamp-2 break-words">{quest.description}</p>
+        <p className="font-medium text-sm w-fit rounded-md my-2 sm:my-3">
         
       </p>
-        <div className="mt-2 flex gap-5 items-start">
-          <div className="min-w-fit  font-semibold">Rewards :</div>
+        <div className="mt-2 flex flex-col sm:flex-row gap-2 sm:gap-5 items-start">
+          <div className="min-w-fit font-semibold text-sm">Rewards:</div>
           <Rewards rewards={quest.rewards} />
         </div>
       </div>
@@ -89,7 +89,7 @@ export default function QuestCard({ quest, onQuestClick }) {
           <FaCheck size={80} />
         </div>
       )}
-      <p className="group-hover:opacity-100 opacity-0 duration-700 absolute top-2 right-2 font-medium text-sm  bg-black/60 w-fit p-2 rounded-md transition-opacity">
+      <p className="group-hover:opacity-100 opacity-0 duration-700 absolute top-2 right-2 font-medium text-xs sm:text-sm bg-black/60 w-fit p-1.5 sm:p-2 rounded-md transition-opacity">
         {getPriorityBadge()} - {getRemainingTime()}
       </p>
       
