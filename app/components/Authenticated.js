@@ -27,7 +27,6 @@ const Authenticated = ({ children }) => {
         dispatch(clearUser(null));
       }
     };
-
     if (!isAuthenticated) {
       // console.log("isAuthenticated:", isAuthenticated);
       fetchUser();
