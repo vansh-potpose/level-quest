@@ -92,7 +92,7 @@ const Navbar = () => {
       </div>
 
 
-      </div>
+     
 
       {/* Middle - Navigation Links */}
       <ul
