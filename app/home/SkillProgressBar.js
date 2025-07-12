@@ -3,7 +3,7 @@ import ProgressBar from "../components/ProgressBar";
 const SkillProgressBar = ({ skill, level, value,getMaxSkillPoints }) => {
   
   const xpNeeded = getMaxSkillPoints(level);
-  return (
+  return (   
     <div className="mb-5">
       <div className="flex justify-between text-sm  mb-1 font-medium tracking-wide ">
         <span className="capitalize text-[#f0f6fc]">{skill}</span>
@@ -12,7 +12,7 @@ const SkillProgressBar = ({ skill, level, value,getMaxSkillPoints }) => {
           <span className="text-white font-medium">LVL {level} </span> <span className="text-sm">{value}/{xpNeeded}</span>
         </span>
       </div>
-      <ProgressBar value={(value/xpNeeded)*100} color="bg-[#0090FF]" h="h-2 rounded-none" />
+      <ProgressBar value={(value/xpNeeded)*100} color="bg-[#0090FF]" h="h-1 sm:h-2 rounded-none" />
     </div>
   );
 };

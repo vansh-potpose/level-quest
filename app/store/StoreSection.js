@@ -12,7 +12,7 @@ export default function StoreSection({
   handleDelete,
 }) {
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6 mb-30">
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6 mb-30">
       {items.map(item => (
         <StoreItemWrapper
           key={item.id}
