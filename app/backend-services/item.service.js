@@ -1,5 +1,6 @@
 import asyncHandler from "./utils/asyncHandler";
 import ApiError from "./utils/ApiError";
+import axios from "axios";
 
 class ItemService {
   constructor() {
@@ -24,78 +25,67 @@ class ItemService {
   };
 
   createItem = asyncHandler(async ({ name, description, price, image, type, amount, attribute_name, userId }) => {
-    const response = await fetch(`${this.item_url}/create`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, description, price, image, type, amount, attribute_name, userId }),
-      credentials: "include",
-    });
-    return this.handleResponse(response, "Item creation failed");
+    const res = await axios.post(
+      `${this.item_url}/create`,
+      { name, description, price, image, type, amount, attribute_name, userId },
+      { withCredentials: true }
+    );
+    return res.data?.data;
   });
 
   getUserItems = asyncHandler(async (userId) => {
-    const response = await fetch(`${this.item_url}/user/${userId}`, {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
+    const res = await axios.get(`${this.item_url}/user/${userId}`, {
+      withCredentials: true,
     });
-    return this.handleResponse(response, "Fetching user items failed");
+    return res.data?.data;
   });
 
   getStoreItems = asyncHandler(async () => {
-    const response = await fetch(`${this.item_url}/store`, {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
+    const res = await axios.get(`${this.item_url}/store`, {
+      withCredentials: true,
     });
-    return this.handleResponse(response, "Fetching store items failed");
+    return res.data?.data;
   });
 
   getItemById = asyncHandler(async (itemId) => {
-    const response = await fetch(`${this.item_url}/${itemId}`, {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
+    const res = await axios.get(`${this.item_url}/${itemId}`, {
+      withCredentials: true,
     });
-    return this.handleResponse(response, "Fetching item failed");
+    return res.data?.data;
   });
 
   updateItem = asyncHandler(async (itemId, { name, description, price, image, type, amount, claimed, attribute_name }) => {
-    const response = await fetch(`${this.item_url}/${itemId}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, description, price, image, type, amount, claimed, attribute_name }),
-      credentials: "include",
-    });
-    return this.handleResponse(response, "Updating item failed");
+    const res = await axios.put(
+      `${this.item_url}/${itemId}`,
+      { name, description, price, image, type, amount, claimed, attribute_name },
+      { withCredentials: true }
+    );
+    return res.data?.data;
   });
 
   deleteItem = asyncHandler(async (itemId) => {
-    const response = await fetch(`${this.item_url}/${itemId}`, {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
+    const res = await axios.delete(`${this.item_url}/${itemId}`, {
+      withCredentials: true,
     });
-    return this.handleResponse(response, "Deleting item failed");
+    return res.data?.data;
   });
 
   purchaseItem = asyncHandler(async (itemId, userId) => {
-    const response = await fetch(`${this.item_url}/${itemId}/purchase`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userId }),
-      credentials: "include",
-    });
-    return this.handleResponse(response, "Purchasing item failed");
+    const res = await axios.post(
+      `${this.item_url}/${itemId}/purchase`,
+      { userId },
+      { withCredentials: true }
+    );
+    return res.data?.data;
   });
 
   useItem = asyncHandler(async (itemId) => {
-    const response = await fetch(`${this.item_url}/${itemId}/use`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-    });
-    return this.handleResponse(response, "Using item failed");
+    const res = await axios.patch(
+      `${this.item_url}/${itemId}/use`,
+      {},
+      { withCredentials: true }
+    );
+    return res.data?.data;
   });
 }
 

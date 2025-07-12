@@ -2,7 +2,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { BsCoin } from "react-icons/bs";
-import { useGame } from "../context/GameContext";
 import { usePathname, useRouter } from "next/navigation";
 import auth from "../appwrite/auth";
 import { useState, useEffect } from "react";
@@ -91,9 +90,6 @@ const Navbar = () => {
         </div>
       </div>
 
-
-      </div>
-
       {/* Middle - Navigation Links */}
       <ul
         className={`transition-all duration-300
@@ -144,6 +140,8 @@ const Navbar = () => {
             width={40}
             height={40}
             className="rounded-full object-cover sm:w-[40px] sm:h-[40px] w-[28px] h-[28px]"
+            unoptimized
+            priority
           />
 
           <p className="text-white text-sm font-medium hidden md:block">{user.name}</p>

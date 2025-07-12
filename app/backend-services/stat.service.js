@@ -1,5 +1,6 @@
 import asyncHandler from "./utils/asyncHandler";
 import ApiError from "./utils/ApiError";
+import axios from "axios";
 
 class StatService {
   constructor() {
@@ -24,69 +25,58 @@ class StatService {
   };
 
   createStat = asyncHandler(async ({ skill, level, value, userId }) => {
-    const response = await fetch(`${this.stat_url}/create`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ skill, level, value, userId }),
-      credentials: "include",
-    });
-    return this.handleResponse(response, "Stat creation failed");
+    const res = await axios.post(
+      `${this.stat_url}/create`,
+      { skill, level, value, userId },
+      { withCredentials: true }
+    );
+    return res.data?.data;
   });
 
   getUserStats = asyncHandler(async (userId) => {
-    const response = await fetch(`${this.stat_url}/user/${userId}`, {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
+    const res = await axios.get(`${this.stat_url}/user/${userId}`, {
+      withCredentials: true,
     });
-    return this.handleResponse(response, "Fetching user stats failed");
+    return res.data?.data;
   });
 
   getStatById = asyncHandler(async (statId) => {
-    const response = await fetch(`${this.stat_url}/${statId}`, {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
+    const res = await axios.get(`${this.stat_url}/${statId}`, {
+      withCredentials: true,
     });
-    return this.handleResponse(response, "Fetching stat failed");
+    return res.data?.data;
   });
 
   updateStat = asyncHandler(async (statId, { skill, level, value }) => {
-    const response = await fetch(`${this.stat_url}/${statId}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ skill, level, value }),
-      credentials: "include",
-    });
-    return this.handleResponse(response, "Updating stat failed");
+    const res = await axios.put(
+      `${this.stat_url}/${statId}`,
+      { skill, level, value },
+      { withCredentials: true }
+    );
+    return res.data?.data;
   });
 
   deleteStat = asyncHandler(async (statId) => {
-    const response = await fetch(`${this.stat_url}/${statId}`, {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
+    const res = await axios.delete(`${this.stat_url}/${statId}`, {
+      withCredentials: true,
     });
-    return this.handleResponse(response, "Deleting stat failed");
+    return res.data?.data;
   });
 
   incrementStat = asyncHandler(async (statId, amount = 1) => {
-    const response = await fetch(`${this.stat_url}/${statId}/increment`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ amount }),
-      credentials: "include",
-    });
-    return this.handleResponse(response, "Incrementing stat failed");
+    const res = await axios.patch(
+      `${this.stat_url}/${statId}/increment`,
+      { amount },
+      { withCredentials: true }
+    );
+    return res.data?.data;
   });
 
   getUserStatBySkill = asyncHandler(async (userId, skill) => {
-    const response = await fetch(`${this.stat_url}/user/${userId}/skill/${skill}`, {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
+    const res = await axios.get(`${this.stat_url}/user/${userId}/skill/${skill}`, {
+      withCredentials: true,
     });
-    return this.handleResponse(response, "Fetching stat by skill failed");
+    return res.data?.data;
   });
 }
 
