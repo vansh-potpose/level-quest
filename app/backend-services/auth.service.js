@@ -26,7 +26,6 @@ class Auth {
   });
 
   getUser = asyncHandler(async () => {
-    console.log("refreshing");
     const res = await axios.get(`${this.auth_url}/user`, {
       withCredentials: true,
     });

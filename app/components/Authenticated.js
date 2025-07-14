@@ -1,15 +1,16 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import auth from "../backend-services/auth.service";
 import { clearUser, setUser } from "../redux/userSlice";
 
 const Authenticated = ({ children }) => {
   // User slice
   const { user, isAuthenticated } = useSelector((state) => state.user);
-
+  const publicRoutes = new Set(["/login", "/register"]);
   const router = useRouter();
   const dispatch = useDispatch();
+  const path = usePathname();
   useEffect(() => {
     console.log("Checking authentication status...");
     const fetchUser = async () => {
@@ -27,7 +28,7 @@ const Authenticated = ({ children }) => {
         dispatch(clearUser(null));
       }
     };
-    if (!isAuthenticated) {
+    if (!publicRoutes.has(path) && !isAuthenticated) {
       // console.log("isAuthenticated:", isAuthenticated);
       fetchUser();
     }
