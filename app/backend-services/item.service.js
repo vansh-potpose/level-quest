@@ -24,11 +24,16 @@ class ItemService {
     return data.data;
   };
 
-  createItem = asyncHandler(async ({ name, description, price, image, type, amount, attribute_name, userId }) => {
+  createItem = asyncHandler(async ({ name, description, price, file, type, amount, attribute_name }) => {
     const res = await axios.post(
       `${this.item_url}/create`,
-      { name, description, price, image, type, amount, attribute_name, userId },
-      { withCredentials: true }
+      { name, description, price, type, amount, attribute_name, image: file },
+      { 
+        withCredentials: true, 
+        headers: {
+          "Content-Type": "multipart/form-data"
+        }
+      }
     );
     return res.data?.data;
   });

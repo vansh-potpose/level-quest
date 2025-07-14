@@ -1,5 +1,5 @@
 "use client";
-import { Provider } from "react-redux";
+import { Provider, useDispatch } from "react-redux";
 import store from "./redux/store";
 import { GameProvider } from "./context/GameContext";
 import { ToastContainer } from "react-toastify";

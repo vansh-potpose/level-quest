@@ -18,7 +18,7 @@ export default function ItemImage({
     >
       <div className="rounded-md  overflow-hidden mb-2">
         <img
-          src={item.image}
+          src={item.image || ""}
           alt={item.name}
           className="w-full z-0 h-48 object-cover"
         />
