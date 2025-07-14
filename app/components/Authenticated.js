@@ -14,7 +14,7 @@ const Authenticated = ({ children }) => {
     console.log("Checking authentication status...");
     const fetchUser = async () => {
       try {
-        const user = await auth.refreshAccessToken();
+        const user = await auth.getUser();
         if (!user) {
           router.push("/login");
           dispatch(clearUser(null));
@@ -27,7 +27,6 @@ const Authenticated = ({ children }) => {
         dispatch(clearUser(null));
       }
     };
-
     if (!isAuthenticated) {
       // console.log("isAuthenticated:", isAuthenticated);
       fetchUser();

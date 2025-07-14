@@ -17,56 +17,39 @@ class Auth {
   });
 
   register = asyncHandler(async ({ name = "", email = "", password = "" }) => {
-    const response = await fetch(`${this.auth_url}/register`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name,
-        email,
-        password,
-      }),
-      credentials: "include",
-    });
-    return await this.handleResponse(response, "Registration failed");
+    const res = await axios.post(
+      `${this.auth_url}/register`,
+      { name, email, password },
+      { withCredentials: true }
+    );
+    return res.data?.data;
   });
 
-  refreshAccessToken = asyncHandler(async () => {
+  getUser = asyncHandler(async () => {
     console.log("refreshing");
     const res = await axios.get(`${this.auth_url}/user`, {
       withCredentials: true,
     });
-    return res.data.data;
+    return res.data?.data;
   });
 
   logout = asyncHandler(async () => {
-    const response = await fetch(`${this.auth_url}/logout`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
+    const res = await axios.get(`${this.auth_url}/logout`, {
+      withCredentials: true,
     });
     // Logout may not always return data, so handle gracefully
-    try {
-      const data = await response.json();
-      return data?.data || true;
-    } catch {
-      return true;
-    }
+    return res.data?.data;
   });
 
-  getUserDetails = asyncHandler(async (id) => {
-    const response = await fetch(`${this.auth_url}/get-user-details/${id}`, {
-      method: "GET",
+  updateProfile = asyncHandler(async (formData) => {
+    const res = await axios.patch(`${this.auth_url}/user`, formData, {
+      withCredentials: true,
       headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
+        "Content-Type": "multipart/form-data"
+      }
     });
-    return this.handleResponse(response, "Fetching user details failed");
-  });
+    return res.data?.data;
+  })
 }
 const auth = new Auth();
 

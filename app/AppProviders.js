@@ -11,7 +11,8 @@ import Authenticated from "./components/Authenticated";
 export default function AppProviders({ children }) {
   return (
     <Provider store={store}>
-        <GameProvider>
+      <GameProvider>
+        <Authenticated>
           <NavbarWrapper />
           {children}
           <ToastContainer
@@ -27,7 +28,8 @@ export default function AppProviders({ children }) {
             theme="dark"
           />
           <Toaster position="top-center" richColors closeButton theme="dark" />
-        </GameProvider>
+        </Authenticated>
+      </GameProvider>
     </Provider>
   );
 }

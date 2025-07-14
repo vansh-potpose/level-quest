@@ -3,24 +3,24 @@ import React, { useState } from "react";
 import ProfilePictureUpload from "./ProfilePictureUpload";
 import SettingsInput from "./SettingsInput";
 import SettingsTextarea from "./SettingsTextarea";
-import { useGame } from "../context/GameContext"; // 1. Import the hook
 import { useSelector } from "react-redux";
+import auth from "../backend-services/auth.service";
 
 export default function SettingsPage() {
   const { user } = useSelector((state) => state.user); // 2. Use context instead of props
-  const { setUser } = useGame(); // 2. Use context instead of props
 
   const [form, setForm] = useState({
     name: user.name || "",
     job: user.job || "",
     about: user.about || "",
-    stregth: user.stregth || "",
+    strength: user.strength || "",
     weakness: user.weakness || "",
     masterObjective: user.masterObjective || "",
     minorObjective: user.minorObjective || "",
     profilePic: user.profilePic || "",
   });
   const [preview, setPreview] = useState(user.profilePic || "");
+  const [file, setFile] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -28,20 +28,33 @@ export default function SettingsPage() {
   };
 
   const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
+    const fileObj = e.target.files[0];
+    if (fileObj) {
+      setFile(fileObj);
       const reader = new FileReader();
       reader.onloadend = () => {
-        setForm((prev) => ({ ...prev, profilePic: reader.result }));
         setPreview(reader.result);
       };
-      reader.readAsDataURL(file);
+      reader.readAsDataURL(fileObj);
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setUser({ ...user, ...form });
+  const handleSubmit = async (e) => {
+    try {
+      e.preventDefault();
+      const formData = new FormData();
+      Object.entries(form).forEach(([key, value]) => {
+        formData.append(key, value);
+      });
+      // To view FormData contents, iterate and log each entry
+      if (file) {
+        formData.set("profilePic", file); // Use the File object for upload
+      }
+      const data = await auth.updateProfile(formData);
+      if (!data) console.log("error on sending data to the server");
+    } catch (error) {
+      console.log(error.message);
+    }
   };
 
   return (
@@ -83,8 +96,8 @@ export default function SettingsPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <SettingsInput
                 label="Strength:"
-                name="stregth"
-                value={form.stregth}
+                name="strength"
+                value={form.strength}
                 onChange={handleChange}
               />
               <SettingsInput
