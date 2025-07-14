@@ -3,10 +3,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { BsCoin } from "react-icons/bs";
 import { usePathname, useRouter } from "next/navigation";
-import auth from "../appwrite/auth";
 import { useState, useEffect } from "react";
 import { FiMenu, FiX } from "react-icons/fi";
 import { useSelector } from "react-redux";
+import auth from "../backend-services/auth.service";
 
 const navItems = [
   { name: "Home", href: "/home" },

@@ -33,7 +33,7 @@ const Authenticated = ({ children }) => {
       fetchUser();
     }
   }, []);
-  if (isAuthenticated) {
+  if (publicRoutes.has(path) || isAuthenticated) {
     return <>{children}</>;
   } else {
     return (
