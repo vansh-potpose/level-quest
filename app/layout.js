@@ -56,6 +56,7 @@ export default function RootLayout({ children }) {
           />
           <Toaster position="top-center" richColors closeButton theme="dark" />
         {/* </GameProvider> */}
+        </GameProvider>
         </AppProviders>
 
       </body>
