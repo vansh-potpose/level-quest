@@ -90,6 +90,7 @@ const Navbar = () => {
         </div>
       </div>
 
+
       {/* Middle - Navigation Links */}
       <ul
         className={`transition-all duration-300

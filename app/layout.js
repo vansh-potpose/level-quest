@@ -8,6 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { Toaster } from "sonner";
 import NavbarWrapper from "./components/NavbarWrapper";
 import StarBackground from "./components/StarBackground";
+import { GameProvider } from "./context/GameContext";
 import AnimatedBackground from "./components/AnimatedBackground";
 
 
@@ -31,7 +32,9 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <AppProviders>
+          <GameProvider>
           {/* Background moved outside content wrapper for visibility */}
+
            {/* <StarBackground />
            */}
            <AnimatedBackground />
