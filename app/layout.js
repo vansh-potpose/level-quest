@@ -32,7 +32,6 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <AppProviders>
-          <GameProvider>
           {/* Background moved outside content wrapper for visibility */}
 
            {/* <StarBackground />
