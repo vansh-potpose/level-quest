@@ -4,6 +4,8 @@ import { FiUpload, FiSave, FiBox } from "react-icons/fi";
 import { BsCoin } from "react-icons/bs";
 import ItemImage from "./ItemImage";
 import itemService from "../backend-services/item.service";
+import ApiError from "../backend-services/utils/ApiError";
+import { useRouter } from "next/navigation";
 
 const ATTRIBUTE_OPTIONS = [
   { value: "health", label: "Health" },
@@ -23,10 +25,20 @@ export default function CreateItem({
   const [selectedAttribute, setSelectedAttribute] = useState("health");
   const [cost, setCost] = useState(0);
   const [minPrice, setMinPrice] = useState(10);
+  const router = useRouter();
 
   const addItemToStore = async () => {
-    console.log(item)
-    await itemService.createItem(item);
+    // console.log(item);
+    try {
+      const newItem = await itemService.createItem({ ...item, cost });
+      if (!newItem) {
+        throw new ApiError(500, "something went wrong while creating item");
+      }
+      console.log("item created successfully", newItem);
+      router.push("/home");
+    } catch (error) {
+      console.log(error.message);
+    }
   };
 
   // Update cost and minPrice based on item state

@@ -6,8 +6,12 @@ const asyncHandler = (callback) => {
     try {
       return await callback(...args);
     } catch (err) {
-      const { message = err.message } = err.response?.data?.error;
-      const { status = 500 } = err.response?.data;
+      let message = err.message || "something went wrong";
+      let status = err.status || 500;
+      console.log(err);
+      if (err.response?.isBackendError) {
+        message = err.response.message;
+      }
       showGameToast({
         icon: "❌",
         title: "Error",
@@ -16,7 +20,7 @@ const asyncHandler = (callback) => {
         text_color: "text-red-500",
         progressClass_color: "!bg-red-700",
       });
-      throw new ApiError(status, message || err.message);
+      throw new ApiError(status, message);
     }
   };
 };

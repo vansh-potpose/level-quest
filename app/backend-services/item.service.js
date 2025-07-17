@@ -12,31 +12,57 @@ class ItemService {
     try {
       data = await response.json();
     } catch (e) {
-      throw new ApiError(response.status || 500, `${defaultErrorMsg}: Invalid JSON response`);
+      throw new ApiError(
+        response.status || 500,
+        `${defaultErrorMsg}: Invalid JSON response`
+      );
     }
     if (!response.ok) {
       const errorMsg = data?.message || data?.error || defaultErrorMsg;
       throw new ApiError(response.status, errorMsg);
     }
-    if (!('data' in data)) {
-      throw new ApiError(response.status || 500, `${defaultErrorMsg}: Data not found`);
+    if (!("data" in data)) {
+      throw new ApiError(
+        response.status || 500,
+        `${defaultErrorMsg}: Data not found`
+      );
     }
     return data.data;
   };
 
-  createItem = asyncHandler(async ({ name, description, price, file, type, amount, attribute_name }) => {
-    const res = await axios.post(
-      `${this.item_url}/create`,
-      { name, description, price, type, amount, attribute_name, image: file },
-      { 
-        withCredentials: true, 
-        headers: {
-          "Content-Type": "multipart/form-data"
+  createItem = asyncHandler(
+    async ({
+      name,
+      description,
+      price,
+      file,
+      type,
+      amount,
+      attribute_name,
+      cost,
+    }) => {
+      const res = await axios.post(
+        `${this.item_url}/item`,
+        {
+          name,
+          description,
+          price,
+          type,
+          amount,
+          attribute_name,
+          image: file,
+          cost,
+        },
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         }
-      }
-    );
-    return res.data?.data;
-  });
+      );
+      return res.data?.data;
+    }
+  );
 
   getUserItems = asyncHandler(async (userId) => {
     const res = await axios.get(`${this.item_url}/user/${userId}`, {
@@ -59,14 +85,28 @@ class ItemService {
     return res.data?.data;
   });
 
-  updateItem = asyncHandler(async (itemId, { name, description, price, image, type, amount, claimed, attribute_name }) => {
-    const res = await axios.put(
-      `${this.item_url}/${itemId}`,
-      { name, description, price, image, type, amount, claimed, attribute_name },
-      { withCredentials: true }
-    );
-    return res.data?.data;
-  });
+  updateItem = asyncHandler(
+    async (
+      itemId,
+      { name, description, price, image, type, amount, claimed, attribute_name }
+    ) => {
+      const res = await axios.put(
+        `${this.item_url}/${itemId}`,
+        {
+          name,
+          description,
+          price,
+          image,
+          type,
+          amount,
+          claimed,
+          attribute_name,
+        },
+        { withCredentials: true }
+      );
+      return res.data?.data;
+    }
+  );
 
   deleteItem = asyncHandler(async (itemId) => {
     const res = await axios.delete(`${this.item_url}/${itemId}`, {

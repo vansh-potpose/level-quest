@@ -7,6 +7,7 @@ import { confirmToast } from "../components/confirmToast";
 import { useGame } from "./../context/GameContext";
 import { useSelector } from "react-redux";
 import itemService from "../backend-services/item.service";
+import ApiError from "../backend-services/utils/ApiError";
 
 const Dashboard = () => {
   const { user } = useSelector((state) => state.user);
@@ -39,8 +40,14 @@ const Dashboard = () => {
     });
 
     if (!confirmed) return;
-    deleteFromInventory(item.id);
-    setSelectedItemId(null);
+
+    const deletedItem = await itemService.deleteItem(item._id);
+
+    if (!deletedItem) {
+      throw new ApiError(500, "something happened while deleting the item");
+    }
+
+    setInventory((prev) => prev.filter((item) => item._id != deletedItem._id));
   }
 
   useEffect(() => {
